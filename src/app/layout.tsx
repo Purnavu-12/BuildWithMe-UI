@@ -1,0 +1,30 @@
+import type { Metadata } from 'next';
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
+import { ThemeProvider } from '@/components/theme-provider';
+import { Header, Footer } from '@/components/shell';
+import './globals.css';
+export const metadata: Metadata = {
+  title: {
+    default: 'BuildWithMe UI — Build the interface. Keep the source.',
+    template: '%s · BuildWithMe UI',
+  },
+  description:
+    'Discover 40 open-source component designs with native React, Vue, and Svelte implementations.',
+};
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${GeistSans.variable} ${GeistMono.variable}`}>
+        <ThemeProvider>
+          <a href="#main-content" className="skip-link">
+            Skip to content
+          </a>
+          <Header />
+          {children}
+          <Footer />
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}

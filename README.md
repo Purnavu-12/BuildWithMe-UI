@@ -1,10 +1,10 @@
 # BuildWithMe UI
 
-A little less from scratch. A lot more possibility.
+**Build the interface. Keep the source.**
 
-An open-source, community-driven React component registry. Discover, preview, install, and remix 25 original components built with CSS, Motion, and Anime.js. Component source and metadata are authoritative; the website and installable artifacts are generated views of the registry.
+BuildWithMe-UI is an open-source component ecosystem served by one Next.js application. Its 40 designs ship as 120 native React, Vue, and Svelte implementations. Install a tree-shakeable package for speed, add framework-specific source for ownership, or copy the code directly.
 
-## Run locally
+## Start locally
 
 Requires Node.js 22+ and pnpm 10.28.1.
 
@@ -13,36 +13,46 @@ pnpm install
 pnpm dev
 ```
 
-Open http://localhost:3000. The dev command generates the registry before starting Next.js. Restart it after changing metadata or adding entries.
+Open `http://localhost:3000`. The dev command validates and generates the registry before starting Next.js.
 
-## Install a component
-
-Initialize shadcn in your React project, then copy the command from a component page. For a locally running registry:
+## Install components
 
 ```sh
-pnpm dlx shadcn@latest add http://localhost:3000/r/magnetic-button.json
+pnpm add @buildwithme/react
+pnpm add @buildwithme/vue
+pnpm add @buildwithme/svelte
 ```
 
-Files land in `components/buildwithme/magnetic-button/`. You own the source. Install only the engines you use; preserve attribution notices.
-
-## Contribute
+Every component page also provides a source command such as:
 
 ```sh
-pnpm component:new my-button buttons css
+pnpm dlx shadcn@latest add http://localhost:3000/r/react/magnetic-button.json
+```
+
+The package publication folders are generated with `pnpm packages:build` and remain untracked until a release is prepared.
+
+## Add a design
+
+```sh
+pnpm component:new signal-card data-display css
 pnpm registry:validate
 pnpm check
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) and [architecture](docs/architecture.md). The [agent guide](AGENTS.md) explains where to start. Live documentation is served at `/docs/installation`.
+The scaffold creates four authored files: a typed manifest and native React, Vue, and Svelte sources. Catalog metadata, documentation, previews, registry artifacts, package exports, discovery records, and README content are generated.
 
-## Quality checks
+See [CONTRIBUTING.md](CONTRIBUTING.md), [architecture](docs/architecture.md), and [agent guidance](AGENTS.md).
 
-`pnpm check` runs lint, type checks, unit tests, registry validation, and a production build. `pnpm test:e2e` runs browser and accessibility checks after building. `pnpm test:install` installs all registry entries through the shadcn CLI into an isolated Next.js fixture and builds it.
+## Quality commands
+
+- `pnpm check` validates formatting-independent code quality, types, tests, the registry, the Next.js production build, and all three package outputs.
+- `pnpm test:e2e` verifies the discovery journey, accessibility, responsive layouts, reduced motion, and public registry endpoints.
+- `pnpm test:install` builds publication folders, checks all 120 source artifacts, compiles Svelte output, and builds a clean Next.js fixture from `@buildwithme/react`.
 
 ## Configuration
 
-Copy `.env.example` to `apps/web/.env.local` for Next.js public links. Set the same variables in the shell or deployment environment for registry generation. Set `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_REPOSITORY_URL` only when real public destinations exist. No accounts, backend credentials, analytics, or hosted AI services are required.
+Copy `.env.example` to `.env.local`. `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_REPOSITORY_URL` remain optional until real public destinations exist.
 
 ## License
 
-MIT. Original components credit BuildWithMe-UI contributors. See [LICENSE](LICENSE), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), and each entry's provenance. Custom CLI and MCP hosting are future interfaces, not V0 features.
+Original project code is MIT licensed. Adapted and remixed designs retain their recorded upstream licenses and provenance. See [LICENSE](LICENSE) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

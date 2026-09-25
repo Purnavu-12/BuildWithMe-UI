@@ -1,24 +1,42 @@
 # Architecture
 
-Git is the authoritative store. `registry/<category>/<id>/` contains metadata, source, scoped CSS, preview, and README. Shared animation lifecycle and base styles live in `registry/shared/` and are explicitly listed in each entry.
+BuildWithMe-UI is one Next.js App Router application. The website, documentation, registry service, search, previews, validation, contributor tooling, and release packaging live in this repository without workspace or Turborepo boundaries.
 
-## Pipeline
+## Authoritative data
 
-Schema → validator → generated data, lazy preview map, discovery index, shadcn JSON → Next.js website and source consumers.
+`src/registry/designs/<id>/` is the source of truth. Each design has:
 
-`packages/registry-schema` owns public metadata types. `validator` validates all entries and imports using the TypeScript parser. `registry` generates outputs and normalizes local imports for source distribution. `search` filters discovery data. `ui` owns shared website controls. `agent-kit` owns canonical agent instructions.
+- `manifest.ts` — typed metadata, framework mapping, accessibility, installation, and provenance.
+- `react.tsx` — React and Next.js implementation.
+- `vue.vue` — Vue and Nuxt implementation.
+- `svelte.svelte` — Svelte and SvelteKit implementation.
+- An optional design stylesheet when an existing effect benefits from shared CSS.
 
-The website uses server-rendered detail and documentation routes, a client-side searchable catalog, and lazy component previews. The preview map only imports reviewed repository files. Effects pause off-screen, in hidden tabs, and under reduced-motion preferences.
+The manifest uses a discriminated provenance model. Original work needs a creator and license. Adaptations additionally require upstream URL, author, license, and modification notes. Remixes require a valid parent and modification notes.
 
-## Public outputs
+## Generation
 
-- `/registry.json`: shadcn registry manifest.
-- `/r/<id>.json`: source files, exact dependencies, attribution, and provenance.
-- `/index.v1.json`: versioned discovery metadata.
-- `/llms.txt`: machine-readable entry points.
+`scripts/registry.ts` validates manifests, safe paths, files, dependencies, relations, and provenance. It generates:
 
-Artifacts in public/r, the manifest/index, and src/generated are reproducible build outputs and ignored. Build before serving. Production origin and repository links are environment configuration. No database or credentials are required.
+- `/registry.json`
+- `/r/<framework>/<id>.json`
+- `/index.v2.json`
+- `/.well-known/buildwithme.json`
+- The server-consumed registry and source data.
+- A statically analyzable lazy React preview map.
 
-## Deliberate boundaries
+Generated output is ignored by Git. Submitted code is never executed dynamically; only reviewed source included in the generated import map can render.
 
-React only in V0. Preview tooling belongs to apps/web. No empty CLI, MCP, core, or playground packages. A custom installer, hosted submissions, accounts, arbitrary code execution, and analytics are deferred. Public rollout requires a real domain, repository URL, private reporting channel, and GitHub branch protection.
+## Package publication
+
+`scripts/build-packages.ts` creates untracked publication folders in `.release/`:
+
+- React is bundled with tsup using per-component entry points.
+- Vue SFCs are compiled with Vite and the Vue plugin.
+- Svelte components are processed with `svelte-package`.
+
+The public packages are `@buildwithme/react`, `@buildwithme/vue`, and `@buildwithme/svelte`. Publishing is a separate release action.
+
+## Rendering and performance
+
+Pages, documentation, search inputs, and registry metadata are server-rendered. Interactive previews are lazy imports. The homepage Three.js universe is isolated behind a client-side dynamic import and replaced by a static composition for reduced motion. The catalog does not eagerly load every preview or framework runtime.
