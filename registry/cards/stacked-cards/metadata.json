@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "stacked-cards",
+  "title": "Stacked cards",
+  "description": "A small deck of ideas. Shuffle to find your next one.",
+  "category": "cards",
+  "framework": "react",
+  "engine": "motion",
+  "tags": ["cards", "motion", "stacked", "cards"],
+  "files": [
+    "cards/stacked-cards/stacked-cards.tsx",
+    "cards/stacked-cards/stacked-cards.css",
+    "shared/use-animation.ts",
+    "shared/base.css",
+    "shared/LICENSE"
+  ],
+  "preview": "cards/stacked-cards/preview.tsx",
+  "dependencies": {
+    "motion": "13.4.4"
+  },
+  "author": {
+    "name": "BuildWithMe-UI contributors"
+  },
+  "license": "MIT",
+  "origin": "original",
+  "adaptations": [],
+  "usage": "import StackedCards from \"@/components/buildwithme/stacked-cards/stacked-cards\";\n\n<StackedCards />",
+  "accessibility": "Respects prefers-reduced-motion; pauses when off screen or the document is hidden. Interactive controls support keyboard focus. Use paused to stop the demonstration.",
+  "props": [
+    {
+      "name": "paused",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pause decorative animation while retaining interactive controls."
+    }
+  ]
+}

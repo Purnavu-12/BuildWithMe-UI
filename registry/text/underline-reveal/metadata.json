@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "underline-reveal",
+  "title": "Underline reveal",
+  "description": "An expressive underline for the words that matter.",
+  "category": "text",
+  "framework": "react",
+  "engine": "css",
+  "tags": ["text", "css", "underline", "reveal"],
+  "files": [
+    "text/underline-reveal/underline-reveal.tsx",
+    "text/underline-reveal/underline-reveal.css",
+    "shared/use-animation.ts",
+    "shared/base.css",
+    "shared/LICENSE"
+  ],
+  "preview": "text/underline-reveal/preview.tsx",
+  "dependencies": {},
+  "author": {
+    "name": "BuildWithMe-UI contributors"
+  },
+  "license": "MIT",
+  "origin": "original",
+  "adaptations": [],
+  "usage": "import UnderlineReveal from \"@/components/buildwithme/underline-reveal/underline-reveal\";\n\n<UnderlineReveal />",
+  "accessibility": "Respects prefers-reduced-motion; pauses when off screen or the document is hidden. Interactive controls support keyboard focus. Use paused to stop the demonstration.",
+  "props": [
+    {
+      "name": "paused",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pause decorative animation while retaining interactive controls."
+    },
+    {
+      "name": "text",
+      "type": "string",
+      "default": "Make your mark.",
+      "description": "Highlighted text."
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "name": "buildwithme-ui",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.28.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm registry:build && pnpm --filter @buildwithme/web dev",
+    "build": "pnpm registry:build && turbo run build",
+    "lint": "eslint .",
+    "typecheck": "pnpm registry:build && tsc --noEmit && pnpm --filter @buildwithme/web typecheck",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:install": "tsx scripts/install-smoke.ts",
+    "registry:validate": "tsx packages/validator/src/cli.ts",
+    "registry:build": "tsx packages/registry/src/build.ts",
+    "component:new": "tsx scripts/new-component.ts",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm registry:validate && pnpm build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.11.0",
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.63.0",
+    "@types/node": "22.19.1",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "eslint": "10.11.0",
+    "prettier": "3.9.9",
+    "tsx": "4.21.0",
+    "turbo": "2.11.4",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.70.1",
+    "vitest": "4.1.11"
+  },
+  "dependencies": {
+    "animejs": "4.5.0",
+    "motion": "13.4.4",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "zod": "4.6.5"
+  },
+  "type": "module"
+}

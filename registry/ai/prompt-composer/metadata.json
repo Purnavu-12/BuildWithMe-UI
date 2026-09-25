@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "prompt-composer",
+  "title": "Prompt composer",
+  "description": "A thoughtful starting point for a conversation with AI.",
+  "category": "ai",
+  "framework": "react",
+  "engine": "css",
+  "tags": ["ai", "css", "prompt", "composer"],
+  "files": [
+    "ai/prompt-composer/prompt-composer.tsx",
+    "ai/prompt-composer/prompt-composer.css",
+    "shared/use-animation.ts",
+    "shared/base.css",
+    "shared/LICENSE"
+  ],
+  "preview": "ai/prompt-composer/preview.tsx",
+  "dependencies": {},
+  "author": {
+    "name": "BuildWithMe-UI contributors"
+  },
+  "license": "MIT",
+  "origin": "original",
+  "adaptations": [],
+  "usage": "import PromptComposer from \"@/components/buildwithme/prompt-composer/prompt-composer\";\n\n<PromptComposer />",
+  "accessibility": "Respects prefers-reduced-motion; pauses when off screen or the document is hidden. Interactive controls support keyboard focus. Use paused to stop the demonstration.",
+  "props": [
+    {
+      "name": "paused",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pause decorative animation while retaining interactive controls."
+    },
+    {
+      "name": "onSubmit",
+      "type": "(value: string) => void",
+      "default": "undefined",
+      "description": "Receives trimmed prompt. No network requests are made."
+    }
+  ]
+}

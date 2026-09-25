@@ -1,0 +1,13 @@
+.bw-dots {
+  min-height: 240px;
+  background-image: radial-gradient(var(--bw-muted) 0.75px, transparent 0.75px);
+  background-size: 18px 18px;
+  mask-image: radial-gradient(ellipse, black 35%, transparent 80%);
+}
+.bw-grid-label {
+  padding: 14px 18px;
+  border: 1px solid var(--bw-border);
+  background: var(--bw-panel);
+  border-radius: 8px;
+  font-size: 13px;
+}

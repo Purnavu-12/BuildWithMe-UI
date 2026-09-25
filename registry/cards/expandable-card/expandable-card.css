@@ -1,0 +1,7 @@
+.bw-expand-toggle {
+  background: none;
+  border: 0;
+  padding: 10px 0;
+  color: var(--bw-accent);
+  font-size: 13px;
+}

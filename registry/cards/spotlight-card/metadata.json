@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "spotlight-card",
+  "title": "Spotlight card",
+  "description": "A soft pool of light follows you across the surface.",
+  "category": "cards",
+  "framework": "react",
+  "engine": "css",
+  "tags": ["cards", "css", "spotlight", "card"],
+  "files": [
+    "cards/spotlight-card/spotlight-card.tsx",
+    "cards/spotlight-card/spotlight-card.css",
+    "shared/use-animation.ts",
+    "shared/base.css",
+    "shared/LICENSE"
+  ],
+  "preview": "cards/spotlight-card/preview.tsx",
+  "dependencies": {},
+  "author": {
+    "name": "BuildWithMe-UI contributors"
+  },
+  "license": "MIT",
+  "origin": "original",
+  "adaptations": [],
+  "usage": "import SpotlightCard from \"@/components/buildwithme/spotlight-card/spotlight-card\";\n\n<SpotlightCard />",
+  "accessibility": "Respects prefers-reduced-motion; pauses when off screen or the document is hidden. Interactive controls support keyboard focus. Use paused to stop the demonstration.",
+  "props": [
+    {
+      "name": "paused",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pause decorative animation while retaining interactive controls."
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "default": "example card content",
+      "description": "Card content."
+    }
+  ]
+}

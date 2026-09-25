@@ -1,0 +1,17 @@
+.bw-perspective {
+  perspective: 700px;
+}
+.bw-tilt {
+  background: linear-gradient(135deg, #303827, var(--bw-panel));
+  min-height: 190px;
+}
+.bw-tilt-orbit {
+  width: 64px;
+  height: 64px;
+  border: 1px solid #c8ed9480;
+  border-radius: 50%;
+  margin: 18px auto;
+  box-shadow:
+    inset 10px 0 16px #c8ed9422,
+    14px 0 0 -1px #c8ed9418;
+}

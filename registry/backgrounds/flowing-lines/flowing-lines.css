@@ -1,0 +1,10 @@
+.bw-flow {
+  gap: 12px;
+  min-height: 240px;
+}
+.bw-flow-line {
+  width: 2px;
+  background: linear-gradient(transparent, #c4e898, transparent);
+  border-radius: 2px;
+  box-shadow: 0 0 12px #b7ef6a22;
+}

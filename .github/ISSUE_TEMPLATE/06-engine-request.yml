@@ -1,0 +1,28 @@
+name: 'Engine request'
+description: 'Propose another animation engine.'
+body:
+  - type: textarea
+    id: field-1
+    attributes:
+      label: 'Engine and official documentation'
+    validations:
+      required: true
+  - type: textarea
+    id: field-2
+    attributes:
+      label: 'License, maintenance and size'
+    validations:
+      required: true
+  - type: textarea
+    id: field-3
+    attributes:
+      label: 'Use cases and alternatives'
+    validations:
+      required: true
+  - type: checkboxes
+    id: conduct
+    attributes:
+      label: Community expectations
+      options:
+        - label: I agree to follow the project Code of Conduct.
+          required: true

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "aurora-field",
+  "title": "Aurora field",
+  "description": "Slow-moving color that gives a quiet page some atmosphere.",
+  "category": "backgrounds",
+  "framework": "react",
+  "engine": "css",
+  "tags": ["backgrounds", "css", "aurora", "field"],
+  "files": [
+    "backgrounds/aurora-field/aurora-field.tsx",
+    "backgrounds/aurora-field/aurora-field.css",
+    "shared/use-animation.ts",
+    "shared/base.css",
+    "shared/LICENSE"
+  ],
+  "preview": "backgrounds/aurora-field/preview.tsx",
+  "dependencies": {},
+  "author": {
+    "name": "BuildWithMe-UI contributors"
+  },
+  "license": "MIT",
+  "origin": "original",
+  "adaptations": [],
+  "usage": "import AuroraField from \"@/components/buildwithme/aurora-field/aurora-field\";\n\n<AuroraField />",
+  "accessibility": "Respects prefers-reduced-motion; pauses when off screen or the document is hidden. Interactive controls support keyboard focus. Use paused to stop the demonstration.",
+  "props": [
+    {
+      "name": "paused",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pause decorative animation while retaining interactive controls."
+    }
+  ]
+}

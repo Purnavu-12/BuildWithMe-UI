@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "particle-field",
+  "title": "Particle field",
+  "description": "A deterministic constellation of gently drifting points.",
+  "category": "backgrounds",
+  "framework": "react",
+  "engine": "animejs",
+  "tags": ["backgrounds", "animejs", "particle", "field"],
+  "files": [
+    "backgrounds/particle-field/particle-field.tsx",
+    "backgrounds/particle-field/particle-field.css",
+    "shared/use-animation.ts",
+    "shared/base.css",
+    "shared/LICENSE"
+  ],
+  "preview": "backgrounds/particle-field/preview.tsx",
+  "dependencies": {
+    "animejs": "4.5.0"
+  },
+  "author": {
+    "name": "BuildWithMe-UI contributors"
+  },
+  "license": "MIT",
+  "origin": "original",
+  "adaptations": [],
+  "usage": "import ParticleField from \"@/components/buildwithme/particle-field/particle-field\";\n\n<ParticleField />",
+  "accessibility": "Respects prefers-reduced-motion; pauses when off screen or the document is hidden. Interactive controls support keyboard focus. Use paused to stop the demonstration.",
+  "props": [
+    {
+      "name": "paused",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pause decorative animation while retaining interactive controls."
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+.bw-demo {
+  --bw-fg: #f5f5ee;
+  --bw-muted: #a5a69d;
+  --bw-panel: #1b1d19;
+  --bw-border: #36392f;
+  --bw-accent: #d0f58b;
+  color: var(--bw-fg);
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  width: 100%;
+  position: relative;
+  isolation: isolate;
+}
+[data-theme='light'] .bw-demo {
+  --bw-fg: #20251b;
+  --bw-muted: #59614f;
+  --bw-panel: #fff;
+  --bw-border: #cbd1c1;
+  --bw-accent: #355b12;
+}
+.bw-demo * {
+  box-sizing: border-box;
+}
+.bw-demo button,
+.bw-demo textarea,
+.bw-demo input {
+  font: inherit;
+}
+.bw-demo button {
+  cursor: pointer;
+}
+.bw-demo button:disabled {
+  cursor: wait;
+}
+.bw-demo :focus-visible {
+  outline: 2px solid var(--bw-accent);
+  outline-offset: 5px;
+}
+.bw-button {
+  border: 1px solid var(--bw-border);
+  background: var(--bw-panel);
+  color: var(--bw-fg);
+  padding: 13px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+}
+.bw-panel {
+  background: var(--bw-panel);
+  border: 1px solid var(--bw-border);
+  border-radius: 16px;
+  padding: 24px;
+  width: min(100%, 310px);
+  color: var(--bw-fg);
+}
+.bw-caption {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bw-muted);
+  margin: 0 0 15px;
+}
+.bw-title {
+  font-size: 24px;
+  letter-spacing: -0.04em;
+  font-weight: 550;
+  margin: 0 0 10px;
+}
+.bw-description {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--bw-muted);
+  margin: 0;
+}
+.bw-large-text {
+  font-size: clamp(26px, 4vw, 42px);
+  font-weight: 550;
+  letter-spacing: -0.05em;
+  line-height: 1.15;
+  margin: 0;
+}
+.bw-demo[data-active='false'] *,
+.bw-demo[data-active='false'] *::before,
+.bw-demo[data-active='false'] *::after {
+  animation-play-state: paused !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bw-demo *,
+  .bw-demo *::before,
+  .bw-demo *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.bw-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

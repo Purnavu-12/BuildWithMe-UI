@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "id": "shimmer-button",
+  "title": "Shimmer button",
+  "description": "A quiet sweep of light across a beautifully simple action.",
+  "category": "buttons",
+  "framework": "react",
+  "engine": "css",
+  "tags": ["buttons", "css", "shimmer", "button"],
+  "files": [
+    "buttons/shimmer-button/shimmer-button.tsx",
+    "buttons/shimmer-button/shimmer-button.css",
+    "shared/use-animation.ts",
+    "shared/base.css",
+    "shared/LICENSE"
+  ],
+  "preview": "buttons/shimmer-button/preview.tsx",
+  "dependencies": {},
+  "author": {
+    "name": "BuildWithMe-UI contributors"
+  },
+  "license": "MIT",
+  "origin": "original",
+  "adaptations": [],
+  "usage": "import ShimmerButton from \"@/components/buildwithme/shimmer-button/shimmer-button\";\n\n<ShimmerButton />",
+  "accessibility": "Respects prefers-reduced-motion; pauses when off screen or the document is hidden. Interactive controls support keyboard focus. Use paused to stop the demonstration.",
+  "props": [
+    {
+      "name": "paused",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pause decorative animation while retaining interactive controls."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Make something great",
+      "description": "Button text."
+    },
+    {
+      "name": "onClick",
+      "type": "() => void",
+      "default": "undefined",
+      "description": "Action callback."
+    }
+  ]
+}

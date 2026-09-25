@@ -1,0 +1,6 @@
+.bw-spotlight {
+  background:
+    radial-gradient(180px circle at var(--x, 50%) var(--y, 50%), #b7ed7220, transparent),
+    var(--bw-panel);
+  min-height: 170px;
+}

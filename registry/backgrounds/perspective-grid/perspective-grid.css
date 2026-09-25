@@ -1,0 +1,32 @@
+.bw-horizon {
+  min-height: 240px;
+  overflow: hidden;
+  perspective: 220px;
+  background: linear-gradient(#101510, #1a2416);
+}
+.bw-horizon-grid {
+  position: absolute;
+  width: 200%;
+  height: 300%;
+  top: 30%;
+  background-image:
+    linear-gradient(#a4dc4e33 1px, transparent 1px),
+    linear-gradient(90deg, #a4dc4e33 1px, transparent 1px);
+  background-size: 35px 35px;
+  transform: rotateX(65deg);
+  animation: bw-grid-travel 10s linear infinite;
+}
+.bw-horizon-sun {
+  position: absolute;
+  top: 15%;
+  width: 90px;
+  height: 90px;
+  border: 1px solid #ceef9555;
+  border-radius: 50%;
+  background: linear-gradient(#b7d18a33, transparent);
+}
+@keyframes bw-grid-travel {
+  to {
+    background-position: 0 35px;
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "tool-call-panel",
+  "title": "Tool-call panel",
+  "description": "A transparent look at what an assistant is doing.",
+  "category": "ai",
+  "framework": "react",
+  "engine": "css",
+  "tags": ["ai", "css", "tool", "call", "panel"],
+  "files": [
+    "ai/tool-call-panel/tool-call-panel.tsx",
+    "ai/tool-call-panel/tool-call-panel.css",
+    "shared/use-animation.ts",
+    "shared/base.css",
+    "shared/LICENSE"
+  ],
+  "preview": "ai/tool-call-panel/preview.tsx",
+  "dependencies": {},
+  "author": {
+    "name": "BuildWithMe-UI contributors"
+  },
+  "license": "MIT",
+  "origin": "original",
+  "adaptations": [],
+  "usage": "import ToolCallPanel from \"@/components/buildwithme/tool-call-panel/tool-call-panel\";\n\n<ToolCallPanel />",
+  "accessibility": "Respects prefers-reduced-motion; pauses when off screen or the document is hidden. Interactive controls support keyboard focus. Use paused to stop the demonstration.",
+  "props": [
+    {
+      "name": "paused",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pause decorative animation while retaining interactive controls."
+    }
+  ]
+}

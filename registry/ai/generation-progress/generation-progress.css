@@ -1,0 +1,25 @@
+.bw-progress-track {
+  height: 4px;
+  background: var(--bw-border);
+  border-radius: 3px;
+  margin: 22px 0 13px;
+  overflow: hidden;
+}
+.bw-progress-track span {
+  display: block;
+  background: var(--bw-accent);
+  height: 100%;
+}
+.bw-progress-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--bw-muted);
+  font-variant-numeric: tabular-nums;
+}
+.bw-progress-footer button {
+  background: none;
+  border: 0;
+  color: var(--bw-fg);
+  font-size: 11px;
+}

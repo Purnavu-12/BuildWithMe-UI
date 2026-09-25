@@ -1,0 +1,35 @@
+.bw-composer {
+  padding: 16px;
+  max-width: 340px;
+}
+.bw-composer textarea {
+  resize: vertical;
+  width: 100%;
+  min-height: 70px;
+  background: none;
+  border: 0;
+  color: var(--bw-fg);
+  font-size: 14px;
+}
+.bw-composer > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.bw-composer span {
+  font-size: 10px;
+  color: var(--bw-muted);
+}
+.bw-composer button {
+  background: var(--bw-accent);
+  color: var(--bw-panel);
+  border: 0;
+  border-radius: 7px;
+  width: 30px;
+  height: 30px;
+}
+.bw-composer button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

@@ -1,0 +1,9 @@
+.bw-magnetic {
+  background: var(--bw-accent);
+  color: #18220d;
+  border: 0;
+  box-shadow: 0 0 40px #b5f36a12;
+}
+[data-theme='light'] .bw-magnetic {
+  color: white;
+}

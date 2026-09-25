@@ -1,0 +1,16 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": ["NEXT_PUBLIC_SITE_URL", "NEXT_PUBLIC_REPOSITORY_URL"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/registry/**",
+        "$TURBO_ROOT$/packages/**",
+        "src/generated/**"
+      ]
+    }
+  }
+}

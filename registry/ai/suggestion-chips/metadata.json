@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "suggestion-chips",
+  "title": "Suggestion chips",
+  "description": "Small invitations that make a blank canvas less blank.",
+  "category": "ai",
+  "framework": "react",
+  "engine": "motion",
+  "tags": ["ai", "motion", "suggestion", "chips"],
+  "files": [
+    "ai/suggestion-chips/suggestion-chips.tsx",
+    "ai/suggestion-chips/suggestion-chips.css",
+    "shared/use-animation.ts",
+    "shared/base.css",
+    "shared/LICENSE"
+  ],
+  "preview": "ai/suggestion-chips/preview.tsx",
+  "dependencies": {
+    "motion": "13.4.4"
+  },
+  "author": {
+    "name": "BuildWithMe-UI contributors"
+  },
+  "license": "MIT",
+  "origin": "original",
+  "adaptations": [],
+  "usage": "import SuggestionChips from \"@/components/buildwithme/suggestion-chips/suggestion-chips\";\n\n<SuggestionChips />",
+  "accessibility": "Respects prefers-reduced-motion; pauses when off screen or the document is hidden. Interactive controls support keyboard focus. Use paused to stop the demonstration.",
+  "props": [
+    {
+      "name": "paused",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pause decorative animation while retaining interactive controls."
+    },
+    {
+      "name": "options",
+      "type": "string[]",
+      "default": "three example prompts",
+      "description": "Selectable prompt suggestions."
+    },
+    {
+      "name": "onSelect",
+      "type": "(value: string) => void",
+      "default": "undefined",
+      "description": "Receives selected prompt."
+    }
+  ]
+}

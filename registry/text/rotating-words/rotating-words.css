@@ -1,0 +1,9 @@
+.bw-rotating {
+  color: var(--bw-accent);
+  display: block;
+  min-width: 230px;
+  height: 1.25em;
+}
+.bw-rotating span {
+  display: block;
+}

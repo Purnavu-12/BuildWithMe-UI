@@ -1,0 +1,25 @@
+.bw-underline {
+  position: relative;
+  padding-bottom: 8px;
+}
+.bw-underline:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: var(--bw-accent);
+  transform-origin: left;
+  animation: bw-underline 3s ease-in-out infinite;
+}
+@keyframes bw-underline {
+  0%,
+  10% {
+    transform: scaleX(0.1);
+  }
+  50%,
+  100% {
+    transform: scaleX(1);
+  }
+}

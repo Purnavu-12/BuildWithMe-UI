@@ -1,0 +1,6 @@
+.bw-scramble {
+  font-family: monospace;
+  font-size: 25px;
+  color: var(--bw-accent);
+  letter-spacing: -0.05em;
+}

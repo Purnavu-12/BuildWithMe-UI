@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "id": "press-depth-button",
+  "title": "Press-depth button",
+  "description": "A tactile, raised button with a satisfying press state.",
+  "category": "buttons",
+  "framework": "react",
+  "engine": "css",
+  "tags": ["buttons", "css", "press", "depth", "button"],
+  "files": [
+    "buttons/press-depth-button/press-depth-button.tsx",
+    "buttons/press-depth-button/press-depth-button.css",
+    "shared/use-animation.ts",
+    "shared/base.css",
+    "shared/LICENSE"
+  ],
+  "preview": "buttons/press-depth-button/preview.tsx",
+  "dependencies": {},
+  "author": {
+    "name": "BuildWithMe-UI contributors"
+  },
+  "license": "MIT",
+  "origin": "original",
+  "adaptations": [],
+  "usage": "import PressDepthButton from \"@/components/buildwithme/press-depth-button/press-depth-button\";\n\n<PressDepthButton />",
+  "accessibility": "Respects prefers-reduced-motion; pauses when off screen or the document is hidden. Interactive controls support keyboard focus. Use paused to stop the demonstration.",
+  "props": [
+    {
+      "name": "paused",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pause decorative animation while retaining interactive controls."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Give it a push",
+      "description": "Button text."
+    },
+    {
+      "name": "onClick",
+      "type": "() => void",
+      "default": "undefined",
+      "description": "Action callback."
+    }
+  ]
+}

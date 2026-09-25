@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "stagger-reveal",
+  "title": "Stagger reveal",
+  "description": "Typography that arrives one word at a time.",
+  "category": "text",
+  "framework": "react",
+  "engine": "animejs",
+  "tags": ["text", "animejs", "stagger", "reveal"],
+  "files": [
+    "text/stagger-reveal/stagger-reveal.tsx",
+    "text/stagger-reveal/stagger-reveal.css",
+    "shared/use-animation.ts",
+    "shared/base.css",
+    "shared/LICENSE"
+  ],
+  "preview": "text/stagger-reveal/preview.tsx",
+  "dependencies": {
+    "animejs": "4.5.0"
+  },
+  "author": {
+    "name": "BuildWithMe-UI contributors"
+  },
+  "license": "MIT",
+  "origin": "original",
+  "adaptations": [],
+  "usage": "import StaggerReveal from \"@/components/buildwithme/stagger-reveal/stagger-reveal\";\n\n<StaggerReveal />",
+  "accessibility": "Respects prefers-reduced-motion; pauses when off screen or the document is hidden. Interactive controls support keyboard focus. Use paused to stop the demonstration.",
+  "props": [
+    {
+      "name": "paused",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pause decorative animation while retaining interactive controls."
+    },
+    {
+      "name": "text",
+      "type": "string",
+      "default": "Ideas into interfaces.",
+      "description": "Text revealed by word."
+    }
+  ]
+}

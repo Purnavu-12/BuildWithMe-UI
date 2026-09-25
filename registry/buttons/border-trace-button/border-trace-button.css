@@ -1,0 +1,26 @@
+.bw-trace {
+  isolation: isolate;
+  overflow: hidden;
+  padding: 1px;
+  border: 0;
+}
+.bw-trace:before {
+  content: '';
+  position: absolute;
+  inset: -150%;
+  background: conic-gradient(transparent 75%, #c8eaa3 95%, transparent);
+  animation: bw-trace 5s linear infinite;
+  z-index: -1;
+}
+.bw-trace span {
+  display: block;
+  margin: 1px;
+  padding: 12px 22px;
+  background: var(--bw-panel);
+  border-radius: 9px;
+}
+@keyframes bw-trace {
+  to {
+    transform: rotate(360deg);
+  }
+}

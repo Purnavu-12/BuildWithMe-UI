@@ -1,0 +1,19 @@
+.bw-aurora {
+  overflow: hidden;
+  min-height: 240px;
+  background: #0e1716;
+}
+.bw-aurora > div {
+  position: absolute;
+  inset: -50%;
+  background:
+    radial-gradient(ellipse at 30% 55%, #8dbd6866, transparent 40%),
+    radial-gradient(ellipse at 65% 45%, #3ca59a66, transparent 40%);
+  filter: blur(20px);
+  animation: bw-aurora 12s ease-in-out infinite alternate;
+}
+@keyframes bw-aurora {
+  to {
+    transform: rotate(35deg) scale(1.2) translateY(10%);
+  }
+}

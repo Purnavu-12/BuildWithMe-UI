@@ -1,0 +1,14 @@
+.bw-depth {
+  background: #f1eee4;
+  color: #272820;
+  box-shadow:
+    0 5px 0 #919582,
+    0 8px 12px #0003;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+.bw-depth:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #919582;
+}

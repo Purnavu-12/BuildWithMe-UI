@@ -1,0 +1,40 @@
+name: 'Component submission'
+description: 'Propose a component for review.'
+body:
+  - type: textarea
+    id: field-1
+    attributes:
+      label: 'Name, description, category and framework'
+    validations:
+      required: true
+  - type: textarea
+    id: field-2
+    attributes:
+      label: 'Author, license, provenance and source URL'
+    validations:
+      required: true
+  - type: textarea
+    id: field-3
+    attributes:
+      label: 'Engine and dependencies'
+    validations:
+      required: true
+  - type: textarea
+    id: field-4
+    attributes:
+      label: 'Usage, screenshots and source'
+    validations:
+      required: true
+  - type: textarea
+    id: field-5
+    attributes:
+      label: 'Reduced motion and accessibility notes'
+    validations:
+      required: true
+  - type: checkboxes
+    id: conduct
+    attributes:
+      label: Community expectations
+      options:
+        - label: I agree to follow the project Code of Conduct.
+          required: true

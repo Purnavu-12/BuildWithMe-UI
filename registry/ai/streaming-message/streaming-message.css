@@ -1,0 +1,17 @@
+.bw-message {
+  min-height: 180px;
+}
+.bw-caret {
+  display: inline-block;
+  width: 5px;
+  height: 13px;
+  background: var(--bw-accent);
+  vertical-align: middle;
+  margin-left: 4px;
+  animation: bw-blink 1s steps(2) infinite;
+}
+@keyframes bw-blink {
+  to {
+    opacity: 0;
+  }
+}

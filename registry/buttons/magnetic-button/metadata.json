@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "magnetic-button",
+  "title": "Magnetic button",
+  "description": "A spring-loaded button that gently follows your pointer.",
+  "category": "buttons",
+  "framework": "react",
+  "engine": "motion",
+  "tags": ["buttons", "motion", "magnetic", "button"],
+  "files": [
+    "buttons/magnetic-button/magnetic-button.tsx",
+    "buttons/magnetic-button/magnetic-button.css",
+    "shared/use-animation.ts",
+    "shared/base.css",
+    "shared/LICENSE"
+  ],
+  "preview": "buttons/magnetic-button/preview.tsx",
+  "dependencies": {
+    "motion": "13.4.4"
+  },
+  "author": {
+    "name": "BuildWithMe-UI contributors"
+  },
+  "license": "MIT",
+  "origin": "original",
+  "adaptations": [],
+  "usage": "import MagneticButton from \"@/components/buildwithme/magnetic-button/magnetic-button\";\n\n<MagneticButton />",
+  "accessibility": "Respects prefers-reduced-motion; pauses when off screen or the document is hidden. Interactive controls support keyboard focus. Use paused to stop the demonstration.",
+  "props": [
+    {
+      "name": "paused",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pause decorative animation while retaining interactive controls."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Pull me closer",
+      "description": "Button text."
+    },
+    {
+      "name": "onClick",
+      "type": "() => void",
+      "default": "undefined",
+      "description": "Action callback."
+    }
+  ]
+}

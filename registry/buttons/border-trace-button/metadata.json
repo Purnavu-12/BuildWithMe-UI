@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "id": "border-trace-button",
+  "title": "Border-trace button",
+  "description": "A moving highlight that traces the edge of your next action.",
+  "category": "buttons",
+  "framework": "react",
+  "engine": "css",
+  "tags": ["buttons", "css", "border", "trace", "button"],
+  "files": [
+    "buttons/border-trace-button/border-trace-button.tsx",
+    "buttons/border-trace-button/border-trace-button.css",
+    "shared/use-animation.ts",
+    "shared/base.css",
+    "shared/LICENSE"
+  ],
+  "preview": "buttons/border-trace-button/preview.tsx",
+  "dependencies": {},
+  "author": {
+    "name": "BuildWithMe-UI contributors"
+  },
+  "license": "MIT",
+  "origin": "original",
+  "adaptations": [],
+  "usage": "import BorderTraceButton from \"@/components/buildwithme/border-trace-button/border-trace-button\";\n\n<BorderTraceButton />",
+  "accessibility": "Respects prefers-reduced-motion; pauses when off screen or the document is hidden. Interactive controls support keyboard focus. Use paused to stop the demonstration.",
+  "props": [
+    {
+      "name": "paused",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pause decorative animation while retaining interactive controls."
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Explore the possibilities",
+      "description": "Button text."
+    },
+    {
+      "name": "onClick",
+      "type": "() => void",
+      "default": "undefined",
+      "description": "Action callback."
+    }
+  ]
+}

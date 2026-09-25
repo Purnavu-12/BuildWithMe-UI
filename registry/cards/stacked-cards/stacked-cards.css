@@ -1,0 +1,20 @@
+.bw-stack {
+  position: relative;
+  width: 250px;
+  margin: 15px;
+}
+.bw-stack-back {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--bw-border);
+  background: #87967433;
+  border-radius: 16px;
+  transform: rotate(6deg);
+}
+.bw-stack-front {
+  position: relative;
+  text-align: left;
+  display: grid;
+  gap: 12px;
+  min-height: 165px;
+}

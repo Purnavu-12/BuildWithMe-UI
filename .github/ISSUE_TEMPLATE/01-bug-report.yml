@@ -1,0 +1,28 @@
+name: 'Bug report'
+description: 'Report reproducible unexpected behavior.'
+body:
+  - type: textarea
+    id: field-1
+    attributes:
+      label: 'Steps to reproduce'
+    validations:
+      required: true
+  - type: textarea
+    id: field-2
+    attributes:
+      label: 'Expected and actual behavior'
+    validations:
+      required: true
+  - type: textarea
+    id: field-3
+    attributes:
+      label: 'Environment and affected component'
+    validations:
+      required: true
+  - type: checkboxes
+    id: conduct
+    attributes:
+      label: Community expectations
+      options:
+        - label: I agree to follow the project Code of Conduct.
+          required: true

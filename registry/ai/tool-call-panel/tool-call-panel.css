@@ -1,0 +1,27 @@
+.bw-tool button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: 0;
+  color: var(--bw-fg);
+  padding: 0 0 12px;
+  font-family: monospace;
+  font-size: 13px;
+}
+.bw-tool-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--bw-accent);
+  margin-right: 10px;
+}
+.bw-tool pre {
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--bw-muted);
+  margin-bottom: 0;
+  overflow: auto;
+}

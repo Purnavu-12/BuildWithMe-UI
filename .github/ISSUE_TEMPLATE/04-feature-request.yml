@@ -1,0 +1,28 @@
+name: 'Feature request'
+description: 'Suggest an improvement to the registry.'
+body:
+  - type: textarea
+    id: field-1
+    attributes:
+      label: 'Problem and audience'
+    validations:
+      required: true
+  - type: textarea
+    id: field-2
+    attributes:
+      label: 'Proposed behavior'
+    validations:
+      required: true
+  - type: textarea
+    id: field-3
+    attributes:
+      label: 'Alternatives considered'
+    validations:
+      required: true
+  - type: checkboxes
+    id: conduct
+    attributes:
+      label: Community expectations
+      options:
+        - label: I agree to follow the project Code of Conduct.
+          required: true

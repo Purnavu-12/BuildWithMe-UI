@@ -1,0 +1,20 @@
+.bw-shimmer {
+  overflow: hidden;
+  border-color: #5d644d;
+}
+.bw-shimmer:after {
+  content: '';
+  position: absolute;
+  inset: -80%;
+  background: linear-gradient(110deg, transparent 40%, #d5f5b333 50%, transparent 60%);
+  animation: bw-shimmer 4s infinite;
+  pointer-events: none;
+}
+@keyframes bw-shimmer {
+  from {
+    transform: translateX(-60%);
+  }
+  to {
+    transform: translateX(60%);
+  }
+}

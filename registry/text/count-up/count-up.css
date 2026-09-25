@@ -1,0 +1,10 @@
+.bw-counter {
+  font-size: 56px;
+  letter-spacing: -0.07em;
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+.bw-counter > span + span {
+  color: var(--bw-accent);
+  font-size: 30px;
+}

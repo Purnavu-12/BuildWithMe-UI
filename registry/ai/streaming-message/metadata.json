@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "streaming-message",
+  "title": "Streaming message",
+  "description": "A local text-stream demonstration with a readable static fallback.",
+  "category": "ai",
+  "framework": "react",
+  "engine": "css",
+  "tags": ["ai", "css", "streaming", "message"],
+  "files": [
+    "ai/streaming-message/streaming-message.tsx",
+    "ai/streaming-message/streaming-message.css",
+    "shared/use-animation.ts",
+    "shared/base.css",
+    "shared/LICENSE"
+  ],
+  "preview": "ai/streaming-message/preview.tsx",
+  "dependencies": {},
+  "author": {
+    "name": "BuildWithMe-UI contributors"
+  },
+  "license": "MIT",
+  "origin": "original",
+  "adaptations": [],
+  "usage": "import StreamingMessage from \"@/components/buildwithme/streaming-message/streaming-message\";\n\n<StreamingMessage />",
+  "accessibility": "Respects prefers-reduced-motion; pauses when off screen or the document is hidden. Interactive controls support keyboard focus. Use paused to stop the demonstration.",
+  "props": [
+    {
+      "name": "paused",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pause decorative animation while retaining interactive controls."
+    },
+    {
+      "name": "text",
+      "type": "string",
+      "default": "example message",
+      "description": "Text to reveal locally."
+    }
+  ]
+}

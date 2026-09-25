@@ -1,0 +1,23 @@
+.bw-chips {
+  width: 280px;
+}
+.bw-chips button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  margin: 7px 0;
+  border: 1px solid var(--bw-border);
+  border-radius: 9px;
+  background: var(--bw-panel);
+  color: var(--bw-fg);
+  font-size: 12px;
+  text-align: left;
+}
+.bw-chips button[aria-pressed='true'] {
+  border-color: var(--bw-accent);
+}
+.bw-chips button span {
+  color: var(--bw-muted);
+}

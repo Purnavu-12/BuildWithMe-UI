@@ -1,0 +1,11 @@
+.bw-particles {
+  min-height: 240px;
+  overflow: hidden;
+  background: radial-gradient(ellipse at center, #21302055, transparent);
+}
+.bw-particle {
+  position: absolute;
+  background: var(--bw-accent);
+  border-radius: 50%;
+  box-shadow: 0 0 8px #c7ec9b55;
+}

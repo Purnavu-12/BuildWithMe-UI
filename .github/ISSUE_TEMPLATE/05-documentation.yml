@@ -1,0 +1,28 @@
+name: 'Documentation improvement'
+description: 'Help make the project easier to understand.'
+body:
+  - type: textarea
+    id: field-1
+    attributes:
+      label: 'Affected document or route'
+    validations:
+      required: true
+  - type: textarea
+    id: field-2
+    attributes:
+      label: 'What is unclear'
+    validations:
+      required: true
+  - type: textarea
+    id: field-3
+    attributes:
+      label: 'Suggested correction'
+    validations:
+      required: true
+  - type: checkboxes
+    id: conduct
+    attributes:
+      label: Community expectations
+      options:
+        - label: I agree to follow the project Code of Conduct.
+          required: true

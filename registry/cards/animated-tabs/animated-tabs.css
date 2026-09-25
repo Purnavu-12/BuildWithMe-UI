@@ -1,0 +1,36 @@
+.bw-tab-box {
+  width: 290px;
+}
+.bw-tabs {
+  display: flex;
+  background: var(--bw-panel);
+  padding: 5px;
+  border: 1px solid var(--bw-border);
+  border-radius: 10px;
+}
+.bw-tabs button {
+  background: none;
+  border: 0;
+  color: var(--bw-muted);
+  padding: 10px 14px;
+  position: relative;
+  flex: 1;
+  font-size: 12px;
+}
+.bw-tabs button span {
+  position: relative;
+  z-index: 1;
+}
+.bw-tabs button[aria-selected='true'] {
+  color: var(--bw-fg);
+}
+.bw-tabs .bw-tab-indicator {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--bw-fg) 10%, transparent);
+  border-radius: 7px;
+}
+.bw-tab-copy {
+  padding: 20px 8px;
+  min-height: 85px;
+}

@@ -1,0 +1,28 @@
+name: 'Component request'
+description: 'Suggest a reusable component.'
+body:
+  - type: textarea
+    id: field-1
+    attributes:
+      label: 'Desired behavior'
+    validations:
+      required: true
+  - type: textarea
+    id: field-2
+    attributes:
+      label: 'Use case and visual references'
+    validations:
+      required: true
+  - type: textarea
+    id: field-3
+    attributes:
+      label: 'Category and preferred engine'
+    validations:
+      required: true
+  - type: checkboxes
+    id: conduct
+    attributes:
+      label: Community expectations
+      options:
+        - label: I agree to follow the project Code of Conduct.
+          required: true

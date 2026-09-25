@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "perspective-grid",
+  "title": "Perspective grid",
+  "description": "An infinite horizon, built from a few simple lines.",
+  "category": "backgrounds",
+  "framework": "react",
+  "engine": "css",
+  "tags": ["backgrounds", "css", "perspective", "grid"],
+  "files": [
+    "backgrounds/perspective-grid/perspective-grid.tsx",
+    "backgrounds/perspective-grid/perspective-grid.css",
+    "shared/use-animation.ts",
+    "shared/base.css",
+    "shared/LICENSE"
+  ],
+  "preview": "backgrounds/perspective-grid/preview.tsx",
+  "dependencies": {},
+  "author": {
+    "name": "BuildWithMe-UI contributors"
+  },
+  "license": "MIT",
+  "origin": "original",
+  "adaptations": [],
+  "usage": "import PerspectiveGrid from \"@/components/buildwithme/perspective-grid/perspective-grid\";\n\n<PerspectiveGrid />",
+  "accessibility": "Respects prefers-reduced-motion; pauses when off screen or the document is hidden. Interactive controls support keyboard focus. Use paused to stop the demonstration.",
+  "props": [
+    {
+      "name": "paused",
+      "type": "boolean",
+      "default": "false",
+      "description": "Pause decorative animation while retaining interactive controls."
+    }
+  ]
+}
