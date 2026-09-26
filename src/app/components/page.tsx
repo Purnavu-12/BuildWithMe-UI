@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { Catalog } from '@/components/catalog';
 import { components, registryStats } from '@/lib/registry';
 
-export const metadata = { title: 'Component collection', description: 'Browse 40 component designs across React, Vue, and Svelte.' };
+export const metadata = { title: 'Component collection', description: `Browse ${registryStats.designs} component designs across React, Vue, and Svelte.` };
 
 export default function ComponentsPage() {
   const items = components.map(({ id,title,summary,domains,tags,status,engines,frameworks,installation,provenance })=>({id,title,summary,domains,tags,status,engines,frameworks,installation,provenance}));

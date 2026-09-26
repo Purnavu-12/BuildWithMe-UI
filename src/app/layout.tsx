@@ -3,6 +3,7 @@ import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Header, Footer } from '@/components/shell';
+import { registryStats } from '@/lib/registry';
 import './globals.css';
 export const metadata: Metadata = {
   title: {
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
     template: '%s · BuildWithMe UI',
   },
   description:
-    'Discover 40 open-source component designs with 120 React, Vue, and Svelte framework sources.',
+    `Discover ${registryStats.designs} open-source component designs with ${registryStats.implementations} React, Vue, and Svelte framework sources.`,
 };
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

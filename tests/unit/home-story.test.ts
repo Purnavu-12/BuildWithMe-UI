@@ -26,4 +26,15 @@ describe('Interface Cosmos story configuration', () => {
     const story = getHomeStory();
     expect(story.provenance.original + story.provenance.adapted + story.provenance.remix).toBe(components.length);
   });
+
+  it('keeps exact provenance for every imported design', () => {
+    const adapted = components.filter((component) => component.provenance.type === 'adapted');
+    expect(adapted).toHaveLength(15);
+    for (const component of adapted) {
+      if (component.provenance.type !== 'adapted') continue;
+      expect(component.provenance.upstreamUrl).toMatch(/^https:\/\/github\.com\/(Ashutoshx7\/VengeanceUI|vercel\/(examples|registry-starter))\/blob\//);
+      expect(component.provenance.upstreamLicense).toBe('MIT');
+      expect(component.provenance.modification.length).toBeGreaterThan(30);
+    }
+  });
 });

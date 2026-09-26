@@ -4,7 +4,7 @@ import AxeBuilder from '@axe-core/playwright';
 test('homepage presents the ecosystem before discovery', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: /Build the interface/ })).toBeVisible();
-  await expect(page.getByText('120', { exact: true }).first()).toBeVisible();
+  await expect(page.getByText('165', { exact: true }).first()).toBeVisible();
   await expect(page.getByRole('link', { name: /Explore the collection/ })).toBeVisible();
   await expect(page.locator('[data-cosmos-chapter]')).toHaveCount(5);
   await expect(page.locator('.cosmos-static')).toBeVisible();
@@ -27,17 +27,21 @@ test('chapter navigation and command search work by keyboard', async ({ page }) 
 });
 
 test('search and every filter survive reload and reset cleanly', async ({ page }) => {
+  const index = await (await page.request.get('/index.v2.json')).json();
+  const navigationCount = index.items.filter((item: { domains: string[] }) =>
+    item.domains.includes('navigation'),
+  ).length;
   await page.goto('/components');
   await page.getByRole('combobox', { name: 'Filter by product domain' }).selectOption('navigation');
   await page.getByRole('combobox', { name: 'Filter by framework' }).selectOption('vue');
   await expect(page).toHaveURL(/domain=navigation/);
-  await expect(page.locator('.component-card')).toHaveCount(3);
+  await expect(page.locator('.component-card')).toHaveCount(navigationCount);
   await page.reload();
   await expect(page.getByRole('combobox', { name: 'Filter by product domain' })).toHaveValue('navigation');
   await page.getByRole('textbox', { name: 'Search components' }).fill('no-such-design');
   await expect(page.getByText('No design matches that combination.')).toBeVisible();
   await page.getByRole('button', { name: 'Clear filters' }).click();
-  await expect(page.locator('.component-card')).toHaveCount(40);
+  await expect(page.locator('.component-card')).toHaveCount(55);
 });
 
 test('detail supports preview controls, framework source, and copy failure recovery', async ({ page }) => {
@@ -53,6 +57,22 @@ test('detail supports preview controls, framework source, and copy failure recov
   await page.evaluate(() => Object.defineProperty(navigator, 'clipboard', { value: { writeText: () => Promise.reject(new Error('blocked')) }, configurable: true }));
   await page.getByRole('button', { name: 'Copy command' }).click();
   await expect(page.getByText('Copy failed')).toBeVisible();
+});
+
+test('site and component preview themes switch completely and persist', async ({ page }) => {
+  await page.goto('/components/magnetic-button');
+  await page.getByRole('combobox', { name: 'Color theme' }).selectOption('light');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(241, 241, 237)');
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+
+  const stage = page.locator('.preview-stage');
+  await page.getByRole('combobox', { name: 'Preview theme' }).selectOption('light');
+  await expect(stage).toHaveCSS('background-color', 'rgb(241, 241, 237)');
+  await expect(stage.locator('.bw-demo')).toHaveCSS('color', 'rgb(32, 37, 27)');
+  await page.getByRole('combobox', { name: 'Preview theme' }).selectOption('dark');
+  await expect(stage).toHaveCSS('background-color', 'rgb(5, 5, 5)');
 });
 
 test('invalid component route returns the designed 404', async ({ page }) => {
@@ -76,17 +96,37 @@ for (const theme of ['dark', 'light'] as const) {
 
 test('reduced motion uses the static hero and every React preview renders', async ({ page }) => {
   test.setTimeout(120000);
+  const pageErrors: string[] = [];
+  page.on('pageerror', (error) => pageErrors.push(error.message));
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await expect(page.locator('.cosmos-static')).toBeVisible();
   await expect(page.locator('.cosmos-canvas')).toHaveCount(0);
   const index = await (await page.request.get('/index.v2.json')).json();
-  expect(index.items).toHaveLength(40);
+  expect(index.items).toHaveLength(55);
   for (const item of index.items) {
     await page.goto(`/preview/${item.id}/react`);
     await expect(page.getByText('This preview could not load.')).toHaveCount(0);
     await expect(page.locator('.preview-stage')).toBeVisible();
+    await expect(page.locator('.preview-stage > :not(.preview-loading)').first()).toBeVisible();
   }
+  expect(pageErrors).toEqual([]);
+});
+
+test('adapted artifacts expose working semantic interactions', async ({ page }) => {
+  await page.goto('/components/folder-preview');
+  const folder = page.locator('.adapt-folder');
+  await folder.getByText('Folder preview').click();
+  await expect(folder).toHaveAttribute('open', '');
+
+  await page.goto('/components/account-login-card');
+  await page.getByRole('textbox', { name: 'Email' }).fill('builder@example.com');
+  await page.getByLabel('Password').fill('source-owned');
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await expect(page.getByRole('status')).toHaveText('Demo sign-in complete.');
+
+  await page.goto('/components/precision-pagination');
+  await expect(page.getByRole('button', { name: '2', exact: true })).toHaveAttribute('aria-current', 'page');
 });
 
 test('save-data mode keeps the complete static story without WebGL', async ({ page }) => {
@@ -100,13 +140,13 @@ test('save-data mode keeps the complete static story without WebGL', async ({ pa
 
 test('ecosystem coverage is registry-derived and accessible', async ({ page }) => {
   await page.goto('/ecosystem');
-  await expect(page.getByText('40', { exact: true }).first()).toBeVisible();
-  await expect(page.getByText('120', { exact: true }).first()).toBeVisible();
+  await expect(page.getByText('55', { exact: true }).first()).toBeVisible();
+  await expect(page.getByText('165', { exact: true }).first()).toBeVisible();
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
   expect(results.violations).toEqual([]);
 });
 
-for (const route of ['/components', '/components/magnetic-button', '/docs/installation', '/contribute']) {
+for (const route of ['/components', '/components/magnetic-button', '/components/glass-dock', '/docs/installation', '/contribute']) {
   test(`${route} has no automated accessibility violations`, async ({ page }) => {
     await page.goto(route);
     const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
@@ -116,7 +156,7 @@ for (const route of ['/components', '/components/magnetic-button', '/docs/instal
 
 test('machine-readable registry exposes all framework artifacts', async ({ page }) => {
   const registry = await (await page.request.get('/registry.json')).json();
-  expect(registry.items).toHaveLength(120);
+  expect(registry.items).toHaveLength(165);
   for (const framework of ['react', 'vue', 'svelte']) {
     const response = await page.request.get(`/r/${framework}/magnetic-button.json`);
     expect(response.ok()).toBe(true);

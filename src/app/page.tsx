@@ -20,7 +20,7 @@ export default function Home() {
           <ChapterMiniature state="signal" />
           <p className="mono-label"><span /> OPEN COMPONENT ECOSYSTEM · INTERFACE COSMOS</p>
           <h1>Build the interface.<br /><em>Keep the source.</em></h1>
-          <p className="cosmos-lede">One considered collection. Three framework expressions. Forty interface signals you can install, inspect, remix, and make your own.</p>
+          <p className="cosmos-lede">One considered collection. Three framework expressions. {story.stats.designs} interface signals you can install, inspect, remix, and make your own.</p>
           <div className="hero-actions">
             <Link className="button button-light magnetic-action" href="/components">Explore the collection <ArrowRight size={16} /></Link>
             <Link className="button button-ghost" href="/docs/installation">Start building <ArrowUpRight size={15} /></Link>
@@ -31,7 +31,7 @@ export default function Home() {
         <article id="constellation" className="cosmos-chapter" data-cosmos-chapter="1">
           <ChapterMiniature state="constellation" />
           <p className="chapter-index">02 / CONSTELLATION</p>
-          <h2>Forty signals.<br />Sixteen product orbits.</h2>
+          <h2>{story.stats.designs} signals.<br />{story.stats.domains} product orbits.</h2>
           <p>Actions, forms, dashboards, AI, commerce, media, documentation, and everything between them. The catalog is structured around what people build.</p>
           <div className="cosmos-stats"><span><b>{story.stats.designs}</b> designs</span><span><b>{story.stats.domains}</b> domains</span><span><b>{story.stats.implementations}</b> sources</span></div>
           <Link className="chapter-link" href="/components">Navigate the complete constellation <ArrowUpRight size={14}/></Link>

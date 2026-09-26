@@ -4,7 +4,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 
-const nodeCount = 40;
+const nodeCount = 55;
 
 function Network() {
   const group = useRef<THREE.Group>(null);

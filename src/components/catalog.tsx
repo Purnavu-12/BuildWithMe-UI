@@ -37,7 +37,7 @@ export function Catalog({ items }: { items: Item[] }) {
   const active = query || domain!=='all'||framework!=='all'||engine!=='all'||method!=='all';
   return <>
     <div className="catalog-controls">
-      <label className="catalog-search"><Search size={14}/><span className="sr-only">Search components</span><input value={query} onChange={(event)=>{setQuery(event.target.value);update({q:event.target.value})}} placeholder="Search 40 designs, domains, tags, or creators…"/></label>
+      <label className="catalog-search"><Search size={14}/><span className="sr-only">Search components</span><input value={query} onChange={(event)=>{setQuery(event.target.value);update({q:event.target.value})}} placeholder={`Search ${items.length} designs, domains, tags, or creators…`}/></label>
       <div className="catalog-filter-drawer">
         <button type="button" className="filter-drawer-trigger" aria-expanded={filtersOpen} aria-controls="catalog-filters" onClick={()=>setFiltersOpen((value)=>!value)}><SlidersHorizontal size={14} aria-hidden="true"/> Filters</button>
         <div className="catalog-filters" id="catalog-filters">

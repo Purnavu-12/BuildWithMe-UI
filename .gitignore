@@ -24,7 +24,9 @@ Desktop.ini
 !.vscode/extensions.json
 AGENT.local.md
 USER.md
-memory/ACTIVE_TASK.md
+/prior-art/
+/design-notes/
+/memory/
 PROJECT_PLAN*.md
 BOOTSTRAP_PROMPT.md
 INITIAL_PLAN.md
@@ -42,6 +44,3 @@ src/generated/
 .release/
 .registry-cache/
 .preview-cache/
-prior-art/
-design-notes/
-memory/

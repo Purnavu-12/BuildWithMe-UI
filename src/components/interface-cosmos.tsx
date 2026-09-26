@@ -113,7 +113,7 @@ export function InterfaceCosmos({
         ) : null}
         <div className="cosmos-coordinate cosmos-coordinate-top">BWM–COSMOS / {String(activeChapter + 1).padStart(2, '0')}</div>
         <div className="cosmos-coordinate cosmos-coordinate-bottom">{nodeCount} SIGNALS · {domainCount} ORBITS</div>
-        <div className="cosmos-frameworks" aria-hidden="true"><span>REACT / 40</span><span>VUE / 40</span><span>SVELTE / 40</span></div>
+        <div className="cosmos-frameworks" aria-hidden="true"><span>REACT / {nodeCount}</span><span>VUE / {nodeCount}</span><span>SVELTE / {nodeCount}</span></div>
         <IgnitionSequence active={activeChapter === 3} reduced={Boolean(reducedMotion)} />
         <nav className="cosmos-rail" aria-label="Interface Cosmos chapters">
           <motion.span className="cosmos-progress" style={{ scaleY: progress }} />
