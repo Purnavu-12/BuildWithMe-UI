@@ -6,9 +6,9 @@ import { Preview } from '@/components/preview';
 import { getHomeStory } from '@/lib/home-story';
 
 const frameworkExamples = [
-  { name: 'React', meta: 'Next.js', code: "import { MagneticButton } from '@buildwithme/react'" },
-  { name: 'Vue', meta: 'Nuxt', code: "import { MagneticButton } from '@buildwithme/vue'" },
-  { name: 'Svelte', meta: 'SvelteKit', code: "import { MagneticButton } from '@buildwithme/svelte'" },
+  { name: 'React', meta: 'Next.js', code: "import { MagneticButton } from '@/components/magnetic-button'" },
+  { name: 'Vue', meta: 'Nuxt', code: "import MagneticButton from '~/components/MagneticButton.vue'" },
+  { name: 'Svelte', meta: 'SvelteKit', code: "import MagneticButton from '$lib/MagneticButton.svelte'" },
 ];
 
 export default function Home() {
@@ -26,6 +26,9 @@ export default function Home() {
             <Link className="button button-ghost" href="/docs/installation">Start building <ArrowUpRight size={15} /></Link>
           </div>
           <InstallSwitcher compact />
+          <Link href="/components/magnetic-button" className="signal-artifact" aria-label="Open the Magnetic button component">
+            <span>LIVE SIGNAL / MAGNETIC BUTTON</span><Preview id="magnetic-button" />
+          </Link>
         </article>
 
         <article id="constellation" className="cosmos-chapter" data-cosmos-chapter="1">
@@ -50,7 +53,7 @@ export default function Home() {
           <ChapterMiniature state="ownership" />
           <p className="chapter-index">04 / OWNERSHIP</p>
           <h2>Start fast.<br />Own every layer.</h2>
-          <p>Use the package for momentum, land reviewed source in your project, or copy the exact implementation you need.</p>
+          <p>Install reviewed source today, inspect every dependency, and keep the implementation inside your product. Packages remain visibly unavailable until they are published.</p>
           <InstallSwitcher />
           <div className="ownership-paths"><span><Package size={15}/> Package</span><span><Braces size={15}/> Source</span><span><Layers3 size={15}/> Copy</span></div>
         </article>

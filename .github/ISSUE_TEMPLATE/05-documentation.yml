@@ -1,5 +1,6 @@
 name: 'Documentation improvement'
 description: 'Help make the project easier to understand.'
+labels: ['documentation', 'needs-triage']
 body:
   - type: textarea
     id: field-1

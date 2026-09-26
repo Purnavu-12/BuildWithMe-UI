@@ -1,5 +1,6 @@
 name: 'Bug report'
 description: 'Report reproducible unexpected behavior.'
+labels: ['bug', 'needs-triage']
 body:
   - type: textarea
     id: field-1

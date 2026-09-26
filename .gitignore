@@ -44,3 +44,5 @@ src/generated/
 .release/
 .registry-cache/
 .preview-cache/
+.preview-build/
+public/preview-runtime/

@@ -2,13 +2,13 @@ type Doc = { title: string; intro: string; sections: { title: string; text: stri
 export const docs: Record<string, Doc> = {
   installation: {
     title: 'From discovery to a working interface.',
-    intro: 'Choose the shortest path for today. You can switch to owned source whenever the component needs to become part of your product language.',
+    intro: 'Source installation is available today. Package commands remain unavailable until the first verified npm release, so the site never promises an install path that does not exist.',
     sections: [
-      { title: 'Install a framework package', text: 'The framework packages expose tree-shakeable component entry points. Importing one component does not load every preview or animation engine.', code: "pnpm add @buildwithme/react\n# or @buildwithme/vue / @buildwithme/svelte" },
-      { title: 'React and Next.js', text: 'Import the named component or its direct export. Interactive components already declare their client boundary.', code: "import { MagneticButton } from '@buildwithme/react';\nimport '@buildwithme/react/styles.css';" },
-      { title: 'Vue and Nuxt', text: 'Import the Vue SFC export from the package. Nuxt projects can register components locally or through their normal components configuration.', code: "import { MagneticButton } from '@buildwithme/vue';" },
-      { title: 'Svelte and SvelteKit', text: 'Import the Svelte 5 component directly. Components do not require a browser-only wrapper unless their documentation says so.', code: "import { MagneticButton } from '@buildwithme/svelte';" },
-      { title: 'Own the source', text: 'Every detail page provides a framework-specific registry URL and a source viewer. Source installation includes only the declared files and dependencies.', code: 'pnpm dlx shadcn@latest add https://your-domain.example/r/react/magnetic-button.json' },
+      { title: 'Own the source', text: 'Every detail page provides a framework-specific registry URL and source viewer. Installation includes only declared files, exact dependencies, creator attribution, and license context.', code: 'pnpm dlx shadcn@latest add https://your-domain.example/r/react/magnetic-button.json' },
+      { title: 'React and Next.js', text: 'Choose React in the workbench and install its registry item. Interactive components keep an explicit client boundary, while static components remain server-compatible.', code: "import { MagneticButton } from '@/components/buildwithme/magnetic-button/react';" },
+      { title: 'Vue and Nuxt', text: 'Choose Vue to receive the single-file source. Register it locally or through the normal Nuxt components configuration.', code: "import MagneticButton from '~/components/buildwithme/magnetic-button/vue.vue';" },
+      { title: 'Svelte and SvelteKit', text: 'Choose Svelte to receive the Svelte 5 source. Place it in the application library and import it through your project alias.', code: "import MagneticButton from '$lib/components/buildwithme/magnetic-button/svelte.svelte';" },
+      { title: 'Package status', text: 'The repository builds and packs @buildwithme/react, @buildwithme/vue, and @buildwithme/svelte for verification. They are not published. Package commands will appear only after provenance, declarations, fixture installs, and the manual release gate pass.' },
     ],
   },
   frameworks: {
@@ -25,7 +25,7 @@ export const docs: Record<string, Doc> = {
     title: 'A starting point. Never a ceiling.',
     intro: 'Package users get stable theme tokens. Source users can change every line.',
     sections: [
-      { title: 'Theme tokens', text: 'Components use a small neutral token surface for foreground, panel, border, muted copy, and focus. Override the variables beneath your application theme.', code: ':root {\n  --bwm-foreground: #f3f3ef;\n  --bwm-surface: #0b0b0b;\n  --bwm-border: #2a2a2a;\n}' },
+      { title: 'Theme boundary', text: 'Wrap a component or preview with data-bwm-theme. The nearest boundary fully defines its canvas, panel, text, muted text, border, and focus colors, so nested themes do not leak.', code: "[data-bwm-theme='dark'] {\n  --bwm-component-canvas: #050505;\n  --bwm-component-fg: #f4f1e8;\n  --bwm-component-panel: #10100f;\n}" },
       { title: 'Animation engines', text: 'CSS handles simple state changes. Motion and Anime.js are declared per component. Three.js stays isolated to immersive visuals and is never loaded by the catalog unless required.' },
       { title: 'Keep the accessible contract', text: 'When adapting source, preserve semantic controls, visible focus, labels, status announcements, and reduced-motion behavior.' },
     ],

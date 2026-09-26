@@ -8,6 +8,8 @@ export default ts.config(
       '**/generated/**',
       '**/.release/**',
       '**/public/r/**',
+      '**/public/preview-runtime/**',
+      '**/.preview-build/**',
       'tmp/**',
       '**/next-env.d.ts',
       'playwright-report/**',

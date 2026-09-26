@@ -1,9 +1,12 @@
 .bw-demo {
-  --bw-fg: #f5f5ee;
-  --bw-muted: #a5a69d;
-  --bw-panel: #1b1d19;
-  --bw-border: #36392f;
-  --bw-accent: #d0f58b;
+  --bw-fg: var(--bwm-component-fg, #f4f1e8);
+  --bw-muted: var(--bwm-component-muted, #a6a49c);
+  --bw-panel: var(--bwm-component-panel, #10100f);
+  --bw-border: var(--bwm-component-border, #343431);
+  --bw-accent: var(--bwm-component-focus, #ffffff);
+  --bw-bg: var(--bwm-component-canvas, #050505);
+  --bw-line: var(--bwm-component-border, #343431);
+  --bw-strong: var(--bwm-component-focus, #ffffff);
   color: var(--bw-fg);
   font-family: inherit;
   display: flex;
@@ -13,13 +16,7 @@
   width: 100%;
   position: relative;
   isolation: isolate;
-}
-[data-theme='light'] .bw-demo {
-  --bw-fg: #20251b;
-  --bw-muted: #59614f;
-  --bw-panel: #fff;
-  --bw-border: #cbd1c1;
-  --bw-accent: #355b12;
+  padding: 24px;
 }
 .bw-demo * {
   box-sizing: border-box;

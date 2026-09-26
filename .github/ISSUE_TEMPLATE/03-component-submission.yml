@@ -1,5 +1,6 @@
 name: 'Component submission'
-description: 'Propose a component for review.'
+description: 'Propose a component for review.'
+labels: ['component', 'contribution', 'needs-triage']
 body:
   - type: textarea
     id: field-1
