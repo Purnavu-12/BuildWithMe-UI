@@ -1,7 +1,5 @@
-import {it,expect} from 'vitest';
-import {rewriteImports} from '../../packages/registry/src/rewrite-imports';
-it('rewrites module paths while retaining unrelated strings and source notices',()=>{
- const source=`// MIT copyright notice\nimport {useAnimation} from '../../shared/use-animation';\nimport '../../shared/base.css';\nexport {thing} from '../module/thing';\nconst loader=()=>import('../module/lazy');\nconst url='../../some-page';`;
- const result=rewriteImports(source);
- expect(result).toContain("from './use-animation'");expect(result).toContain("import './base.css'");expect(result).toContain("from './thing'");expect(result).toContain("import('./lazy')");expect(result).toContain("const url='../../some-page'");expect(result).toContain('// MIT copyright notice');
-});
+import { expect, it } from 'vitest';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
+it('generates 165 framework-specific source artifacts and machine discovery',async()=>{const registry=JSON.parse(await fs.readFile(path.join(process.cwd(),'public','registry.json'),'utf8'));const discovery=JSON.parse(await fs.readFile(path.join(process.cwd(),'public','index.v2.json'),'utf8'));const wellKnown=JSON.parse(await fs.readFile(path.join(process.cwd(),'public','.well-known/buildwithme.json'),'utf8'));expect(registry.items).toHaveLength(165);expect(discovery.items).toHaveLength(55);expect(wellKnown.frameworks).toEqual(['react','vue','svelte']);for(const item of registry.items){expect(item.files.length).toBeGreaterThan(0);expect(item.files[0].content).not.toContain('@buildwithme/');expect(item.files[0].content).not.toContain('../../shared/')}});

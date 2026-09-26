@@ -4,13 +4,14 @@ body:
   - type: textarea
     id: field-1
     attributes:
-      label: 'Name, description, category and framework'
+      label: 'Name, description and product domain'
     validations:
       required: true
   - type: textarea
     id: field-2
     attributes:
-      label: 'Author, license, provenance and source URL'
+      label: 'Creator, license and provenance type'
+      description: 'Original work needs creator and license only. Adaptations and remixes also need their applicable source or parent details.'
     validations:
       required: true
   - type: textarea
@@ -22,7 +23,7 @@ body:
   - type: textarea
     id: field-4
     attributes:
-      label: 'Usage, screenshots and source'
+      label: 'React, Vue and Svelte behavior, usage and screenshots'
     validations:
       required: true
   - type: textarea

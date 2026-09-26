@@ -1,33 +1,12 @@
-import { it, expect } from 'vitest';
-import { searchComponents } from '../../packages/search/src/index';
-import type { DiscoveryItem } from '../../packages/registry-schema/src/index';
-const items: DiscoveryItem[] = [
-  {
-    id: 'magnetic',
-    title: 'Magnetic button',
-    description: 'Spring-loaded action',
-    category: 'buttons',
-    engine: 'motion',
-    tags: ['pointer'],
-    author: { name: 'Asha' },
-  },
-  {
-    id: 'dots',
-    title: 'Dot grid',
-    description: 'Subtle background',
-    category: 'backgrounds',
-    engine: 'css',
-    tags: ['canvas'],
-    author: { name: 'Kai' },
-  },
+import { expect, it } from 'vitest';
+import { searchComponents } from '../../src/lib/search';
+import { componentManifestSchema } from '../../src/registry/schema';
+
+const base = { schemaVersion: 2 as const, status: 'stable' as const, engines: ['css'] as const, tags: ['keyboard'], installation: { npm: true, source: true, copy: true }, accessibility: { summary: 'Accessible controls.', features: ['Keyboard'] }, props: [], related: [], provenance: { type: 'original' as const, creator: { name: 'Asha' }, license: 'MIT' } };
+const framework = (source:string)=>({source,exportName:'Demo',usage:'<Demo />',dependencies:{}});
+const items = [
+  componentManifestSchema.parse({ ...base, id:'command-palette',title:'Command palette',summary:'Fast navigation',domains:['navigation'],frameworks:{react:framework('a.tsx'),vue:framework('a.vue'),svelte:framework('a.svelte')} }),
+  componentManifestSchema.parse({ ...base, id:'metric-sparkline',title:'Metric sparkline',summary:'Dashboard trend',domains:['data-visualization'],engines:['motion'],frameworks:{react:framework('b.tsx'),vue:framework('b.vue'),svelte:framework('b.svelte')} }),
 ];
-it('combines engine, category and all query terms', () => {
-  expect(
-    searchComponents(items, { q: '  ASHA pointer ', category: 'buttons', engine: 'motion' }),
-  ).toEqual([items[0]]);
-  expect(searchComponents(items, { q: 'action', engine: 'css' })).toEqual([]);
-});
-it('returns all items for clear filters and no matches for unknown filters', () => {
-  expect(searchComponents(items, { q: ' ', category: 'all', engine: 'all' })).toEqual(items);
-  expect(searchComponents(items, { category: 'unknown' })).toEqual([]);
-});
+it('combines text, domain, framework, engine, and installation filters',()=>{expect(searchComponents(items,{q:'Asha keyboard',domain:'navigation',framework:'vue',method:'npm'})).toEqual([items[0]]);expect(searchComponents(items,{q:'dashboard',engine:'css'})).toEqual([])});
+it('restores the complete collection for clear filters',()=>expect(searchComponents(items,{q:' ',domain:'all',framework:'all',engine:'all',method:'all'})).toEqual(items));

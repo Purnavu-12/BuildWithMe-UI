@@ -1,29 +1,47 @@
-# Contributing
+# Contributing to BuildWithMe UI
 
-Bug reports, docs, accessibility improvements, reviews, components, and engine variants are welcome.
+Thank you for helping build an open component ecosystem. Contributions can be new designs, framework parity improvements, accessibility fixes, documentation, bug reports, or reviews.
 
-## First contribution
+## Create a component
 
-1. Fork and clone the repository. Install Node.js 22+ and pnpm 10.28.1.
-2. Run `pnpm install`; create `feat/<description>` or `fix/<description>`.
-3. Run `pnpm component:new my-button buttons css`. Categories: buttons, text, cards, backgrounds, ai. Engines: css, motion, animejs.
-4. Complete the generated source, CSS, preview, metadata, and README. Replace placeholder descriptions. Credit the actual creator; never invent an identity.
-5. Run `pnpm registry:validate` and `pnpm dev`. Inspect the component at `/components/my-button`.
-6. Run `pnpm check`. For distribution or UI changes, run `pnpm test:install` and `pnpm test:e2e` after installing Chromium with `pnpm exec playwright install chromium`.
-7. Open a PR using the template. Include screenshots, dependencies, provenance, validation results, and accessibility notes.
+```sh
+pnpm install
+pnpm component:new signal-card data-display css
+pnpm dev
+```
 
-## Source distribution
+The scaffold creates four authored files under `src/registry/designs/signal-card/`: one typed manifest and React, Vue, and Svelte sources. Generated previews, documentation, search data, registry JSON, package maps, and README content are not edited manually.
 
-Every import must be declared. Include local files in metadata; no private workspace aliases. The builder flattens listed files into `components/buildwithme/<id>/` and rewrites local imports. File basenames within an entry must be unique. Test installation in a clean project.
+## Completion requirements
 
-## Accessibility
+- Preserve equivalent capability and accessibility across React, Vue, and Svelte.
+- Use semantic controls, visible focus, useful labels, and reduced-motion behavior.
+- Declare every non-framework dependency with an exact version.
+- Keep the implementation usable outside this repository.
+- Test keyboard, touch, dark and light themes, and responsive layouts.
+- Add focused tests for stateful or failure-prone behavior.
 
-Semantic controls, keyboard operation, visible focus, meaningful names, sufficient contrast, and reduced-motion behavior are required. Hover cannot be the sole way to access an action. Do not announce every animation frame to screen readers. Effects must clean up when unmounted.
+The registry currently guarantees three source variants per design. Do not describe a design as having native framework parity until its parity review covers props, emitted events, visual intent, keyboard behavior, labels, state transitions, reduced motion, and failure recovery in all three frameworks.
 
-## Attribution
+## Motion contributions
 
-Submit original or clearly licensed MIT-compatible code. Adaptations need origin, sourceUrl, adaptation notes, and retained notices. Remixes set parent to a valid registry ID and preserve original credit. No paid kits, premium Motion code, or uncertain-license snippets.
+Assign each animated element to one owner: CSS for simple state transitions, Motion for React gestures and scroll-linked DOM state, Anime.js for isolated timelines, or Three.js for canvas rendering. Provide a readable reduced-motion state and never require the canvas for navigation or meaning. New homepage story placements belong in the internal story configuration rather than component manifests.
 
-## Review
+## Provenance
 
-One logical change per PR. Maintainers review behavior, documentation, accessibility, dependencies, provenance, and installability. No arbitrary user submissions execute on the website before review. Use Conventional Commits. Never commit local plans, credentials, dependency folders, build outputs, or generated registry artifacts.
+- Original work: provide your display name or GitHub handle and confirm the license.
+- Adapted work: also provide the upstream URL, author, license, and a concise modification note.
+- Remix: reference the parent registry ID and describe the variation.
+
+Do not submit premium code, copied source with incompatible licensing, or work with uncertain ownership.
+
+## Validate
+
+```sh
+pnpm registry:validate
+pnpm check
+pnpm test:e2e
+pnpm test:install
+```
+
+Use the pull request template and include screenshots, parity notes, accessibility verification, dependency changes, and provenance.

@@ -1,5 +1,6 @@
 node_modules/
 .next/
+.svelte-kit/
 out/
 dist/
 build/
@@ -23,7 +24,9 @@ Desktop.ini
 !.vscode/extensions.json
 AGENT.local.md
 USER.md
-memory/ACTIVE_TASK.md
+/prior-art/
+/design-notes/
+/memory/
 PROJECT_PLAN*.md
 BOOTSTRAP_PROMPT.md
 INITIAL_PLAN.md
@@ -33,12 +36,11 @@ tmp/
 temp/
 scratch/
 *.pem
-apps/web/public/r/
-apps/web/public/registry.json
-apps/web/public/index.v1.json
-apps/web/src/generated/
+public/r/
+public/registry.json
+public/index.v2.json
+public/.well-known/buildwithme.json
+src/generated/
+.release/
 .registry-cache/
 .preview-cache/
-prior-art/
-design-notes/
-memory/
