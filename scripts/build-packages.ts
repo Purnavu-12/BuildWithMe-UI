@@ -79,6 +79,6 @@ const svelte = spawnSync(process.execPath, [path.join(root, 'node_modules', '@sv
 if (svelte.status !== 0) throw new Error(`Svelte package build failed${svelte.error ? `: ${svelte.error.message}` : ''}`);
 
 for (const name of ['react', 'vue', 'svelte']) {
-  await fs.writeFile(path.join(releaseRoot, name, 'README.md'), `# @buildwithme/${name}\n\nNative ${name} components generated from the BuildWithMe-UI registry.\n`);
+  await fs.writeFile(path.join(releaseRoot, name, 'README.md'), `# @buildwithme/${name}\n\n${name[0].toUpperCase()}${name.slice(1)} framework sources generated from the BuildWithMe-UI registry.\n`);
 }
 console.log(`Built three publication folders with ${result.manifests.length} component exports each.`);

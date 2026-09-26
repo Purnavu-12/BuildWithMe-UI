@@ -21,6 +21,12 @@ The scaffold creates four authored files under `src/registry/designs/signal-card
 - Test keyboard, touch, dark and light themes, and responsive layouts.
 - Add focused tests for stateful or failure-prone behavior.
 
+The registry currently guarantees three source variants per design. Do not describe a design as having native framework parity until its parity review covers props, emitted events, visual intent, keyboard behavior, labels, state transitions, reduced motion, and failure recovery in all three frameworks.
+
+## Motion contributions
+
+Assign each animated element to one owner: CSS for simple state transitions, Motion for React gestures and scroll-linked DOM state, Anime.js for isolated timelines, or Three.js for canvas rendering. Provide a readable reduced-motion state and never require the canvas for navigation or meaning. New homepage story placements belong in the internal story configuration rather than component manifests.
+
 ## Provenance
 
 - Original work: provide your display name or GitHub handle and confirm the license.

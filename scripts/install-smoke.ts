@@ -25,7 +25,7 @@ if(registry.items.length!==120)throw new Error(`Expected 120 registry artifacts;
 for(const item of registry.items){for(const file of item.files){if(!file.content.trim())throw new Error(`${item.name}/${item.meta.framework}: empty source`);if(file.content.includes('@buildwithme/')||file.content.includes('../../shared/'))throw new Error(`${item.name}/${item.meta.framework}: workspace path leaked`)}}
 
 const packages = ['react','vue','svelte'];
-for(const framework of packages){const directory=path.join(root,'.release',framework);const pkg=JSON.parse(await fs.readFile(path.join(directory,'package.json'),'utf8')) as {exports:Record<string,unknown>};if(Object.keys(pkg.exports).filter((key)=>key!=='.'&&key!=='./styles.css').length!==40)throw new Error(`${framework}: package parity failed`)}
+for(const framework of packages){const directory=path.join(root,'.release',framework);const pkg=JSON.parse(await fs.readFile(path.join(directory,'package.json'),'utf8')) as {exports:Record<string,unknown>};if(Object.keys(pkg.exports).filter((key)=>key!=='.'&&key!=='./styles.css').length!==40)throw new Error(`${framework}: package source coverage failed`)}
 
 const svelteDist=path.join(root,'.release','svelte','dist');
 for(const file of (await fs.readdir(svelteDist)).filter((name)=>name.endsWith('.svelte'))){const source=await fs.readFile(path.join(svelteDist,file),'utf8');compile(source,{filename:file,generate:'client'});}
@@ -39,5 +39,25 @@ await fs.writeFile(path.join(fixture,'tsconfig.json'),JSON.stringify({compilerOp
 await fs.writeFile(path.join(fixture,'next.config.mjs'),"export default {turbopack:{root:process.cwd()}};");
 await run(['install','--no-frozen-lockfile'],fixture);
 await run(['build'],fixture);
-await fs.writeFile(path.join(root,'tmp','install-smoke-result.json'),JSON.stringify({designs:40,sourceArtifacts:120,packages,reactFixture:fixture,passed:true},null,2));
-console.log('PASS: 120 source artifacts, three 40-export packages, Svelte compilation, and a clean Next.js package build.');
+
+const vuePackage = `file:${path.join(root,'.release','vue').replaceAll('\\','/')}`;
+const nuxtFixture=await fs.mkdtemp(path.join(root,'tmp','nuxt-package-'));
+await fs.writeFile(path.join(nuxtFixture,'package.json'),JSON.stringify({name:'buildwithme-vue-smoke',private:true,scripts:{build:'nuxt build'},dependencies:{'@buildwithme/vue':vuePackage,nuxt:'4.5.2',vue:'3.5.43'}}));
+await fs.writeFile(path.join(nuxtFixture,'nuxt.config.ts'),"export default defineNuxtConfig({devtools:{enabled:false},compatibilityDate:'2026-09-26'});");
+await fs.writeFile(path.join(nuxtFixture,'app.vue'),"<script setup lang=\"ts\">import * as UI from '@buildwithme/vue';const count=Object.keys(UI).length;const Component=UI.MagneticButton;</script><template><main><h1>{{count}} components installed</h1><Component>Build</Component></main></template>");
+await run(['install','--no-frozen-lockfile'],nuxtFixture);
+await run(['build'],nuxtFixture);
+
+const sveltePackage = `file:${path.join(root,'.release','svelte').replaceAll('\\','/')}`;
+const svelteKitFixture=await fs.mkdtemp(path.join(root,'tmp','sveltekit-package-'));
+await fs.writeFile(path.join(svelteKitFixture,'package.json'),JSON.stringify({name:'buildwithme-svelte-smoke',private:true,type:'module',scripts:{build:'vite build'},dependencies:{'@buildwithme/svelte':sveltePackage},devDependencies:{'@sveltejs/adapter-auto':'7.0.1','@sveltejs/kit':'2.70.3',svelte:'5.57.1',vite:'8.3.1'}}));
+await fs.writeFile(path.join(svelteKitFixture,'svelte.config.js'),"import adapter from '@sveltejs/adapter-auto';export default {kit:{adapter:adapter()}};");
+await fs.writeFile(path.join(svelteKitFixture,'vite.config.ts'),"import {sveltekit} from '@sveltejs/kit/vite';import {defineConfig} from 'vite';export default defineConfig({plugins:[sveltekit()]});");
+await fs.mkdir(path.join(svelteKitFixture,'src','routes'),{recursive:true});
+await fs.writeFile(path.join(svelteKitFixture,'src','app.html'),'<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width"/>%sveltekit.head%</head><body data-sveltekit-preload-data="hover"><div style="display: contents">%sveltekit.body%</div></body></html>');
+await fs.writeFile(path.join(svelteKitFixture,'src','routes','+page.svelte'),"<script lang=\"ts\">import * as UI from '@buildwithme/svelte';const count=Object.keys(UI).length;</script><svelte:head><title>BuildWithMe smoke</title></svelte:head><main><h1>{count} components installed</h1></main>");
+await run(['install','--no-frozen-lockfile'],svelteKitFixture);
+await run(['build'],svelteKitFixture);
+
+await fs.writeFile(path.join(root,'tmp','install-smoke-result.json'),JSON.stringify({designs:40,sourceArtifacts:120,packages,fixtures:{next:fixture,nuxt:nuxtFixture,sveltekit:svelteKitFixture},passed:true},null,2));
+console.log('PASS: 120 source artifacts, three 40-export packages, Svelte compilation, and clean Next.js, Nuxt, and SvelteKit package builds.');

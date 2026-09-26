@@ -6,9 +6,24 @@ test('homepage presents the ecosystem before discovery', async ({ page }) => {
   await expect(page.getByRole('heading', { name: /Build the interface/ })).toBeVisible();
   await expect(page.getByText('120', { exact: true }).first()).toBeVisible();
   await expect(page.getByRole('link', { name: /Explore the collection/ })).toBeVisible();
-  await expect(page.locator('canvas')).toHaveCount(1);
+  await expect(page.locator('[data-cosmos-chapter]')).toHaveCount(5);
+  await expect(page.locator('.cosmos-static')).toBeVisible();
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
   expect(results.violations).toEqual([]);
+});
+
+test('chapter navigation and command search work by keyboard', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: /03 Translation/ }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/#translation$/);
+  await expect(page.locator('#translation')).toBeInViewport();
+  await page.keyboard.press('Control+k');
+  const search = page.getByRole('textbox', { name: 'Search components and documentation' });
+  await expect(search).toBeFocused();
+  await search.fill('magnetic');
+  await expect(page.getByRole('option', { name: /Magnetic button/ })).toBeVisible();
+  await page.keyboard.press('Escape');
 });
 
 test('search and every filter survive reload and reset cleanly', async ({ page }) => {
@@ -33,7 +48,7 @@ test('detail supports preview controls, framework source, and copy failure recov
   await page.getByRole('button', { name: 'Play preview', exact: true }).click();
   await page.getByRole('combobox', { name: 'Preview theme' }).selectOption('light');
   await page.getByRole('combobox', { name: 'Preview width' }).selectOption('360px');
-  await page.getByRole('tab', { name: 'vue' }).click();
+  await page.getByRole('tablist', { name: 'Source framework' }).getByRole('tab', { name: 'vue' }).click();
   await expect(page.locator('.source-block')).toContainText('<template>');
   await page.evaluate(() => Object.defineProperty(navigator, 'clipboard', { value: { writeText: () => Promise.reject(new Error('blocked')) }, configurable: true }));
   await page.getByRole('button', { name: 'Copy command' }).click();
@@ -50,8 +65,8 @@ for (const theme of ['dark', 'light'] as const) {
   for (const width of [360, 768, 1280, 1536]) {
     test(`${theme} homepage at ${width}`, async ({ page }) => {
       await page.setViewportSize({ width, height: 1000 });
+      await page.addInitScript((selectedTheme) => localStorage.setItem('theme', selectedTheme), theme);
       await page.goto('/');
-      await page.locator('html').evaluate((element, value) => element.setAttribute('data-theme', String(value)), theme);
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
       await page.screenshot({ path: `test-results/home-${theme}-${width}.png`, fullPage: false });
@@ -63,7 +78,8 @@ test('reduced motion uses the static hero and every React preview renders', asyn
   test.setTimeout(120000);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
-  await expect(page.locator('.hero-static')).toBeVisible();
+  await expect(page.locator('.cosmos-static')).toBeVisible();
+  await expect(page.locator('.cosmos-canvas')).toHaveCount(0);
   const index = await (await page.request.get('/index.v2.json')).json();
   expect(index.items).toHaveLength(40);
   for (const item of index.items) {
@@ -72,6 +88,31 @@ test('reduced motion uses the static hero and every React preview renders', asyn
     await expect(page.locator('.preview-stage')).toBeVisible();
   }
 });
+
+test('save-data mode keeps the complete static story without WebGL', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'connection', { value: { saveData: true }, configurable: true });
+  });
+  await page.goto('/');
+  await expect(page.locator('.cosmos-canvas')).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: /The system grows/ })).toBeAttached();
+});
+
+test('ecosystem coverage is registry-derived and accessible', async ({ page }) => {
+  await page.goto('/ecosystem');
+  await expect(page.getByText('40', { exact: true }).first()).toBeVisible();
+  await expect(page.getByText('120', { exact: true }).first()).toBeVisible();
+  const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
+  expect(results.violations).toEqual([]);
+});
+
+for (const route of ['/components', '/components/magnetic-button', '/docs/installation', '/contribute']) {
+  test(`${route} has no automated accessibility violations`, async ({ page }) => {
+    await page.goto(route);
+    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
+    expect(results.violations).toEqual([]);
+  });
+}
 
 test('machine-readable registry exposes all framework artifacts', async ({ page }) => {
   const registry = await (await page.request.get('/registry.json')).json();

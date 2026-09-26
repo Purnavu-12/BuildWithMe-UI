@@ -39,4 +39,10 @@ The public packages are `@buildwithme/react`, `@buildwithme/vue`, and `@buildwit
 
 ## Rendering and performance
 
-Pages, documentation, search inputs, and registry metadata are server-rendered. Interactive previews are lazy imports. The homepage Three.js universe is isolated behind a client-side dynamic import and replaced by a static composition for reduced motion. The catalog does not eagerly load every preview or framework runtime.
+Pages, documentation, search inputs, chapter copy, and registry metadata are server-rendered. Interactive previews are lazy imports. The catalog does not eagerly load every preview or framework runtime.
+
+The homepage story is configured in `src/lib/home-story.ts`. It validates its featured IDs against the registry and derives every public count from registry data. `InterfaceCosmos` progressively enhances the server-rendered chapters: Motion owns chapter progress and DOM transitions, Anime.js owns the isolated SVG/code ignition sequence, and React Three Fiber owns the canvas. No element is controlled by two engines.
+
+The Three.js universe is imported from a client boundary, reserves its dimensions, uses one instanced node mesh and one buffered line network, and pauses when the story is hidden or off-screen. The server-rendered SVG/CSS constellation remains available before hydration and is the final presentation for mobile, reduced motion, save-data, low-power, and WebGL failure modes. See `docs/motion-system.md` for budgets and verification.
+
+Global command search uses a native dialog and searches components, product domains, documentation, and frameworks. It is available from the header and with `Command/Ctrl + K` or `/` outside editable fields.

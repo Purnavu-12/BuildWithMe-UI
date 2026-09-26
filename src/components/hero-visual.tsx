@@ -14,7 +14,7 @@ export function HeroVisual() {
       <div className="universe-label universe-label-react">React <span>40</span></div>
       <div className="universe-label universe-label-vue">Vue <span>40</span></div>
       <div className="universe-label universe-label-svelte">Svelte <span>40</span></div>
-      <div className="universe-counter"><strong>120</strong><span>native implementations</span></div>
+      <div className="universe-counter"><strong>120</strong><span>framework sources</span></div>
     </div>
   );
 }

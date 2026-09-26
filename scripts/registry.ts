@@ -171,6 +171,6 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   else {
     const result = await validateRegistry();
     if (result.errors.length) { console.error(result.errors.join('\n')); process.exitCode = 1; }
-    else console.log(`Validated ${result.manifests.length} designs with full React, Vue, and Svelte parity.`);
+    else console.log(`Validated ${result.manifests.length} designs with React, Vue, and Svelte source coverage.`);
   }
 }

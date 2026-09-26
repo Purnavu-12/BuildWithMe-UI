@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: '%s · BuildWithMe UI',
   },
   description:
-    'Discover 40 open-source component designs with native React, Vue, and Svelte implementations.',
+    'Discover 40 open-source component designs with 120 React, Vue, and Svelte framework sources.',
 };
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

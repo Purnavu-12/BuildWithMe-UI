@@ -12,13 +12,13 @@ export const docs: Record<string, Doc> = {
     ],
   },
   frameworks: {
-    title: 'Native components. Shared intent.',
-    intro: 'A design is accepted only when its public behavior, accessibility, and visual intent are represented in React, Vue, and Svelte.',
+    title: 'Three sources. Shared intent.',
+    intro: 'Every design ships React, Vue, and Svelte source. Native-parity status is earned only after behavior, accessibility, and visual intent pass the framework matrix.',
     sections: [
       { title: 'React / Next.js', text: 'React implementations use explicit client boundaries only where state or browser APIs require them. Pages, metadata, and registry documents remain server-rendered.' },
       { title: 'Vue / Nuxt', text: 'Vue implementations use Vue 3 composition patterns and single-file components. Props and events follow Vue naming conventions.' },
       { title: 'Svelte / SvelteKit', text: 'Svelte implementations target Svelte 5 and use runes where local state is required. Props preserve the shared capability contract.' },
-      { title: 'Parity policy', text: 'Markup does not need to be character-for-character identical. Behavior, keyboard support, motion controls, public capability, and visual hierarchy do.' },
+      { title: 'Parity policy', text: 'Markup does not need to be character-for-character identical. Props, events, behavior, keyboard support, labels, motion controls, failure recovery, public capability, and visual hierarchy must be equivalent before native parity is claimed.' },
     ],
   },
   customization: {
@@ -28,6 +28,16 @@ export const docs: Record<string, Doc> = {
       { title: 'Theme tokens', text: 'Components use a small neutral token surface for foreground, panel, border, muted copy, and focus. Override the variables beneath your application theme.', code: ':root {\n  --bwm-foreground: #f3f3ef;\n  --bwm-surface: #0b0b0b;\n  --bwm-border: #2a2a2a;\n}' },
       { title: 'Animation engines', text: 'CSS handles simple state changes. Motion and Anime.js are declared per component. Three.js stays isolated to immersive visuals and is never loaded by the catalog unless required.' },
       { title: 'Keep the accessible contract', text: 'When adapting source, preserve semantic controls, visible focus, labels, status announcements, and reduced-motion behavior.' },
+    ],
+  },
+  motion: {
+    title: 'Motion with a clear owner.',
+    intro: 'Interface Cosmos uses motion to explain the product while keeping native scrolling, semantic order, and a complete static experience.',
+    sections: [
+      { title: 'One owner per element', text: 'CSS handles local state, Motion handles scroll-linked React DOM state, Anime.js handles isolated line and code timelines, and React Three Fiber owns the optional canvas. An element is never driven by multiple engines.' },
+      { title: 'A complete baseline', text: 'Headings, controls, commands, and chapter content render on the server. SVG and CSS provide the constellation for reduced motion, mobile, save-data, low-power, and WebGL failure modes.' },
+      { title: 'Normal scrolling', text: 'The desktop stage is sticky inside normal document flow. Chapter anchors work by keyboard and browser navigation. Mobile presents the same five chapters as a linear story.' },
+      { title: 'Performance boundaries', text: 'Three.js is dynamically loaded, its space is reserved, rendering pauses off-screen or in hidden tabs, and only active component previews are imported. Vue and Svelte runtimes are excluded from the homepage.' },
     ],
   },
   contributing: {

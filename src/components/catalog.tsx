@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useDeferredValue, useMemo, useState, useTransition } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ArrowUpRight, Search, X } from 'lucide-react';
+import { ArrowUpRight, Search, SlidersHorizontal, X } from 'lucide-react';
 import { Preview } from './preview';
 import { domainLabels } from '@/registry/schema';
 
@@ -21,6 +21,7 @@ export function Catalog({ items }: { items: Item[] }) {
   const [framework, setFramework] = useState(params.get('framework') ?? 'all');
   const [engine, setEngine] = useState(params.get('engine') ?? 'all');
   const [method, setMethod] = useState(params.get('method') ?? 'all');
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [, startTransition] = useTransition();
   const deferredQuery = useDeferredValue(query.trim().toLowerCase());
   function update(next: Record<string,string>) {
@@ -37,11 +38,14 @@ export function Catalog({ items }: { items: Item[] }) {
   return <>
     <div className="catalog-controls">
       <label className="catalog-search"><Search size={14}/><span className="sr-only">Search components</span><input value={query} onChange={(event)=>{setQuery(event.target.value);update({q:event.target.value})}} placeholder="Search 40 designs, domains, tags, or creators…"/></label>
-      <div className="catalog-filters">
+      <div className="catalog-filter-drawer">
+        <button type="button" className="filter-drawer-trigger" aria-expanded={filtersOpen} aria-controls="catalog-filters" onClick={()=>setFiltersOpen((value)=>!value)}><SlidersHorizontal size={14} aria-hidden="true"/> Filters</button>
+        <div className="catalog-filters" id="catalog-filters">
         <select aria-label="Filter by product domain" value={domain} onChange={(e)=>{setDomain(e.target.value);update({domain:e.target.value})}}><option value="all">All domains</option>{Object.entries(domainLabels).map(([id,label])=><option key={id} value={id}>{label}</option>)}</select>
         <select aria-label="Filter by framework" value={framework} onChange={(e)=>{setFramework(e.target.value);update({framework:e.target.value})}}><option value="all">All frameworks</option><option value="react">React</option><option value="vue">Vue</option><option value="svelte">Svelte</option></select>
         <select aria-label="Filter by engine" value={engine} onChange={(e)=>{setEngine(e.target.value);update({engine:e.target.value})}}><option value="all">All engines</option><option value="css">CSS</option><option value="motion">Motion</option><option value="animejs">Anime.js</option></select>
         <select aria-label="Filter by installation" value={method} onChange={(e)=>{setMethod(e.target.value);update({method:e.target.value})}}><option value="all">Any install</option><option value="npm">npm</option><option value="source">Source</option><option value="copy">Copy</option></select>
+        </div>
       </div>
       {active ? <div className="active-filters"><span role="status">{filtered.length} matching designs</span><button onClick={reset}>Reset <X size={11}/></button></div> : <span className="sr-only" role="status">{filtered.length} designs</span>}
     </div>

@@ -2,7 +2,9 @@
 
 **Build the interface. Keep the source.**
 
-BuildWithMe-UI is an open-source component ecosystem served by one Next.js application. Its 40 designs ship as 120 native React, Vue, and Svelte implementations. Install a tree-shakeable package for speed, add framework-specific source for ownership, or copy the code directly.
+BuildWithMe-UI is an open-source component ecosystem served by one Next.js application. Its 40 designs ship as 120 React, Vue, and Svelte framework sources. Install a tree-shakeable package for speed, add framework-specific source for ownership, or copy the code directly.
+
+The homepage tells that system as **Interface Cosmos**: one source signal expands into a 40-design constellation, translates across three frameworks, becomes installable source, and returns to an open contributor orbit. The story copy and controls are server-rendered. Motion coordinates scroll-linked DOM transitions, Anime.js owns isolated line and code sequences, and React Three Fiber owns the optional constellation canvas. Mobile, reduced-motion, save-data, low-power, and WebGL failure paths use the same semantic story with CSS and SVG.
 
 ## Start locally
 
@@ -39,15 +41,15 @@ pnpm registry:validate
 pnpm check
 ```
 
-The scaffold creates four authored files: a typed manifest and native React, Vue, and Svelte sources. Catalog metadata, documentation, previews, registry artifacts, package exports, discovery records, and README content are generated.
+The scaffold creates four authored files: a typed manifest and React, Vue, and Svelte sources. Catalog metadata, documentation, previews, registry artifacts, package exports, discovery records, and README content are generated.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md), [architecture](docs/architecture.md), and [agent guidance](AGENTS.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md), [architecture](docs/architecture.md), [design system](docs/design-system.md), [motion system](docs/motion-system.md), and [agent guidance](AGENTS.md).
 
 ## Quality commands
 
 - `pnpm check` validates formatting-independent code quality, types, tests, the registry, the Next.js production build, and all three package outputs.
 - `pnpm test:e2e` verifies the discovery journey, accessibility, responsive layouts, reduced motion, and public registry endpoints.
-- `pnpm test:install` builds publication folders, checks all 120 source artifacts, compiles Svelte output, and builds a clean Next.js fixture from `@buildwithme/react`.
+- `pnpm test:install` builds publication folders, checks all 120 source artifacts, compiles Svelte output, and builds clean Next.js, Nuxt, and SvelteKit package fixtures.
 
 ## Configuration
 

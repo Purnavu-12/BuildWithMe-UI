@@ -1,6 +1,6 @@
 # BuildWithMe UI
 
-Open-source component designs with native React, Vue, and Svelte implementations.
+Open-source component designs with React, Vue, and Svelte framework sources.
 
 - /index.v2.json — compact discovery metadata
 - /registry.json — complete generated registry

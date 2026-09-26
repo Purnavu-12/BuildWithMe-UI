@@ -20,7 +20,7 @@ export default function Contribute() {
           <span>01 / MAKE IT</span>
           <h2>Bring your idea.</h2>
           <p>
-            Run one command. It creates the typed manifest and native React, Vue, and Svelte sources.
+            Run one command. It creates the typed manifest and React, Vue, and Svelte sources.
           </p>
         </article>
         <article>
