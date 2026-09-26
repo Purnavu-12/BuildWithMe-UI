@@ -153,7 +153,15 @@ async function build() {
       registryItems.push(artifact);
     }
   }
-  const discovery = result.manifests.map(({ id, title, summary, domains, tags, status, engines, frameworks: support, installation, accessibility, provenance }) => ({ id, title, summary, domains, tags, status, engines, frameworks: Object.keys(support), installation, accessibility, provenance }));
+  const discovery = result.manifests.map(({ id, title, summary, domains, tags, status, engines, frameworks: support, installation, accessibility, provenance }) => ({
+    id, title, summary, domains, tags, status, engines,
+    frameworks: Object.keys(support),
+    frameworkVerification: Object.fromEntries(frameworks.map((framework) => [framework, support[framework].verification?.status ?? 'provisional'])),
+    installation,
+    publication: { npm: false, source: true, copy: true },
+    accessibility,
+    provenance,
+  }));
   await Promise.all([
     fs.writeFile(path.join(publicRoot, 'registry.json'), `${JSON.stringify({ schemaVersion: 2, name: 'buildwithme-ui', items: registryItems }, null, 2)}\n`),
     fs.writeFile(path.join(publicRoot, 'index.v2.json'), `${JSON.stringify({ schemaVersion: 2, items: discovery }, null, 2)}\n`),

@@ -1,5 +1,6 @@
 name: 'Engine request'
 description: 'Propose another animation engine.'
+labels: ['engine', 'enhancement', 'needs-triage']
 body:
   - type: textarea
     id: field-1

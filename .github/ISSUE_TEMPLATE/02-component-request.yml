@@ -1,5 +1,6 @@
 name: 'Component request'
 description: 'Suggest a reusable component.'
+labels: ['component', 'enhancement', 'needs-triage']
 body:
   - type: textarea
     id: field-1

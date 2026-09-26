@@ -46,11 +46,26 @@ const dependencyMap = z.record(
   z.string().regex(/^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/),
   z.string().regex(/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/, 'Pin an exact version'),
 );
+const verificationCapabilities = z.object({
+  props: z.boolean(),
+  events: z.boolean(),
+  composition: z.boolean(),
+  keyboard: z.boolean(),
+  labels: z.boolean(),
+  state: z.boolean(),
+  reducedMotion: z.boolean(),
+  styling: z.boolean(),
+  errorRecovery: z.boolean(),
+});
 const frameworkSource = z.object({
   source: text,
   exportName: text,
   usage: text,
   dependencies: dependencyMap,
+  verification: z.object({
+    status: z.enum(['provisional', 'verified']),
+    capabilities: verificationCapabilities,
+  }).optional(),
 });
 const creator = z.object({ name: text, url: httpUrl.optional() });
 const provenance = z.discriminatedUnion('type', [

@@ -63,14 +63,22 @@ test('site and component preview themes switch completely and persist', async ({
   await page.goto('/components/magnetic-button');
   await page.getByRole('combobox', { name: 'Color theme' }).selectOption('light');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(241, 241, 237)');
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(243, 240, 232)');
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
 
   const stage = page.locator('.preview-stage');
+  await expect(stage).toHaveAttribute('data-bwm-theme', 'light');
+  await page.getByRole('combobox', { name: 'Preview theme' }).selectOption('dark');
+  await expect(stage).toHaveAttribute('data-bwm-theme', 'dark');
+  await expect(stage).toHaveCSS('background-color', 'rgb(5, 5, 5)');
+  await expect(stage.locator('.bw-demo')).toHaveCSS('color', 'rgb(244, 241, 232)');
+  expect(await stage.locator('.bw-demo').evaluate((node) => getComputedStyle(node).getPropertyValue('--bw-border').trim())).toBe('#343431');
   await page.getByRole('combobox', { name: 'Preview theme' }).selectOption('light');
-  await expect(stage).toHaveCSS('background-color', 'rgb(241, 241, 237)');
-  await expect(stage.locator('.bw-demo')).toHaveCSS('color', 'rgb(32, 37, 27)');
+  await expect(stage).toHaveAttribute('data-bwm-theme', 'light');
+  await expect(stage).toHaveCSS('background-color', 'rgb(243, 240, 232)');
+  await expect(stage.locator('.bw-demo')).toHaveCSS('color', 'rgb(20, 20, 18)');
+  expect(await stage.locator('.bw-demo').evaluate((node) => getComputedStyle(node).getPropertyValue('--bw-border').trim())).toBe('#cbc6ba');
   await page.getByRole('combobox', { name: 'Preview theme' }).selectOption('dark');
   await expect(stage).toHaveCSS('background-color', 'rgb(5, 5, 5)');
 });
@@ -128,6 +136,22 @@ test('adapted artifacts expose working semantic interactions', async ({ page }) 
   await page.goto('/components/precision-pagination');
   await expect(page.getByRole('button', { name: '2', exact: true })).toHaveAttribute('aria-current', 'page');
 });
+
+for (const framework of ['vue', 'svelte'] as const) {
+  test(`${framework} preview route mounts its isolated runtime`, async ({ page }) => {
+    await page.goto(`/preview/magnetic-button/${framework}`);
+    await expect(page.getByText(new RegExp(`${framework} runtime`, 'i'))).toBeVisible();
+    const runtime = page.frameLocator(`iframe[title="${framework} preview for magnetic-button"]`);
+    await expect(runtime.getByText(new RegExp(`BUILDWITHME / ${framework}`, 'i'))).toBeVisible();
+    await runtime.getByRole('button', { name: 'Try interaction' }).click();
+    await expect(runtime.getByRole('button', { name: 'Selected' })).toBeVisible();
+    await page.getByRole('combobox', { name: 'Preview theme' }).selectOption('light');
+    await expect(runtime.locator('body')).toHaveCSS('background-color', 'rgb(243, 240, 232)');
+    const resources = await page.evaluate(() => performance.getEntriesByType('resource').map((entry) => entry.name));
+    expect(resources.some((resource) => resource.includes(`/preview-runtime/${framework}/`))).toBe(true);
+    expect(resources.some((resource) => resource.includes(`/preview-runtime/${framework === 'vue' ? 'svelte' : 'vue'}/`))).toBe(false);
+  });
+}
 
 test('save-data mode keeps the complete static story without WebGL', async ({ page }) => {
   await page.addInitScript(() => {

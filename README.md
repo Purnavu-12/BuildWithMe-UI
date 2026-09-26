@@ -2,7 +2,7 @@
 
 **Build the interface. Keep the source.**
 
-BuildWithMe-UI is an open-source component ecosystem served by one Next.js application. Its 55 designs ship as 165 React, Vue, and Svelte framework sources. Install a tree-shakeable package for speed, add framework-specific source for ownership, or copy the code directly.
+BuildWithMe-UI is an open-source component ecosystem served by one Next.js application. Its 55 designs ship as 165 React, Vue, and Svelte framework sources. Install framework-specific source for ownership or copy the code directly. Package builds exist for release verification, but the packages are not yet published to npm.
 
 The homepage tells that system as **Interface Cosmos**: one source signal expands into a registry-derived constellation, translates across three frameworks, becomes installable source, and returns to an open contributor orbit. The story copy and controls are server-rendered. Motion coordinates scroll-linked DOM transitions, Anime.js owns isolated line and code sequences, and React Three Fiber owns the optional constellation canvas. Mobile, reduced-motion, save-data, low-power, and WebGL failure paths use the same semantic story with CSS and SVG.
 
@@ -19,19 +19,13 @@ Open `http://localhost:3000`. The dev command validates and generates the regist
 
 ## Install components
 
-```sh
-pnpm add @buildwithme/react
-pnpm add @buildwithme/vue
-pnpm add @buildwithme/svelte
-```
-
-Every component page also provides a source command such as:
+Every component page provides the currently available source command:
 
 ```sh
 pnpm dlx shadcn@latest add http://localhost:3000/r/react/magnetic-button.json
 ```
 
-The package publication folders are generated with `pnpm packages:build` and remain untracked until a release is prepared.
+The package publication folders are generated with `pnpm packages:build` and remain untracked until a release is prepared. The site does not present npm commands as available until a real release is published.
 
 ## Add a design
 
@@ -53,7 +47,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md), [architecture](docs/architecture.md), [d
 
 ## Configuration
 
-Copy `.env.example` to `.env.local`. `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_REPOSITORY_URL` remain optional until real public destinations exist.
+Copy `.env.example` to `.env.local`. The repository URL is configured. `NEXT_PUBLIC_SITE_URL` remains empty until the production destination is supplied; canonical and sitemap URLs activate only when it is set.
 
 ## License
 

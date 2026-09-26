@@ -39,7 +39,8 @@ export function Preview({ id, controls = false }: { id: string; controls?: boole
   const [visible, setVisible] = useState(false);
   const [paused, setPaused] = useState(false);
   const [replay, setReplay] = useState(0);
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState<'site' | 'dark' | 'light'>('site');
+  const [siteTheme, setSiteTheme] = useState<'dark' | 'light'>('dark');
   const [width, setWidth] = useState('100%');
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -52,12 +53,21 @@ export function Preview({ id, controls = false }: { id: string; controls?: boole
     if (root.current) observer.observe(root.current);
     return () => observer.disconnect();
   }, []);
+  useEffect(() => {
+    const html = document.documentElement;
+    const sync = () => setSiteTheme(html.dataset.theme === 'light' ? 'light' : 'dark');
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(html, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, []);
   const Demo = useMemo(() => {
     const load = Object.hasOwn(previewLoaders, id)
       ? previewLoaders[id as keyof typeof previewLoaders]
       : undefined;
     return load ? lazy(load as () => Promise<{ default: ComponentType<{ paused?: boolean }> }>) : undefined;
   }, [id, replay]);
+  const effectiveTheme = theme === 'site' ? siteTheme : theme;
   return (
     <div ref={root} className={`preview-wrapper ${controls ? 'preview-full' : ''}`}>
       {controls ? (
@@ -85,8 +95,9 @@ export function Preview({ id, controls = false }: { id: string; controls?: boole
               <select
                 aria-label="Preview theme"
                 value={theme}
-                onChange={(e) => setTheme(e.target.value)}
+                onChange={(e) => setTheme(e.target.value as 'site' | 'dark' | 'light')}
               >
+                <option value="site">Follow site</option>
                 <option value="dark">Dark</option>
                 <option value="light">Light</option>
               </select>
@@ -109,11 +120,12 @@ export function Preview({ id, controls = false }: { id: string; controls?: boole
       ) : null}
       <div
         className="preview-stage"
-        data-theme={controls ? theme : undefined}
+        data-theme={effectiveTheme}
+        data-bwm-theme={effectiveTheme}
         style={controls ? { maxWidth: width } : undefined}
       >
         {ready && Demo ? (
-          <PreviewBoundary key={replay} onRetry={() => window.location.reload()}>
+          <PreviewBoundary key={replay} onRetry={() => setReplay((value) => value + 1)}>
             <Suspense fallback={<span className="preview-loading">Preparing preview…</span>}>
               <Demo paused={paused || !visible} />
             </Suspense>

@@ -1,21 +1,18 @@
 'use client';
 
 import { Check, Copy } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Framework } from '@/registry/schema';
-
-const commands: Record<Framework, string> = {
-  react: 'pnpm add @buildwithme/react',
-  vue: 'pnpm add @buildwithme/vue',
-  svelte: 'pnpm add @buildwithme/svelte',
-};
 
 export function InstallSwitcher({ compact = false }: { compact?: boolean }) {
   const [framework, setFramework] = useState<Framework>('react');
   const [copied, setCopied] = useState(false);
+  const [origin, setOrigin] = useState('');
+  useEffect(() => setOrigin(window.location.origin), []);
+  const command = `pnpm dlx shadcn@latest add ${origin || '<site-url>'}/r/${framework}/magnetic-button.json`;
   async function copy() {
     try {
-      await navigator.clipboard.writeText(commands[framework]);
+      await navigator.clipboard.writeText(command);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1500);
     } catch {
@@ -31,8 +28,9 @@ export function InstallSwitcher({ compact = false }: { compact?: boolean }) {
           </button>
         ))}
       </div>
-      <button className="install-command" onClick={copy} aria-label={`Copy ${commands[framework]}`}>
-        <code><span>$</span> {commands[framework]}</code>
+      <div className="install-availability"><i /> SOURCE REGISTRY · AVAILABLE <span>NPM · UNPUBLISHED</span></div>
+      <button className="install-command" onClick={copy} aria-label={`Copy source installation command for ${framework}`}>
+        <code><span>$</span> {command}</code>
         {copied ? <Check size={15} /> : <Copy size={15} />}
       </button>
       <span className="copy-status" role="status" aria-live="polite">{copied ? 'Copied' : ''}</span>

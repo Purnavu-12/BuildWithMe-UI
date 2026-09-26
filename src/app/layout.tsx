@@ -5,13 +5,25 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Header, Footer } from '@/components/shell';
 import { registryStats } from '@/lib/registry';
 import './globals.css';
+const publicSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+const socialImages = publicSiteUrl ? [`${publicSiteUrl}/opengraph-image`] : undefined;
 export const metadata: Metadata = {
+  ...(publicSiteUrl ? { metadataBase: new URL(publicSiteUrl), alternates: { canonical: '/' } } : {}),
   title: {
     default: 'BuildWithMe UI — Build the interface. Keep the source.',
     template: '%s · BuildWithMe UI',
   },
   description:
     `Discover ${registryStats.designs} open-source component designs with ${registryStats.implementations} React, Vue, and Svelte framework sources.`,
+  applicationName: 'BuildWithMe UI',
+  icons: { icon: '/icon', apple: '/icon' },
+  openGraph: {
+    title: 'BuildWithMe UI — Build the interface. Keep the source.',
+    description: `${registryStats.designs} open component designs expressed across React, Vue, and Svelte.`,
+    type: 'website',
+    ...(socialImages ? { images: socialImages } : {}),
+  },
+  twitter: { card: 'summary_large_image', ...(socialImages ? { images: socialImages } : {}) },
 };
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
