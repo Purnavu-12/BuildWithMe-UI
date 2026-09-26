@@ -2,6 +2,18 @@ name: 'Bug report'
 description: 'Report reproducible unexpected behavior.'
 labels: ['bug', 'needs-triage']
 body:
+  - type: dropdown
+    id: framework
+    attributes:
+      label: Framework
+      options: [React / Next.js, Vue / Nuxt, Svelte / SvelteKit, Website or registry]
+    validations:
+      required: true
+  - type: input
+    id: component
+    attributes:
+      label: Component ID or route
+      placeholder: magnetic-button or /components/magnetic-button
   - type: textarea
     id: field-1
     attributes:

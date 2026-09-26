@@ -28,4 +28,6 @@ The server renders every heading, paragraph, link, command, and chapter miniatur
 - Later chapters use content visibility where appropriate.
 - Only the active component preview loads; Vue and Svelte runtimes do not enter the homepage bundle.
 
+Standalone Vue and Svelte previews are generated as separate Vite entry graphs. Each component is a dynamic chunk, mounted inside an iframe only on its framework route. Host controls cross the boundary through the documented preview protocol; pause uses a runtime-wide animation state and replay remounts the selected component.
+
 Test deterministic chapter positions, keyboard anchors, hidden-tab and off-screen pausing, reduced motion, save-data, WebGL failure, touch layouts, and native scrolling.

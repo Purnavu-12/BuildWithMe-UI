@@ -2,6 +2,31 @@ name: 'Component request'
 description: 'Suggest a reusable component.'
 labels: ['component', 'enhancement', 'needs-triage']
 body:
+  - type: dropdown
+    id: domain
+    attributes:
+      label: Product domain
+      options:
+        [
+          Actions,
+          Forms,
+          Navigation,
+          Overlays,
+          Feedback,
+          Data display,
+          Data visualization,
+          Layout,
+          Marketing,
+          Typography,
+          Backgrounds,
+          Media,
+          Commerce,
+          AI,
+          Developer tools,
+          Workflows,
+        ]
+    validations:
+      required: true
   - type: textarea
     id: field-1
     attributes:

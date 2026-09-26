@@ -93,11 +93,12 @@ for (const theme of ['dark', 'light'] as const) {
   for (const width of [360, 768, 1280, 1536]) {
     test(`${theme} homepage at ${width}`, async ({ page }) => {
       await page.setViewportSize({ width, height: 1000 });
+      await page.emulateMedia({ reducedMotion: 'reduce' });
       await page.addInitScript((selectedTheme) => localStorage.setItem('theme', selectedTheme), theme);
       await page.goto('/');
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-      await page.screenshot({ path: `test-results/home-${theme}-${width}.png`, fullPage: false });
+      await expect(page).toHaveScreenshot(`home-${theme}-${width}.png`, { animations: 'disabled', maxDiffPixelRatio: 0.01 });
     });
   }
 }
@@ -140,7 +141,7 @@ test('adapted artifacts expose working semantic interactions', async ({ page }) 
 for (const framework of ['vue', 'svelte'] as const) {
   test(`${framework} preview route mounts its isolated runtime`, async ({ page }) => {
     await page.goto(`/preview/magnetic-button/${framework}`);
-    await expect(page.getByText(new RegExp(`${framework} runtime`, 'i'))).toBeVisible();
+    await expect(page.locator('.live-label')).toContainText(new RegExp(`${framework} runtime`, 'i'));
     const runtime = page.frameLocator(`iframe[title="${framework} preview for magnetic-button"]`);
     await expect(runtime.getByText(new RegExp(`BUILDWITHME / ${framework}`, 'i'))).toBeVisible();
     await runtime.getByRole('button', { name: 'Try interaction' }).click();

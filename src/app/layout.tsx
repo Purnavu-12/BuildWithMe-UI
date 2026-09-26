@@ -8,7 +8,8 @@ import './globals.css';
 const publicSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 const socialImages = publicSiteUrl ? [`${publicSiteUrl}/opengraph-image`] : undefined;
 export const metadata: Metadata = {
-  ...(publicSiteUrl ? { metadataBase: new URL(publicSiteUrl), alternates: { canonical: '/' } } : {}),
+  metadataBase: new URL(publicSiteUrl ?? 'http://localhost:3000'),
+  ...(publicSiteUrl ? { alternates: { canonical: '/' } } : {}),
   title: {
     default: 'BuildWithMe UI — Build the interface. Keep the source.',
     template: '%s · BuildWithMe UI',

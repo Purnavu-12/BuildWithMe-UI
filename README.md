@@ -43,11 +43,13 @@ See [CONTRIBUTING.md](CONTRIBUTING.md), [architecture](docs/architecture.md), [d
 
 - `pnpm check` validates formatting-independent code quality, types, tests, the registry, the Next.js production build, and all three package outputs.
 - `pnpm test:e2e` verifies the discovery journey, accessibility, responsive layouts, reduced motion, and public registry endpoints.
-- `pnpm test:install` builds publication folders, checks all 165 source artifacts, compiles Svelte output, and builds clean Next.js, Nuxt, and SvelteKit package fixtures.
+- `pnpm test:install` builds publication folders, validates all 165 source artifacts, compiles Svelte output, and builds clean Next.js, Nuxt, and SvelteKit package fixtures.
 
 ## Configuration
 
 Copy `.env.example` to `.env.local`. The repository URL is configured. `NEXT_PUBLIC_SITE_URL` remains empty until the production destination is supplied; canonical and sitemap URLs activate only when it is set.
+
+Run `pnpm env:validate` in the production environment before deploying. It rejects missing, invalid, non-HTTPS, and localhost public URLs.
 
 ## License
 
