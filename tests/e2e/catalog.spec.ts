@@ -60,11 +60,32 @@ test('detail supports preview controls, framework source, and copy failure recov
   await page.getByRole('button', { name: 'Play preview', exact: true }).click();
   await page.getByRole('combobox', { name: 'Preview theme' }).selectOption('light');
   await page.getByRole('combobox', { name: 'Preview width' }).selectOption('360px');
-  await page
-    .getByRole('tablist', { name: 'Source framework' })
-    .getByRole('tab', { name: 'vue' })
-    .click();
+  const tablist = page.getByRole('tablist', { name: 'Source framework' });
+  const reactTab = tablist.getByRole('tab', { name: 'react' });
+  const vueTab = tablist.getByRole('tab', { name: 'vue' });
+  const svelteTab = tablist.getByRole('tab', { name: 'svelte' });
+  const tabpanel = page.getByRole('tabpanel');
+
+  await expect(reactTab).toHaveAttribute('aria-selected', 'true');
+  await expect(reactTab).toHaveAttribute('tabindex', '0');
+  await expect(reactTab).toHaveAttribute('aria-controls', 'source-tabpanel');
+  await expect(vueTab).toHaveAttribute('tabindex', '-1');
+  await expect(tabpanel).toHaveAttribute('aria-labelledby', 'source-tab-react');
+
+  await reactTab.focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(vueTab).toBeFocused();
+  await expect(vueTab).toHaveAttribute('aria-selected', 'true');
   await expect(page.locator('.source-block')).toContainText('<template>');
+  await expect(tabpanel).toHaveAttribute('aria-labelledby', 'source-tab-vue');
+
+  await page.keyboard.press('ArrowRight');
+  await expect(svelteTab).toBeFocused();
+  await page.keyboard.press('ArrowRight');
+  await expect(reactTab).toBeFocused();
+
+  await vueTab.click();
+  await expect(vueTab).toHaveAttribute('aria-selected', 'true');
   await expect(page.locator('.component-install code')).toContainText(
     'https://build-with-me-ui.vercel.app/r/react/magnetic-button.json',
   );
