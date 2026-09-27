@@ -1,20 +1,83 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script setup lang="ts">
 import { ref } from 'vue';
-withDefaults(defineProps<{ label?: string }>(), { label: "Command palette" });
-const active = ref(false);
-const value = ref('');
+
+withDefaults(defineProps<{ label?: string }>(), { label: 'Command palette' });
+
+const commands = ['Overview', 'Components', 'Contribute'];
+const active = ref(commands[0]);
 </script>
 
 <template>
-  <section class="bwm-surface" :data-active="active">
-    <span class="bwm-kicker">BUILDWITHME / VUE</span>
-    <strong>{{ label }}</strong>
-    <input v-if="false" v-model="value" aria-label="Example value" placeholder="Start typing…" />
-    <p v-else>One design language. Native Vue interaction.</p>
-    <button type="button" @click="active = !active">{{ active ? 'Selected' : 'Try interaction' }}</button>
+  <section class="bwm-surface bwm-command-palette">
+    <nav class="bwm-list" :aria-label="label">
+      <button
+        v-for="command in commands"
+        :key="command"
+        type="button"
+        :aria-current="active === command ? 'page' : undefined"
+        @click="active = command"
+      >
+        <span class="bwm-command-label">{{ command }}</span>
+        <span class="bwm-command-glyph" aria-hidden="true">↗</span>
+      </button>
+    </nav>
   </section>
 </template>
 
 <style scoped>
-.bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
+.bwm-surface {
+  box-sizing: border-box;
+  display: grid;
+  width: min(100%, 320px);
+  padding: 0.5rem;
+  border: 1px solid var(--bwm-component-border, #343431);
+  background: var(--bwm-component-panel, #10100f);
+  color: var(--bwm-component-fg, #f4f1e8);
+  font-family: inherit;
+}
+.bwm-list {
+  display: grid;
+  gap: 0.125rem;
+}
+.bwm-list button {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 44px;
+  padding: 0 0.875rem;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--bwm-component-muted, #a6a49c);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.bwm-list button:hover {
+  background: color-mix(in srgb, var(--bwm-component-fg, #f4f1e8) 8%, transparent);
+  color: var(--bwm-component-fg, #f4f1e8);
+}
+.bwm-list button[aria-current='page'] {
+  background: color-mix(in srgb, var(--bwm-component-fg, #f4f1e8) 12%, transparent);
+  color: var(--bwm-component-fg, #f4f1e8);
+  font-weight: 550;
+}
+.bwm-command-glyph {
+  color: inherit;
+  font-size: 12px;
+}
+.bwm-list button:focus-visible {
+  outline: 2px solid var(--bwm-component-focus, #fff);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bwm-list button {
+    transition: none;
+  }
+}
 </style>
