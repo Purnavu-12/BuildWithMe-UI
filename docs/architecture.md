@@ -24,18 +24,21 @@ The manifest uses a discriminated provenance model. Original work needs a creato
 - `/.well-known/buildwithme.json`
 - The server-consumed registry and source data.
 - A statically analyzable lazy React preview map.
+- Isolated, code-split Vue and Svelte preview runtimes generated with Vite.
 
-Generated output is ignored by Git. Submitted code is never executed dynamically; only reviewed source included in the generated import map can render.
+Generated output is ignored by Git. Submitted code is never executed dynamically; only reviewed source included in generated maps can render. React previews mount through Next.js. Vue and Svelte previews mount inside same-origin iframes and communicate through a typed `theme`, `pause`, `replay`, `ready`, and `error` message protocol. A framework route loads only its selected runtime.
+
+Every component surface accepts the public `data-bwm-theme="dark|light"` boundary. Component tokens inherit from the nearest boundary, which allows a dark artifact inside the light site and the inverse without ancestor-selector leakage.
 
 ## Package publication
 
 `scripts/build-packages.ts` creates untracked publication folders in `.release/`:
 
-- React is bundled with tsup using per-component entry points.
-- Vue SFCs are compiled with Vite and the Vue plugin.
-- Svelte components are processed with `svelte-package`.
+- React is bundled with tsup using per-component entry points; TypeScript emits declarations from the real source props.
+- Vue SFCs are compiled with Vite and the Vue plugin; `vue-tsc` emits declaration files and package export conditions point to them.
+- Svelte components and declarations are processed with `svelte-package` using a package-local TypeScript configuration.
 
-The public packages are `@buildwithme/react`, `@buildwithme/vue`, and `@buildwithme/svelte`. Publishing is a separate release action.
+The public package names are `@buildwithme/react`, `@buildwithme/vue`, and `@buildwithme/svelte`. The release check creates real tarballs, validates declaration targets, and inspects required license contents. Publishing is a separate release action; the site marks npm as unpublished until that action succeeds.
 
 ## Rendering and performance
 

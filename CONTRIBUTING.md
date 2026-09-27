@@ -1,47 +1,60 @@
 # Contributing to BuildWithMe UI
 
-Thank you for helping build an open component ecosystem. Contributions can be new designs, framework parity improvements, accessibility fixes, documentation, bug reports, or reviews.
+Thank you for helping build an open component ecosystem. Documentation, issue reproduction, accessibility review, design feedback, and focused code fixes are as valuable as new components.
 
-## Create a component
+If this is your first open-source contribution, use the [10-minute first contribution guide](FIRST_CONTRIBUTION.md). You do not need experience with all three frameworks.
+
+## Choose your contribution lane
+
+### Small fix
+
+Use this lane for documentation, copy, links, tests, website polish, accessibility notes, or a contained bug that does not change a component's shared public behavior.
+
+- Change only the files needed for the fix.
+- Run the smallest relevant check from the table below.
+- Provenance details are unnecessary for original documentation and maintenance work.
+
+### Existing component improvement
+
+You may improve one React, Vue, or Svelte source at a time. Describe the behavior you tested and avoid silently changing the shared props or interaction contract. Maintainers can help coordinate follow-up parity work.
+
+### New design or shared capability
+
+This is the advanced lane. New designs ship React, Vue, and Svelte sources because the public registry promises all three. Changes to shared props, events, keyboard behavior, or visual intent must remain equivalent across frameworks.
 
 ```sh
-pnpm install
 pnpm component:new signal-card data-display css
 pnpm dev
 ```
 
-The scaffold creates four authored files under `src/registry/designs/signal-card/`: one typed manifest and React, Vue, and Svelte sources. Generated previews, documentation, search data, registry JSON, package maps, and README content are not edited manually.
+The scaffold creates one typed manifest and three source files. Catalog records, preview entries, docs, package maps, and registry JSON are generated.
 
-## Completion requirements
+## Validation by scope
 
-- Preserve equivalent capability and accessibility across React, Vue, and Svelte.
-- Use semantic controls, visible focus, useful labels, and reduced-motion behavior.
-- Declare every non-framework dependency with an exact version.
-- Keep the implementation usable outside this repository.
-- Test keyboard, touch, dark and light themes, and responsive layouts.
-- Add focused tests for stateful or failure-prone behavior.
+| Contribution                                       | Required before review                             |
+| -------------------------------------------------- | -------------------------------------------------- |
+| Markdown or copy only                              | Review rendered content and links                  |
+| Website TypeScript or CSS                          | `pnpm lint && pnpm typecheck`                      |
+| Registry metadata or one existing framework source | `pnpm registry:validate && pnpm typecheck`         |
+| New design or shared component capability          | `pnpm check && pnpm test:e2e && pnpm test:install` |
+| Release or distribution tooling                    | `pnpm check && pnpm test:install`                  |
 
-The registry currently guarantees three source variants per design. Do not describe a design as having native framework parity until its parity review covers props, emitted events, visual intent, keyboard behavior, labels, state transitions, reduced motion, and failure recovery in all three frameworks.
+CI runs the release-level checks. Report unrelated failures instead of expanding a small contribution until it becomes unmanageable.
 
-## Motion contributions
+## Accessibility and motion
 
-Assign each animated element to one owner: CSS for simple state transitions, Motion for React gestures and scroll-linked DOM state, Anime.js for isolated timelines, or Three.js for canvas rendering. Provide a readable reduced-motion state and never require the canvas for navigation or meaning. New homepage story placements belong in the internal story configuration rather than component manifests.
+Use semantic controls, visible focus, useful labels, and a readable reduced-motion state. Test keyboard behavior for controls you change. An animated element has one owner: CSS for simple state, Motion for React DOM choreography, Anime.js for isolated timelines, or Three.js for canvas rendering.
 
 ## Provenance
 
-- Original work: provide your display name or GitHub handle and confirm the license.
-- Adapted work: also provide the upstream URL, author, license, and a concise modification note.
-- Remix: reference the parent registry ID and describe the variation.
+Provenance applies when you contribute component source or visual work:
 
-Do not submit premium code, copied source with incompatible licensing, or work with uncertain ownership.
+- **Original:** provide your display name or GitHub handle and confirm the license.
+- **Adapted:** also provide the upstream URL, author, license, and a concise modification note.
+- **Remix:** reference the parent registry ID and explain the variation.
 
-## Validate
+Do not submit premium code, incompatible licenses, or work with uncertain ownership. A typo fix or original documentation edit does not need a provenance record.
 
-```sh
-pnpm registry:validate
-pnpm check
-pnpm test:e2e
-pnpm test:install
-```
+## Pull requests
 
-Use the pull request template and include screenshots, parity notes, accessibility verification, dependency changes, and provenance.
+Keep the pull request focused. Explain the problem, the resulting behavior, and the checks you ran. Add screenshots for visible changes. If you are unsure where to begin, choose a [`good first issue`](https://github.com/Purnavu-12/BuildWithMe-UI/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or open a component request with a sketch, screenshot, or reference.

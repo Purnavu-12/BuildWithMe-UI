@@ -16,7 +16,7 @@ export default async function Detail({ params }: { params: Promise<{ id: string 
     <section className="detail-workbench">
       <div className="detail-preview"><Preview id={id} controls /></div>
       <aside className="detail-panel">
-        <div className="framework-picker">{(['react','vue','svelte'] as const).map((framework)=><Link key={framework} href={`/preview/${id}/${framework}`}>{framework}</Link>)}</div>
+        <div className="framework-picker">{(['react','vue','svelte'] as const).map((framework)=><Link key={framework} href={`/preview/${id}/${framework}`}><span>{framework}</span><small>{item.frameworks[framework].verification?.status ?? 'provisional'}</small></Link>)}</div>
         <section className="detail-section"><h2>Install</h2><p>Source installation is available now. Package commands unlock only after a verified npm release.</p><ComponentInstall id={id} site={siteUrl}/></section>
         <section className="detail-section"><h2>Accessibility</h2><p>{item.accessibility.summary}</p><ul>{item.accessibility.features.map((feature)=><li key={feature}>{feature}</li>)}</ul></section>
         <section className="detail-section"><h2>Component API</h2><div className="table-scroll"><table className="props-table"><thead><tr><th>Prop</th><th>Type</th><th>Default</th></tr></thead><tbody>{item.props.map((prop)=><tr key={prop.name}><td><code>{prop.name}</code></td><td>{prop.type}</td><td>{prop.default}</td></tr>)}</tbody></table></div></section>

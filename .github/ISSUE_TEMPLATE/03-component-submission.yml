@@ -1,7 +1,26 @@
 name: 'Component submission'
-description: 'Propose a component for review.'
+description: 'Propose a component for review.'
+
 labels: ['component', 'contribution', 'needs-triage']
 body:
+  - type: dropdown
+    id: provenance
+    attributes:
+      label: Provenance
+      options: [Original, Adapted, Remix]
+    validations:
+      required: true
+  - type: checkboxes
+    id: frameworks
+    attributes:
+      label: Framework sources included
+      options:
+        - label: React / Next.js
+          required: true
+        - label: Vue / Nuxt
+          required: true
+        - label: Svelte / SvelteKit
+          required: true
   - type: textarea
     id: field-1
     attributes:
