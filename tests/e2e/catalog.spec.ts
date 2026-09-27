@@ -23,11 +23,37 @@ test('chapter navigation and command search work by keyboard', async ({ page }) 
   await expect(page).toHaveURL(/#translation$/);
   await expect(page.locator('#translation')).toBeInViewport();
   await page.keyboard.press('Control+k');
-  const search = page.getByRole('textbox', { name: 'Search components and documentation' });
+  const search = page.getByRole('combobox', { name: 'Search components and documentation' });
   await expect(search).toBeFocused();
+
+  const commandResults = page.getByRole('listbox', { name: 'Search results' });
+  const initialOptions = commandResults.getByRole('option');
+  await search.press('ArrowUp');
+  await expect(initialOptions.last()).toHaveAttribute('aria-selected', 'true');
+
   await search.fill('magnetic');
-  await expect(page.getByRole('option', { name: /Magnetic button/ })).toBeVisible();
+  const magnetic = commandResults.getByRole('option', { name: /Magnetic button/ });
+  await expect(magnetic).toBeVisible();
+  await expect(search).not.toHaveAttribute('aria-activedescendant');
+
+  await search.press('ArrowDown');
+  await expect(search).toBeFocused();
+  await expect(magnetic).toHaveAttribute('aria-selected', 'true');
+  await expect(search).toHaveAttribute('aria-activedescendant', 'command-search-option-0');
+
+  await search.fill('no-such-command-search-result');
+  await expect(commandResults.getByRole('option')).toHaveCount(0);
+  await expect(search).not.toHaveAttribute('aria-activedescendant');
+
+  await search.fill('magnetic');
+  await search.press('ArrowDown');
+  await search.press('Enter');
+  await expect(page).toHaveURL(/\/components\/magnetic-button$/);
+
+  await page.keyboard.press('Control+k');
+  await expect(search).toBeFocused();
   await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).toBeHidden();
 });
 
 test('search and every filter survive reload and reset cleanly', async ({ page }) => {
