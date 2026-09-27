@@ -10,7 +10,7 @@ The catalog introduction and component detail hierarchy have been compressed so 
 
 The current verification pass completed `pnpm check`, `pnpm test:install`, and all 78 Playwright cases in Chromium, Firefox, and WebKit. The browser suite includes 24 dark/light responsive image baselines, automated accessibility checks, isolated framework preview checks, reduced-motion and save-data fallbacks, and theme isolation. The visual baselines still need human approval before they become a release gate.
 
-The remaining release gates are full 55-design behavior parity across Vue and Svelte, independent installation of every source artifact into clean fixtures, baseline visual regression approval across all target browsers and viewports, measured field performance, a production domain, npm ownership, Storybook generation, and the opt-in live editor. No deployment or publication has been performed.
+The remaining release gates are full 55-design behavior parity across Vue and Svelte, independent installation of every source artifact into clean fixtures, baseline visual regression approval across all target browsers and viewports, measured field performance, npm ownership, Storybook generation, and the opt-in live editor. The canonical production target is `https://build-with-me-ui.vercel.app`; package publication has not been performed.
 
 ## Assessment
 
@@ -33,7 +33,7 @@ The table records the defects found at the start of this branch. Theme leakage, 
 | P1       | Release metadata and notices need verification | Package generator omits dependency aggregation for external animation engines, uses a hand-written version, and does not explicitly copy upstream license/notice files. Current fixture explicitly supplies animation dependencies, potentially masking missing package metadata.            |
 | P1       | Public claim exceeds evidence                  | Component detail says `THREE NATIVE IMPLEMENTATIONS`; use framework-source wording until parity is proven.                                                                                                                                                                                   |
 | P1       | Visual checks are captures, not regressions    | Existing e2e tests call screenshot without baseline comparison. React preview checks establish element visibility, not intended interaction or correct colors.                                                                                                                               |
-| P1       | Release configuration incomplete               | `.env.example` has blank public URLs; registry falls back to localhost. Repository URL is known. A production domain and npm scope authority still need confirmation.                                                                                                                        |
+| P1       | Release configuration was incomplete           | Resolved for the website: environment defaults, canonical metadata, sitemap, robots, and source-install commands use `https://build-with-me-ui.vercel.app`. npm scope authority still needs confirmation.                                                                                   |
 | P2       | Community tooling incomplete                   | Six issue forms and `config.yml` already exist; config only disables blank issues. CODEOWNERS, triage automation, and funding configuration are absent. Funding is optional and needs a real enabled destination.                                                                            |
 | P2       | Browser asset missing                          | Local production browser reports `/favicon.ico` 404.                                                                                                                                                                                                                                         |
 
@@ -86,7 +86,7 @@ Add CODEOWNERS with confirmed maintainer routing, labels on existing issue forms
 
 ## Phase 5 — Release and deployment
 
-Configure the known repository URL. Choose and validate the production domain, canonical metadata, sitemap, robots, icons and social images. Vercel supports Next.js directly; lack of a vercel.json alone is not a deployment defect. Document the chosen build/install/env configuration and deployment preview checks. Avoid maintaining both Vercel and Netlify configs without a real need.
+The repository and production URLs are configured. Canonical metadata, sitemap, robots, icons, social images, and source-install commands use the production URL while environment variables can override it. Vercel supports Next.js directly; lack of a vercel.json alone is not a deployment defect. Keep deployment preview checks documented and avoid maintaining both Vercel and Netlify configs without a real need.
 
 Prepare versioned releases with changelogs, packed artifacts, npm provenance/trusted publishing where supported, and a manual release gate. Confirm npm scope access and package availability before enabling npm installation as default. Deploy/publish only as a separate authorized release action after the earlier gates pass.
 

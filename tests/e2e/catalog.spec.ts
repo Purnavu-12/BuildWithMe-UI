@@ -8,6 +8,10 @@ test('homepage presents the ecosystem before discovery', async ({ page }) => {
   await expect(page.getByRole('link', { name: /Explore the collection/ })).toBeVisible();
   await expect(page.locator('[data-cosmos-chapter]')).toHaveCount(5);
   await expect(page.locator('.cosmos-static')).toBeVisible();
+  await expect(page.getByRole('link', { name: /GitHub/ }).first()).toHaveAttribute(
+    'href',
+    'https://github.com/Purnavu-12/BuildWithMe-UI',
+  );
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
   expect(results.violations).toEqual([]);
 });
@@ -37,14 +41,18 @@ test('search and every filter survive reload and reset cleanly', async ({ page }
   await expect(page).toHaveURL(/domain=navigation/);
   await expect(page.locator('.component-card')).toHaveCount(navigationCount);
   await page.reload();
-  await expect(page.getByRole('combobox', { name: 'Filter by product domain' })).toHaveValue('navigation');
+  await expect(page.getByRole('combobox', { name: 'Filter by product domain' })).toHaveValue(
+    'navigation',
+  );
   await page.getByRole('textbox', { name: 'Search components' }).fill('no-such-design');
   await expect(page.getByText('No design matches that combination.')).toBeVisible();
   await page.getByRole('button', { name: 'Clear filters' }).click();
   await expect(page.locator('.component-card')).toHaveCount(55);
 });
 
-test('detail supports preview controls, framework source, and copy failure recovery', async ({ page }) => {
+test('detail supports preview controls, framework source, and copy failure recovery', async ({
+  page,
+}) => {
   await page.goto('/components/magnetic-button');
   await expect(page.getByRole('heading', { name: 'Magnetic button' })).toBeVisible();
   await page.getByRole('button', { name: 'Pause preview' }).click();
@@ -52,11 +60,37 @@ test('detail supports preview controls, framework source, and copy failure recov
   await page.getByRole('button', { name: 'Play preview', exact: true }).click();
   await page.getByRole('combobox', { name: 'Preview theme' }).selectOption('light');
   await page.getByRole('combobox', { name: 'Preview width' }).selectOption('360px');
-  await page.getByRole('tablist', { name: 'Source framework' }).getByRole('tab', { name: 'vue' }).click();
+  await page
+    .getByRole('tablist', { name: 'Source framework' })
+    .getByRole('tab', { name: 'vue' })
+    .click();
   await expect(page.locator('.source-block')).toContainText('<template>');
-  await page.evaluate(() => Object.defineProperty(navigator, 'clipboard', { value: { writeText: () => Promise.reject(new Error('blocked')) }, configurable: true }));
+  await expect(page.locator('.component-install code')).toContainText(
+    'https://build-with-me-ui.vercel.app/r/react/magnetic-button.json',
+  );
+  await page.evaluate(() =>
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: () => Promise.reject(new Error('blocked')) },
+      configurable: true,
+    }),
+  );
   await page.getByRole('button', { name: 'Copy command' }).click();
   await expect(page.getByText('Copy failed')).toBeVisible();
+});
+
+test('contribution page offers a beginner path before advanced component work', async ({
+  page,
+}) => {
+  await page.goto('/contribute');
+  await expect(page.getByRole('heading', { name: /Start small/ })).toBeVisible();
+  await expect(page.getByRole('link', { name: /good first issue/i })).toHaveAttribute(
+    'href',
+    /label%3A%22good(?:\+|%20)first(?:\+|%20)issue%22/,
+  );
+  await expect(page.getByRole('link', { name: /First contribution guide/ })).toHaveAttribute(
+    'href',
+    /FIRST_CONTRIBUTION\.md$/,
+  );
 });
 
 test('site and component preview themes switch completely and persist', async ({ page }) => {
@@ -73,12 +107,20 @@ test('site and component preview themes switch completely and persist', async ({
   await expect(stage).toHaveAttribute('data-bwm-theme', 'dark');
   await expect(stage).toHaveCSS('background-color', 'rgb(5, 5, 5)');
   await expect(stage.locator('.bw-demo')).toHaveCSS('color', 'rgb(244, 241, 232)');
-  expect(await stage.locator('.bw-demo').evaluate((node) => getComputedStyle(node).getPropertyValue('--bw-border').trim())).toBe('#343431');
+  expect(
+    await stage
+      .locator('.bw-demo')
+      .evaluate((node) => getComputedStyle(node).getPropertyValue('--bw-border').trim()),
+  ).toBe('#343431');
   await page.getByRole('combobox', { name: 'Preview theme' }).selectOption('light');
   await expect(stage).toHaveAttribute('data-bwm-theme', 'light');
   await expect(stage).toHaveCSS('background-color', 'rgb(243, 240, 232)');
   await expect(stage.locator('.bw-demo')).toHaveCSS('color', 'rgb(20, 20, 18)');
-  expect(await stage.locator('.bw-demo').evaluate((node) => getComputedStyle(node).getPropertyValue('--bw-border').trim())).toBe('#cbc6ba');
+  expect(
+    await stage
+      .locator('.bw-demo')
+      .evaluate((node) => getComputedStyle(node).getPropertyValue('--bw-border').trim()),
+  ).toBe('#cbc6ba');
   await page.getByRole('combobox', { name: 'Preview theme' }).selectOption('dark');
   await expect(stage).toHaveCSS('background-color', 'rgb(5, 5, 5)');
 });
@@ -94,11 +136,19 @@ for (const theme of ['dark', 'light'] as const) {
     test(`${theme} homepage at ${width}`, async ({ page }) => {
       await page.setViewportSize({ width, height: 1000 });
       await page.emulateMedia({ reducedMotion: 'reduce' });
-      await page.addInitScript((selectedTheme) => localStorage.setItem('theme', selectedTheme), theme);
+      await page.addInitScript(
+        (selectedTheme) => localStorage.setItem('theme', selectedTheme),
+        theme,
+      );
       await page.goto('/');
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-      expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-      await expect(page).toHaveScreenshot(`home-${theme}-${width}.png`, { animations: 'disabled', maxDiffPixelRatio: 0.01 });
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+      ).toBe(true);
+      await expect(page).toHaveScreenshot(`home-${theme}-${width}.png`, {
+        animations: 'disabled',
+        maxDiffPixelRatio: 0.01,
+      });
     });
   }
 }
@@ -135,28 +185,44 @@ test('adapted artifacts expose working semantic interactions', async ({ page }) 
   await expect(page.getByRole('status')).toHaveText('Demo sign-in complete.');
 
   await page.goto('/components/precision-pagination');
-  await expect(page.getByRole('button', { name: '2', exact: true })).toHaveAttribute('aria-current', 'page');
+  await expect(page.getByRole('button', { name: '2', exact: true })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
 });
 
 for (const framework of ['vue', 'svelte'] as const) {
   test(`${framework} preview route mounts its isolated runtime`, async ({ page }) => {
     await page.goto(`/preview/magnetic-button/${framework}`);
-    await expect(page.locator('.live-label')).toContainText(new RegExp(`${framework} runtime`, 'i'));
+    await expect(page.locator('.live-label')).toContainText(
+      new RegExp(`${framework} runtime`, 'i'),
+    );
     const runtime = page.frameLocator(`iframe[title="${framework} preview for magnetic-button"]`);
     await expect(runtime.getByText(new RegExp(`BUILDWITHME / ${framework}`, 'i'))).toBeVisible();
     await runtime.getByRole('button', { name: 'Try interaction' }).click();
     await expect(runtime.getByRole('button', { name: 'Selected' })).toBeVisible();
     await page.getByRole('combobox', { name: 'Preview theme' }).selectOption('light');
     await expect(runtime.locator('body')).toHaveCSS('background-color', 'rgb(243, 240, 232)');
-    const resources = await page.evaluate(() => performance.getEntriesByType('resource').map((entry) => entry.name));
-    expect(resources.some((resource) => resource.includes(`/preview-runtime/${framework}/`))).toBe(true);
-    expect(resources.some((resource) => resource.includes(`/preview-runtime/${framework === 'vue' ? 'svelte' : 'vue'}/`))).toBe(false);
+    const resources = await page.evaluate(() =>
+      performance.getEntriesByType('resource').map((entry) => entry.name),
+    );
+    expect(resources.some((resource) => resource.includes(`/preview-runtime/${framework}/`))).toBe(
+      true,
+    );
+    expect(
+      resources.some((resource) =>
+        resource.includes(`/preview-runtime/${framework === 'vue' ? 'svelte' : 'vue'}/`),
+      ),
+    ).toBe(false);
   });
 }
 
 test('save-data mode keeps the complete static story without WebGL', async ({ page }) => {
   await page.addInitScript(() => {
-    Object.defineProperty(navigator, 'connection', { value: { saveData: true }, configurable: true });
+    Object.defineProperty(navigator, 'connection', {
+      value: { saveData: true },
+      configurable: true,
+    });
   });
   await page.goto('/');
   await expect(page.locator('.cosmos-canvas')).toHaveCount(0);
@@ -171,7 +237,13 @@ test('ecosystem coverage is registry-derived and accessible', async ({ page }) =
   expect(results.violations).toEqual([]);
 });
 
-for (const route of ['/components', '/components/magnetic-button', '/components/glass-dock', '/docs/installation', '/contribute']) {
+for (const route of [
+  '/components',
+  '/components/magnetic-button',
+  '/components/glass-dock',
+  '/docs/installation',
+  '/contribute',
+]) {
   test(`${route} has no automated accessibility violations`, async ({ page }) => {
     await page.goto(route);
     const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();

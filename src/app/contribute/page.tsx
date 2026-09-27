@@ -1,64 +1,101 @@
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, BookOpen, Code2, Github } from 'lucide-react';
 import { repositoryUrl } from '@/lib/registry';
+
 export const metadata = { title: 'Build with us' };
+
+const firstIssues = `${repositoryUrl}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22`;
+
 export default function Contribute() {
   return (
     <main id="main-content" className="contribute-page">
-      <p className="mono-label">OPEN SOURCE / OPEN INVITATION</p>
+      <p className="mono-label">OPEN SOURCE / EVERY USEFUL CHANGE COUNTS</p>
       <h1>
-        Good things happen
+        Start small.
         <br />
-        when we build together.
+        Build with us.
       </h1>
       <p className="contribute-lead">
-        An interaction you can’t stop thinking about. A tiny detail that makes a product feel right.
-        There’s a place for it here.
+        Fix a sentence, reproduce a bug, improve one framework, or bring a complete new design. You
+        do not need to know the whole system before your first pull request.
       </p>
-      <div className="contribute-steps">
+
+      <section className="contribution-steps" aria-labelledby="contribution-lanes">
+        <h2 id="contribution-lanes" className="sr-only">
+          Contribution paths
+        </h2>
         <article>
-          <span>01 / MAKE IT</span>
-          <h2>Bring your idea.</h2>
+          <span>01 / FIRST 10 MINUTES</span>
+          <BookOpen aria-hidden="true" />
+          <h2>Make one clear fix.</h2>
           <p>
-            Run one command. It creates the typed manifest and React, Vue, and Svelte sources.
+            Choose documentation, copy, accessibility notes, or a contained website issue. No
+            three-framework work is required.
           </p>
-        </article>
-        <article>
-          <span>02 / CARE FOR IT</span>
-          <h2>Think of everyone.</h2>
-          <p>
-            Build equivalent behavior for each framework and verify the keyboard, touch, and reduced-motion experience.
-          </p>
-        </article>
-        <article>
-          <span>03 / SHARE IT</span>
-          <h2>Build it together.</h2>
-          <p>
-            Generated previews, docs, package maps, registry files, and validation remove the repetitive work.
-          </p>
-        </article>
-      </div>
-      <div className="contribute-actions">
-        <Link href="/docs/contributing" className="button button-light">
-          Read the contributor guide <ArrowUpRight size={15} />
-        </Link>
-        {repositoryUrl ? (
-          <a
-            className="button button-ghost"
-            href={`${repositoryUrl}/issues/new/choose`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Open an issue <ArrowUpRight size={14} />
+          <a href={firstIssues} target="_blank" rel="noreferrer">
+            Find a good first issue <ArrowUpRight size={13} />
           </a>
-        ) : null}
-      </div>
-      <div className="prose">
-        <h2>More than new components.</h2>
-        <p>
-          Accessibility improvements, documentation, bug reports, engine variants, and thoughtful
-          reviews all move the project forward. Start wherever you can help.
-        </p>
+        </article>
+        <article>
+          <span>02 / FOCUSED IMPROVEMENT</span>
+          <Code2 aria-hidden="true" />
+          <h2>Improve what exists.</h2>
+          <p>
+            Fix one React, Vue, or Svelte implementation. Share what you tested and let maintainers
+            coordinate broader parity.
+          </p>
+          <Link href="/components">
+            Choose a component <ArrowUpRight size={13} />
+          </Link>
+        </article>
+        <article>
+          <span>03 / COMPLETE DESIGN</span>
+          <Github aria-hidden="true" />
+          <h2>Add to the ecosystem.</h2>
+          <p>
+            Use the scaffold for a new design. This advanced path carries the shared contract across
+            all three frameworks.
+          </p>
+          <Link href="/docs/contributing">
+            Read the full workflow <ArrowUpRight size={13} />
+          </Link>
+        </article>
+      </section>
+
+      <section className="contribute-quickstart" aria-labelledby="quickstart-title">
+        <div>
+          <p className="mono-label">HUMAN QUICKSTART / FOUR STEPS</p>
+          <h2 id="quickstart-title">Your first contribution should feel possible.</h2>
+          <p>
+            Clone, branch, make one change, and run only the check that matches its scope. CI and
+            maintainers handle the release-level gate.
+          </p>
+        </div>
+        <pre tabIndex={0} aria-label="Local contribution setup commands">
+          <code>{`git clone ${repositoryUrl}.git\ncd BuildWithMe-UI\npnpm install\npnpm dev`}</code>
+        </pre>
+      </section>
+
+      <div className="contribute-actions">
+        <a
+          href={`${repositoryUrl}/blob/main/FIRST_CONTRIBUTION.md`}
+          className="button button-light"
+          target="_blank"
+          rel="noreferrer"
+        >
+          First contribution guide <ArrowUpRight size={15} />
+        </a>
+        <a className="button button-ghost" href={repositoryUrl} target="_blank" rel="noreferrer">
+          View on GitHub <Github size={14} />
+        </a>
+        <a
+          className="button button-ghost"
+          href={`${repositoryUrl}/issues/new/choose`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Open an issue <ArrowUpRight size={14} />
+        </a>
       </div>
     </main>
   );

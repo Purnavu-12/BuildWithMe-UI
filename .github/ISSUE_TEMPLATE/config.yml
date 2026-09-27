@@ -1,5 +1,11 @@
 blank_issues_enabled: false
 contact_links:
+  - name: First contribution guide
+    url: https://github.com/Purnavu-12/BuildWithMe-UI/blob/main/FIRST_CONTRIBUTION.md
+    about: Start with a small documentation, accessibility, or focused code contribution.
+  - name: Good first issues
+    url: https://github.com/Purnavu-12/BuildWithMe-UI/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22
+    about: Browse contained tasks intended for new contributors.
   - name: Security report
     url: https://github.com/Purnavu-12/BuildWithMe-UI/security/advisories/new
     about: Report a vulnerability privately. Do not open a public issue.
