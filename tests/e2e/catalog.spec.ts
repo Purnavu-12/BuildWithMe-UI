@@ -270,11 +270,17 @@ for (const framework of ['vue', 'svelte'] as const) {
       new RegExp(`${framework} runtime`, 'i'),
     );
     const runtime = page.frameLocator(`iframe[title="${framework} preview for magnetic-button"]`);
+    const iframe = page.locator(`iframe[title="${framework} preview for magnetic-button"]`);
     await expect(runtime.getByText(new RegExp(`BUILDWITHME / ${framework}`, 'i'))).toBeVisible();
+    const initialSrc = await iframe.getAttribute('src');
     await runtime.getByRole('button', { name: 'Try interaction' }).click();
     await expect(runtime.getByRole('button', { name: 'Selected' })).toBeVisible();
     await page.getByRole('combobox', { name: 'Preview theme' }).selectOption('light');
     await expect(runtime.locator('body')).toHaveCSS('background-color', 'rgb(243, 240, 232)');
+    await expect(iframe).toHaveAttribute('src', initialSrc ?? '');
+    await expect(runtime.getByRole('button', { name: 'Selected' })).toBeVisible();
+    await page.getByRole('button', { name: 'Replay preview' }).click();
+    await expect(runtime.getByRole('button', { name: 'Try interaction' })).toBeVisible();
     const resources = await page.evaluate(() =>
       performance.getEntriesByType('resource').map((entry) => entry.name),
     );

@@ -20,6 +20,9 @@ export function FrameworkPreview({ id, framework }: { id: string; framework: Exc
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [error, setError] = useState('');
   const effectiveTheme = theme === 'site' ? siteTheme : theme;
+  const [frameSrc] = useState(
+    () => `/preview-runtime/${framework}/index.html?id=${encodeURIComponent(id)}&theme=${effectiveTheme}`,
+  );
   const send = useCallback((message: HostMessage) => frame.current?.contentWindow?.postMessage(message, window.location.origin), []);
 
   useEffect(() => {
@@ -58,7 +61,7 @@ export function FrameworkPreview({ id, framework }: { id: string; framework: Exc
     <div className="preview-stage isolated-preview-stage" data-bwm-theme={effectiveTheme} style={{ maxWidth: width }}>
       {status === 'loading' ? <span className="preview-loading" role="status">Starting {framework} runtime…</span> : null}
       {status === 'error' ? <div className="preview-error" role="alert"><p>{error}</p><button className="small-button" onClick={replay}>Try again</button></div> : null}
-      <iframe ref={frame} className="framework-preview-frame" title={`${framework} preview for ${id}`} src={`/preview-runtime/${framework}/index.html?id=${encodeURIComponent(id)}&theme=${effectiveTheme}`} onLoad={() => send({ source: 'buildwithme-host', type: 'theme', value: effectiveTheme })}/>
+      <iframe ref={frame} className="framework-preview-frame" title={`${framework} preview for ${id}`} src={frameSrc} onLoad={() => send({ source: 'buildwithme-host', type: 'theme', value: effectiveTheme })}/>
     </div>
   </div>;
 }
