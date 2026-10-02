@@ -295,6 +295,59 @@ for (const framework of ['vue', 'svelte'] as const) {
   });
 }
 
+test('every Vue and Svelte preview route mounts in Chromium', async ({ browserName, page }) => {
+  test.skip(browserName !== 'chromium', 'The exhaustive runtime matrix is covered once in Chromium.');
+  test.setTimeout(180_000);
+
+  const index = (await (await page.request.get('/index.v2.json')).json()) as {
+    items: { id: string }[];
+  };
+  const pageErrors: string[] = [];
+  let activeTarget = 'preview bootstrap';
+
+  page.on('pageerror', (error) => {
+    pageErrors.push(`${activeTarget}: ${error.message}`);
+  });
+
+  for (const framework of ['vue', 'svelte'] as const) {
+    for (const { id } of index.items) {
+      activeTarget = `${framework}/${id}`;
+      pageErrors.length = 0;
+
+      await test.step(activeTarget, async () => {
+        await page.goto(`/preview/${id}/${framework}`, { waitUntil: 'domcontentloaded' });
+
+        const previewError = page.locator('.preview-error[role="alert"]');
+        const runtime = page.frameLocator(`iframe[title="${framework} preview for ${id}"]`);
+        const runtimeContent = runtime.locator('#app > *').first();
+
+        try {
+          await expect(
+            runtimeContent,
+            `${activeTarget} did not mount visible component content`,
+          ).toBeVisible();
+        } catch (mountError) {
+          if (await previewError.isVisible()) {
+            throw new Error(
+              `${activeTarget} reported a preview error: ${await previewError.innerText()}`,
+              { cause: mountError },
+            );
+          }
+          throw mountError;
+        }
+
+        await expect(
+          page.getByRole('status', { name: new RegExp(`Starting ${framework} runtime`, 'i') }),
+          `${activeTarget} never reported ready`,
+        ).toBeHidden();
+        expect(pageErrors, `${activeTarget} emitted browser errors:\n${pageErrors.join('\n')}`).toEqual(
+          [],
+        );
+      });
+    }
+  }
+});
+
 test('save-data mode keeps the complete static story without WebGL', async ({ page }) => {
   await page.addInitScript(() => {
     Object.defineProperty(navigator, 'connection', {
