@@ -65,5 +65,6 @@ export default defineManifest({
     },
     "license": "MIT"
   },
-  "related": []
+  "related": [],
+  "style": "designs/dialog-sheet/dialog-sheet.css"
 });

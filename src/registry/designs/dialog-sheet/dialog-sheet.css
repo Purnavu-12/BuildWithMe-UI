@@ -1,0 +1,121 @@
+.bwm-dialog-sheet {
+  min-height: 260px;
+}
+
+.bwm-dialog-sheet__trigger,
+.bwm-dialog-sheet__close {
+  min-height: 44px;
+  border: 1px solid var(--bw-border);
+  background: var(--bw-panel);
+  color: var(--bw-fg);
+  padding: 0 18px;
+}
+
+.bwm-dialog-sheet__trigger {
+  border-radius: 999px;
+}
+
+.bwm-dialog-sheet__dialog {
+  width: min(calc(100% - 32px), 420px);
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 20px;
+  background: transparent;
+  color: var(--bw-fg);
+  animation: bwm-dialog-sheet-enter 180ms ease-out;
+}
+
+.bwm-dialog-sheet__dialog::backdrop {
+  background: color-mix(in srgb, #000 68%, transparent);
+  backdrop-filter: blur(4px);
+  animation: bwm-dialog-sheet-backdrop 180ms ease-out;
+}
+
+.bwm-dialog-sheet__panel {
+  display: grid;
+  gap: 16px;
+  padding: 28px;
+  border: 1px solid var(--bw-border);
+  border-radius: inherit;
+  background: var(--bw-panel);
+  box-shadow: 0 24px 80px color-mix(in srgb, #000 45%, transparent);
+}
+
+.bwm-dialog-sheet__eyebrow {
+  margin: 0;
+  color: var(--bw-muted);
+  font:
+    10px/1.2 ui-monospace,
+    monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.bwm-dialog-sheet__panel h2 {
+  margin: 0;
+  font-size: clamp(26px, 7vw, 36px);
+  font-weight: 550;
+  letter-spacing: -0.05em;
+}
+
+.bwm-dialog-sheet__copy {
+  margin: 0;
+  color: var(--bw-muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.bwm-dialog-sheet__close {
+  width: 100%;
+  margin-top: 4px;
+  background: var(--bw-fg);
+  color: var(--bw-bg);
+}
+
+@keyframes bwm-dialog-sheet-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
+@keyframes bwm-dialog-sheet-backdrop {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .bwm-dialog-sheet__dialog {
+    width: 100%;
+    max-height: calc(100dvh - 48px);
+    margin: auto 0 0;
+    border-radius: 22px 22px 0 0;
+    animation-name: bwm-dialog-sheet-enter-mobile;
+  }
+
+  .bwm-dialog-sheet__panel {
+    padding: 24px 22px calc(24px + env(safe-area-inset-bottom));
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+  }
+}
+
+@keyframes bwm-dialog-sheet-enter-mobile {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bwm-dialog-sheet__dialog,
+  .bwm-dialog-sheet__dialog::backdrop {
+    animation: none;
+  }
+}
