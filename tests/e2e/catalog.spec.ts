@@ -49,6 +49,8 @@ test('chapter navigation and command search work by keyboard', async ({ page }) 
   await search.press('ArrowDown');
   await search.press('Enter');
   await expect(page).toHaveURL(/\/components\/magnetic-button$/);
+  await expect(page.getByRole('heading', { name: 'Magnetic button' })).toBeVisible();
+  await page.waitForLoadState('networkidle');
 
   await page.keyboard.press('Control+k');
   await expect(search).toBeFocused();
@@ -64,8 +66,11 @@ test('search and every filter survive reload and reset cleanly', async ({ page }
   await page.goto('/components');
   await page.getByRole('combobox', { name: 'Filter by product domain' }).selectOption('navigation');
   await page.getByRole('combobox', { name: 'Filter by framework' }).selectOption('vue');
-  await expect(page).toHaveURL(/domain=navigation/);
+  await expect(page).toHaveURL((url) => {
+    return url.searchParams.get('domain') === 'navigation' && url.searchParams.get('framework') === 'vue';
+  });
   await expect(page.locator('.component-card')).toHaveCount(navigationCount);
+  await page.waitForLoadState('networkidle');
   await page.reload();
   await expect(page.getByRole('combobox', { name: 'Filter by product domain' })).toHaveValue(
     'navigation',
