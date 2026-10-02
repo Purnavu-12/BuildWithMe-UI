@@ -217,6 +217,47 @@ test('adapted artifacts expose working semantic interactions', async ({ page }) 
   );
 });
 
+test('dialog sheet is modal, keyboard accessible, and adaptive', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 800 });
+  await page.goto('/preview/dialog-sheet/react');
+
+  const trigger = page.getByRole('button', { name: 'Open Dialog sheet' });
+  await trigger.focus();
+  await trigger.press('Enter');
+
+  const dialog = page.getByRole('dialog', { name: 'Dialog sheet' });
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveJSProperty('open', true);
+  expect(await dialog.evaluate((element) => element.matches(':modal'))).toBe(true);
+  await expect(page.getByRole('button', { name: 'Close Dialog sheet' })).toBeFocused();
+  await expect
+    .poll(async () => {
+      const box = await dialog.boundingBox();
+      return box ? Math.round(box.y + box.height) : 0;
+    })
+    .toBe(800);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(dialog).toHaveCSS('animation-name', 'none');
+
+  await page.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
+
+  await trigger.click();
+  await page.getByRole('button', { name: 'Close Dialog sheet' }).click();
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
+
+  await page.setViewportSize({ width: 1000, height: 800 });
+  await trigger.click();
+  await expect
+    .poll(async () => {
+      const box = await dialog.boundingBox();
+      return box ? Math.round(box.y + box.height / 2) : 0;
+    })
+    .toBe(400);
+});
+
 for (const framework of ['vue', 'svelte'] as const) {
   test(`${framework} preview route mounts its isolated runtime`, async ({ page }) => {
     await page.goto(`/preview/magnetic-button/${framework}`);
