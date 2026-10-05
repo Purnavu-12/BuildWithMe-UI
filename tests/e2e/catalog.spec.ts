@@ -263,6 +263,37 @@ test('adapted artifacts expose working semantic interactions', async ({ page }) 
   );
 });
 
+test('Svelte account login card preserves validation and announces completion', async ({
+  page,
+}) => {
+  await page.goto('/preview/account-login-card/svelte');
+
+  const runtime = page.frameLocator('iframe[title="svelte preview for account-login-card"]');
+  const email = runtime.getByRole('textbox', { name: 'Email' });
+  const password = runtime.getByLabel('Password');
+  const submit = runtime.locator('button[type="submit"]');
+
+  await expect(email).toHaveAttribute('type', 'email');
+  await expect(email).toHaveAttribute('autocomplete', 'email');
+  await expect(email).toHaveAttribute('required', '');
+  await expect(password).toHaveAttribute('type', 'password');
+  await expect(password).toHaveAttribute('autocomplete', 'current-password');
+  await expect(password).toHaveAttribute('required', '');
+
+  await submit.click();
+  await expect(email).toBeFocused();
+  await expect(runtime.getByRole('status')).toBeEmpty();
+
+  await email.fill('builder@example.com');
+  await password.fill('source-owned');
+  await submit.focus();
+  await submit.press('Enter');
+
+  await expect(submit).toBeFocused();
+  await expect(submit).toHaveText('Ready');
+  await expect(runtime.getByRole('status')).toHaveText('Demo sign-in complete.');
+});
+
 test('sortable data table supports accessible keyboard sorting and row actions', async ({
   page,
 }) => {
