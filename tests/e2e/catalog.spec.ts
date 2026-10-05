@@ -263,6 +263,45 @@ test('adapted artifacts expose working semantic interactions', async ({ page }) 
   );
 });
 
+test('sortable data table supports accessible keyboard sorting and row actions', async ({
+  page,
+}) => {
+  await page.goto('/preview/sortable-data-table/react');
+
+  const table = page.getByRole('table', { name: 'Sortable data table' });
+  const nameHeader = table.getByRole('columnheader', { name: 'Name' });
+  const statusHeader = table.getByRole('columnheader', { name: 'Status' });
+  const rowNames = table.locator('tbody tr td:first-child');
+
+  await expect(nameHeader).toHaveAttribute('aria-sort', 'ascending');
+  await expect(statusHeader).not.toHaveAttribute('aria-sort');
+  await expect(rowNames).toHaveText(['Aurora', 'Orbit', 'Signal']);
+
+  const nameSort = nameHeader.getByRole('button', { name: 'Name' });
+  await nameSort.focus();
+  await nameSort.press('Enter');
+  await expect(nameSort).toBeFocused();
+  await expect(nameHeader).toHaveAttribute('aria-sort', 'descending');
+  await expect(rowNames).toHaveText(['Signal', 'Orbit', 'Aurora']);
+
+  const statusSort = statusHeader.getByRole('button', { name: 'Status' });
+  await statusSort.focus();
+  await statusSort.press('Space');
+  await expect(statusHeader).toHaveAttribute('aria-sort', 'ascending');
+  await expect(nameHeader).not.toHaveAttribute('aria-sort');
+  await expect(rowNames).toHaveText(['Aurora', 'Signal', 'Orbit']);
+
+  await statusSort.press('Enter');
+  await expect(statusHeader).toHaveAttribute('aria-sort', 'descending');
+  await expect(rowNames).toHaveText(['Orbit', 'Aurora', 'Signal']);
+
+  const inspectOrbit = table.getByRole('button', { name: 'Inspect Orbit' });
+  await inspectOrbit.focus();
+  await inspectOrbit.press('Enter');
+  await expect(inspectOrbit).toBeFocused();
+  await expect(page.getByRole('status')).toHaveText('Selected Orbit.');
+});
+
 test('dialog sheet is modal, keyboard accessible, and adaptive', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 800 });
   await page.goto('/preview/dialog-sheet/react');
