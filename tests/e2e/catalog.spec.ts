@@ -91,10 +91,51 @@ test('detail supports preview controls, framework source, and copy failure recov
   await page.getByRole('button', { name: 'Play preview', exact: true }).click();
   await page.getByRole('combobox', { name: 'Preview theme' }).selectOption('light');
   await page.getByRole('combobox', { name: 'Preview width' }).selectOption('360px');
-  await page
-    .getByRole('tablist', { name: 'Source framework' })
-    .getByRole('tab', { name: 'vue' })
-    .click();
+  const sourceTabs = page.getByRole('tablist', { name: 'Source framework' });
+  const reactTab = sourceTabs.getByRole('tab', { name: 'react' });
+  const vueTab = sourceTabs.getByRole('tab', { name: 'vue' });
+  const svelteTab = sourceTabs.getByRole('tab', { name: 'svelte' });
+  const sourcePanel = page.getByRole('tabpanel');
+  await expect(reactTab).toHaveAttribute('aria-selected', 'true');
+  await expect(reactTab).toHaveAttribute('tabindex', '0');
+  await expect(vueTab).toHaveAttribute('tabindex', '-1');
+  await expect(svelteTab).toHaveAttribute('tabindex', '-1');
+  const panelId = await sourcePanel.getAttribute('id');
+  const reactTabId = await reactTab.getAttribute('id');
+  expect(panelId).toBeTruthy();
+  expect(reactTabId).toBeTruthy();
+  await expect(reactTab).toHaveAttribute('aria-controls', panelId!);
+  await expect(sourcePanel).toHaveAttribute('aria-labelledby', reactTabId!);
+  await reactTab.focus();
+  await reactTab.press('ArrowRight');
+  await expect(vueTab).toBeFocused();
+  await expect(vueTab).toHaveAttribute('aria-selected', 'true');
+  await expect(vueTab).toHaveAttribute('tabindex', '0');
+  await expect(reactTab).toHaveAttribute('tabindex', '-1');
+  await expect(page.locator('.source-block')).toContainText('<template>');
+  await vueTab.press('ArrowRight');
+  await expect(svelteTab).toBeFocused();
+  await expect(svelteTab).toHaveAttribute('aria-selected', 'true');
+  await svelteTab.press('ArrowRight');
+  await expect(reactTab).toBeFocused();
+  await expect(reactTab).toHaveAttribute('aria-selected', 'true');
+  await reactTab.press('ArrowLeft');
+  await expect(svelteTab).toBeFocused();
+  await expect(svelteTab).toHaveAttribute('aria-selected', 'true');
+  await page.keyboard.press('Tab');
+  await expect(reactTab).not.toBeFocused();
+  await expect(vueTab).not.toBeFocused();
+  await expect(svelteTab).not.toBeFocused();
+  await page.keyboard.press('Shift+Tab');
+  await expect(svelteTab).toBeFocused();
+  await page.keyboard.press('Shift+Tab');
+  await expect(reactTab).not.toBeFocused();
+  await expect(vueTab).not.toBeFocused();
+  await expect(svelteTab).not.toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(svelteTab).toBeFocused();
+  await vueTab.click();
+  await expect(vueTab).toHaveAttribute('aria-selected', 'true');
   await expect(page.locator('.source-block')).toContainText('<template>');
   await expect(page.locator('.component-install code')).toContainText(
     'https://build-with-me-ui.vercel.app/r/react/magnetic-button.json',
