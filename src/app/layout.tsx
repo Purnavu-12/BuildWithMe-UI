@@ -1,10 +1,22 @@
 import type { Metadata } from 'next';
-import { GeistSans } from 'geist/font/sans';
+import localFont from 'next/font/local';
 import { GeistMono } from 'geist/font/mono';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Header, Footer } from '@/components/shell';
 import { registryStats } from '@/lib/registry';
 import './globals.css';
+import './kinetic.css';
+// Explicit faces keep the intended weight in Windows WebKit's variable-font renderer.
+const GeistSans = localFont({
+  src: [
+    { path: '../../node_modules/geist/dist/fonts/geist-sans/Geist-Regular.woff2', weight: '400' },
+    { path: '../../node_modules/geist/dist/fonts/geist-sans/Geist-Medium.woff2', weight: '500' },
+    { path: '../../node_modules/geist/dist/fonts/geist-sans/Geist-SemiBold.woff2', weight: '600' },
+    { path: '../../node_modules/geist/dist/fonts/geist-sans/Geist-Bold.woff2', weight: '700' },
+  ],
+  variable: '--font-geist-sans',
+  display: 'swap',
+});
 const publicSiteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://build-with-me-ui.vercel.app';
 const socialImages = [`${publicSiteUrl}/opengraph-image`];
 export const metadata: Metadata = {

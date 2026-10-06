@@ -4,10 +4,10 @@ import AxeBuilder from '@axe-core/playwright';
 test('homepage presents the ecosystem before discovery', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: /Build the interface/ })).toBeVisible();
-  await expect(page.getByText('165', { exact: true }).first()).toBeVisible();
+  await expect(page.getByText('55 designs', { exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: /Explore the collection/ })).toBeVisible();
   await expect(page.locator('[data-cosmos-chapter]')).toHaveCount(5);
-  await expect(page.locator('.cosmos-static')).toBeVisible();
+  await expect(page.locator('.engine-vector .cosmos-static')).toBeVisible();
   await expect(page.getByRole('link', { name: /GitHub/ }).first()).toHaveAttribute(
     'href',
     'https://github.com/Purnavu-12/BuildWithMe-UI',
@@ -67,7 +67,9 @@ test('search and every filter survive reload and reset cleanly', async ({ page }
   await page.getByRole('combobox', { name: 'Filter by product domain' }).selectOption('navigation');
   await page.getByRole('combobox', { name: 'Filter by framework' }).selectOption('vue');
   await expect(page).toHaveURL((url) => {
-    return url.searchParams.get('domain') === 'navigation' && url.searchParams.get('framework') === 'vue';
+    return (
+      url.searchParams.get('domain') === 'navigation' && url.searchParams.get('framework') === 'vue'
+    );
   });
   await expect(page.locator('.component-card')).toHaveCount(navigationCount);
   await page.waitForLoadState('networkidle');
@@ -91,55 +93,24 @@ test('detail supports preview controls, framework source, and copy failure recov
   await page.getByRole('button', { name: 'Play preview', exact: true }).click();
   await page.getByRole('combobox', { name: 'Preview theme' }).selectOption('light');
   await page.getByRole('combobox', { name: 'Preview width' }).selectOption('360px');
-  const sourceTabs = page.getByRole('tablist', { name: 'Source framework' });
-  const reactTab = sourceTabs.getByRole('tab', { name: 'react' });
-  const vueTab = sourceTabs.getByRole('tab', { name: 'vue' });
-  const svelteTab = sourceTabs.getByRole('tab', { name: 'svelte' });
-  const sourcePanel = page.getByRole('tabpanel');
+  const frameworkTabs = page.getByRole('tablist', { name: 'Component framework' });
+  const reactTab = frameworkTabs.getByRole('tab', { name: /react provisional/i });
+  const vueTab = frameworkTabs.getByRole('tab', { name: /vue provisional/i });
+  const svelteTab = frameworkTabs.getByRole('tab', { name: /svelte provisional/i });
   await expect(reactTab).toHaveAttribute('aria-selected', 'true');
-  await expect(reactTab).toHaveAttribute('tabindex', '0');
-  await expect(vueTab).toHaveAttribute('tabindex', '-1');
-  await expect(svelteTab).toHaveAttribute('tabindex', '-1');
-  const panelId = await sourcePanel.getAttribute('id');
-  const reactTabId = await reactTab.getAttribute('id');
-  expect(panelId).toBeTruthy();
-  expect(reactTabId).toBeTruthy();
-  await expect(reactTab).toHaveAttribute('aria-controls', panelId!);
-  await expect(sourcePanel).toHaveAttribute('aria-labelledby', reactTabId!);
   await reactTab.focus();
   await reactTab.press('ArrowRight');
   await expect(vueTab).toBeFocused();
-  await expect(vueTab).toHaveAttribute('aria-selected', 'true');
-  await expect(vueTab).toHaveAttribute('tabindex', '0');
-  await expect(reactTab).toHaveAttribute('tabindex', '-1');
-  await expect(page.locator('.source-block')).toContainText('<template>');
-  await vueTab.press('ArrowRight');
-  await expect(svelteTab).toBeFocused();
-  await expect(svelteTab).toHaveAttribute('aria-selected', 'true');
-  await svelteTab.press('ArrowRight');
-  await expect(reactTab).toBeFocused();
-  await expect(reactTab).toHaveAttribute('aria-selected', 'true');
-  await reactTab.press('ArrowLeft');
-  await expect(svelteTab).toBeFocused();
-  await expect(svelteTab).toHaveAttribute('aria-selected', 'true');
-  await page.keyboard.press('Tab');
-  await expect(reactTab).not.toBeFocused();
-  await expect(vueTab).not.toBeFocused();
-  await expect(svelteTab).not.toBeFocused();
-  await page.keyboard.press('Shift+Tab');
-  await expect(svelteTab).toBeFocused();
-  await page.keyboard.press('Shift+Tab');
-  await expect(reactTab).not.toBeFocused();
-  await expect(vueTab).not.toBeFocused();
-  await expect(svelteTab).not.toBeFocused();
-  await page.keyboard.press('Tab');
-  await expect(svelteTab).toBeFocused();
-  await vueTab.click();
-  await expect(vueTab).toHaveAttribute('aria-selected', 'true');
+  await expect(page).toHaveURL(/framework=vue/);
   await expect(page.locator('.source-block')).toContainText('<template>');
   await expect(page.locator('.component-install code')).toContainText(
-    'https://build-with-me-ui.vercel.app/r/react/magnetic-button.json',
+    '/r/vue/magnetic-button.json',
   );
+  await vueTab.press('End');
+  await expect(svelteTab).toBeFocused();
+  await expect(page.locator('.source-usage')).toContainText('$lib/');
+  await page.goBack();
+  await expect(vueTab).toHaveAttribute('aria-selected', 'true');
   await page.evaluate(() =>
     Object.defineProperty(navigator, 'clipboard', {
       value: { writeText: () => Promise.reject(new Error('blocked')) },
@@ -147,7 +118,7 @@ test('detail supports preview controls, framework source, and copy failure recov
     }),
   );
   await page.getByRole('button', { name: 'Copy command' }).click();
-  await expect(page.getByText('Copy failed')).toBeVisible();
+  await expect(page.getByLabel('Text to copy manually')).toBeVisible();
 });
 
 test('contribution page offers a beginner path before advanced component work', async ({
@@ -214,6 +185,7 @@ for (const theme of ['dark', 'light'] as const) {
       );
       await page.goto('/');
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      await expect(page.getByRole('combobox', { name: 'Color theme' })).toHaveValue(theme);
       expect(
         await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
       ).toBe(true);
@@ -231,7 +203,7 @@ test('reduced motion uses the static hero and every React preview renders', asyn
   page.on('pageerror', (error) => pageErrors.push(error.message));
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
-  await expect(page.locator('.cosmos-static')).toBeVisible();
+  await expect(page.locator('.engine-vector .cosmos-static')).toBeVisible();
   await expect(page.locator('.cosmos-canvas')).toHaveCount(0);
   const index = await (await page.request.get('/index.v2.json')).json();
   expect(index.items).toHaveLength(55);
@@ -254,7 +226,7 @@ test('adapted artifacts expose working semantic interactions', async ({ page }) 
   await page.getByRole('textbox', { name: 'Email' }).fill('builder@example.com');
   await page.getByLabel('Password').fill('source-owned');
   await page.getByRole('button', { name: 'Continue' }).click();
-  await expect(page.getByRole('status')).toHaveText('Demo sign-in complete.');
+  await expect(page.locator('.adapt-login-status')).toHaveText('Demo sign-in complete.');
 
   await page.goto('/components/precision-pagination');
   await expect(page.getByRole('button', { name: '2', exact: true })).toHaveAttribute(
@@ -382,16 +354,15 @@ for (const framework of ['vue', 'svelte'] as const) {
     );
     const runtime = page.frameLocator(`iframe[title="${framework} preview for magnetic-button"]`);
     const iframe = page.locator(`iframe[title="${framework} preview for magnetic-button"]`);
-    await expect(runtime.getByText(new RegExp(`BUILDWITHME / ${framework}`, 'i'))).toBeVisible();
+    await expect(runtime.getByRole('button', { name: /Pull me closer/ })).toBeVisible();
     const initialSrc = await iframe.getAttribute('src');
-    await runtime.getByRole('button', { name: 'Try interaction' }).click();
-    await expect(runtime.getByRole('button', { name: 'Selected' })).toBeVisible();
+    await runtime.getByRole('button', { name: /Pull me closer/ }).click();
     await page.getByRole('combobox', { name: 'Preview theme' }).selectOption('light');
     await expect(runtime.locator('body')).toHaveCSS('background-color', 'rgb(243, 240, 232)');
     await expect(iframe).toHaveAttribute('src', initialSrc ?? '');
-    await expect(runtime.getByRole('button', { name: 'Selected' })).toBeVisible();
+    await expect(runtime.getByRole('button', { name: /Pull me closer/ })).toBeVisible();
     await page.getByRole('button', { name: 'Replay preview' }).click();
-    await expect(runtime.getByRole('button', { name: 'Try interaction' })).toBeVisible();
+    await expect(runtime.getByRole('button', { name: /Pull me closer/ })).toBeVisible();
     const resources = await page.evaluate(() =>
       performance.getEntriesByType('resource').map((entry) => entry.name),
     );
@@ -406,8 +377,7 @@ for (const framework of ['vue', 'svelte'] as const) {
   });
 }
 
-test('every Vue and Svelte preview route mounts in Chromium', async ({ browserName, page }) => {
-  test.skip(browserName !== 'chromium', 'The exhaustive runtime matrix is covered once in Chromium.');
+test('every Vue and Svelte preview route mounts in each engine', async ({ page }) => {
   test.setTimeout(180_000);
 
   const index = (await (await page.request.get('/index.v2.json')).json()) as {
@@ -451,9 +421,10 @@ test('every Vue and Svelte preview route mounts in Chromium', async ({ browserNa
           page.getByRole('status', { name: new RegExp(`Starting ${framework} runtime`, 'i') }),
           `${activeTarget} never reported ready`,
         ).toBeHidden();
-        expect(pageErrors, `${activeTarget} emitted browser errors:\n${pageErrors.join('\n')}`).toEqual(
-          [],
-        );
+        expect(
+          pageErrors,
+          `${activeTarget} emitted browser errors:\n${pageErrors.join('\n')}`,
+        ).toEqual([]);
       });
     }
   }

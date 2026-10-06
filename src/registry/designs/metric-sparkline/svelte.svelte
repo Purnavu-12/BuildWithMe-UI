@@ -1,20 +1,43 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script lang="ts">
-  let { label = "Metric sparkline" }: { label?: string } = $props();
+  import { tick } from 'svelte';
+  import { observeMotion } from '../../shared/motion-lifecycle';
+
+  import '../../shared/base.css';
+  import './metric-sparkline.css';
+  let { label = 'Metric sparkline', className = '' }: { label?: string; className?: string } =
+    $props();
+  let root: HTMLDivElement;
   let active = $state(false);
-  let value = $state('');
+  let reduced = $state(true);
+  const uid = $props.id();
+  $effect(() => {
+    if (!root) return;
+    const lifecycle = observeMotion(
+      root,
+      (state) => {
+        active = state.active;
+        reduced = state.reduced;
+      },
+      false,
+    );
+    return () => lifecycle.destroy();
+  });
 </script>
 
-<section class="bwm-surface" data-active={active}>
-  <span class="bwm-kicker">BUILDWITHME / SVELTE</span>
-  <strong>{label}</strong>
-  {#if "data-visualization" === 'forms'}
-    <input bind:value aria-label="Example value" placeholder="Start typing…" />
-  {:else}
-    <p>One design language. Native Svelte interaction.</p>
-  {/if}
-  <button type="button" onclick={() => active = !active}>{active ? 'Selected' : 'Try interaction'}</button>
-</section>
-
-<style>
-  .bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
-</style>
+<div
+  bind:this={root}
+  class={`bw-demo ${className ?? ''}`}
+  data-active={active}
+  data-component="metric-sparkline"
+>
+  <figure class="bwm-panel bwm-metric">
+    <figcaption>{label}<small>Weekly velocity · example data</small></figcaption>
+    <strong>+24.8%</strong><svg
+      viewBox="0 0 180 54"
+      role="img"
+      aria-label={`${label}: a rising weekly trend`}
+      ><path d="M2 46 C30 44 34 18 58 30 S92 45 112 22 S146 8 178 4"></path></svg
+    ><small>7 periods · steady growth</small>
+  </figure>
+</div>

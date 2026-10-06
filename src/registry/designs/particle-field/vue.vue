@@ -1,20 +1,67 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script setup lang="ts">
-import { ref } from 'vue';
-withDefaults(defineProps<{ label?: string }>(), { label: "Particle field" });
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue';
+import { observeMotion } from '../../shared/motion-lifecycle';
+import { animate, createScope, stagger } from 'animejs';
+import '../../shared/base.css';
+import './particle-field.css';
+const props = withDefaults(defineProps<{ paused?: boolean }>(), { paused: false });
+const root = ref<HTMLElement | null>(null);
 const active = ref(false);
-const value = ref('');
+const reduced = ref(true);
+const uid = useId();
+let lifecycle: ReturnType<typeof observeMotion> | undefined;
+onMounted(() => {
+  if (root.value)
+    lifecycle = observeMotion(
+      root.value,
+      (state) => {
+        active.value = state.active;
+        reduced.value = state.reduced;
+      },
+      props.paused,
+    );
+});
+watch(
+  () => props.paused,
+  (value) => lifecycle?.setPaused(Boolean(value)),
+);
+onBeforeUnmount(() => lifecycle?.destroy());
+watch(
+  active,
+  (_, __, cleanup) => {
+    if (!active.value || !root.value) return;
+    const scope = createScope({ root: root.value }).add(() => {
+      animate('.bw-particle', {
+        y: [-8, 8],
+        opacity: [0.2, 0.9],
+        duration: 2400,
+        delay: stagger(80),
+        alternate: true,
+        loop: true,
+        ease: 'inOutSine',
+      });
+    });
+    cleanup(() => scope.revert());
+  },
+  { flush: 'post' },
+);
 </script>
 
 <template>
-  <section class="bwm-surface" :data-active="active">
-    <span class="bwm-kicker">BUILDWITHME / VUE</span>
-    <strong>{{ label }}</strong>
-    <input v-if="false" v-model="value" aria-label="Example value" placeholder="Start typing…" />
-    <p v-else>One design language. Native Vue interaction.</p>
-    <button type="button" @click="active = !active">{{ active ? 'Selected' : 'Try interaction' }}</button>
-  </section>
+  <div ref="root" class="bw-demo" :data-active="active" data-component="particle-field">
+    <div class="bw-particles" aria-hidden="true">
+      <span
+        v-for="n in 30"
+        :key="n"
+        class="bw-particle"
+        :style="{
+          left: `${((n - 1) * 37 + 11) % 100}%`,
+          top: `${((n - 1) * 53 + 7) % 100}%`,
+          width: `${((n - 1) % 3) + 2}px`,
+          height: `${((n - 1) % 3) + 2}px`,
+        }"
+      />
+    </div>
+  </div>
 </template>
-
-<style scoped>
-.bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
-</style>

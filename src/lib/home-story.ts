@@ -9,12 +9,12 @@ export const storyChapters = [
 ] as const;
 
 export const featuredComponentIds = [
-  'command-palette',
-  'magnetic-button',
-  'aurora-field',
+  'animated-tabs',
+  'folder-preview',
+  'stagger-reveal',
   'prompt-composer',
   'sortable-data-table',
-  'bento-hero',
+  'wave-grid-background',
 ] as const;
 
 export function getHomeStory() {
@@ -26,7 +26,8 @@ export function getHomeStory() {
   const domains = Object.entries(domainLabels).map(([id, label]) => ({
     id,
     label,
-    count: components.filter((item) => item.domains.includes(id as keyof typeof domainLabels)).length,
+    count: components.filter((item) => item.domains.includes(id as keyof typeof domainLabels))
+      .length,
   }));
   const provenance = components.reduce(
     (counts, item) => ({ ...counts, [item.provenance.type]: counts[item.provenance.type] + 1 }),
@@ -34,4 +35,3 @@ export function getHomeStory() {
   );
   return { chapters: storyChapters, featured, domains, provenance, stats: registryStats };
 }
-

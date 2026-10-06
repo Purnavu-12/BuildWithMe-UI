@@ -1,3 +1,25 @@
+[data-bwm-theme='dark'] {
+  --bwm-component-canvas: #050505;
+  --bwm-component-panel: #10100f;
+  --bwm-component-fg: #f4f1e8;
+  --bwm-component-muted: #a6a49c;
+  --bwm-component-border: #343431;
+  --bwm-component-focus: #ffffff;
+  --bwm-component-highlight: #d6ff59;
+  --bwm-component-highlight-ink: #0b0d10;
+  color-scheme: dark;
+}
+[data-bwm-theme='light'] {
+  --bwm-component-canvas: #f3f0e8;
+  --bwm-component-panel: #fcfaf3;
+  --bwm-component-fg: #141412;
+  --bwm-component-muted: #656159;
+  --bwm-component-border: #cbc6ba;
+  --bwm-component-focus: #0a0a09;
+  --bwm-component-highlight: #244200;
+  --bwm-component-highlight-ink: #ffffff;
+  color-scheme: light;
+}
 .bw-demo {
   --bw-fg: var(--bwm-component-fg, #f4f1e8);
   --bw-muted: var(--bwm-component-muted, #a6a49c);
@@ -7,13 +29,17 @@
   --bw-bg: var(--bwm-component-canvas, #050505);
   --bw-line: var(--bwm-component-border, #343431);
   --bw-strong: var(--bwm-component-focus, #ffffff);
+  --bw-highlight: var(--bwm-component-highlight, var(--bw-fg));
+  --bw-highlight-ink: var(--bwm-component-highlight-ink, var(--bw-bg));
   color: var(--bw-fg);
   font-family: inherit;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 180px;
   width: 100%;
+  min-width: 0;
   position: relative;
   isolation: isolate;
   padding: 24px;
@@ -30,7 +56,8 @@
   cursor: pointer;
 }
 .bw-demo button:disabled {
-  cursor: wait;
+  cursor: not-allowed;
+  opacity: 0.58;
 }
 .bw-demo :focus-visible {
   outline: 2px solid var(--bw-accent);
@@ -73,6 +100,36 @@
   color: var(--bw-muted);
   margin: 0;
 }
+.bw-demo a {
+  color: inherit;
+}
+.bw-demo input,
+.bw-demo textarea,
+.bw-demo select {
+  color: var(--bw-fg);
+  background: var(--bw-bg);
+  border: 1px solid var(--bw-border);
+  border-radius: 8px;
+  padding: 12px;
+  max-width: 100%;
+}
+.bw-demo input,
+.bw-demo textarea {
+  width: 100%;
+}
+:where(.bw-demo button) {
+  color: inherit;
+}
+.bw-demo > * {
+  min-width: 0;
+}
+.bw-demo pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.bw-demo[data-active='false'] .bw-rotating > span {
+  transform: none !important;
+}
 .bw-large-text {
   font-size: clamp(26px, 4vw, 42px);
   font-weight: 550;
@@ -105,4 +162,17 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+.bw-demo input[type='radio'],
+.bw-demo input[type='checkbox'] {
+  width: auto;
+  accent-color: var(--bw-highlight);
+  margin-right: 8px;
+}
+
+.bw-demo[data-active='false'] .bw-tilt,
+.bw-demo[data-active='false'] .bw-magnetic {
+  transform: none !important;
+  transition: none !important;
 }

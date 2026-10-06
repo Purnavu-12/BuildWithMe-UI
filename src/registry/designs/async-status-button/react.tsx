@@ -12,16 +12,23 @@ export default function AsyncStatusButton({
   const { ref, active } = useAnimation(paused);
   const [status, setStatus] = useState('idle');
   const alive = useRef(true);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   useEffect(() => {
     alive.current = true;
     return () => {
       alive.current = false;
+      clearTimeout(timer.current);
     };
   }, []);
   async function run() {
+    if (status === 'working') return;
     setStatus('working');
     try {
-      await (onAction ? onAction() : new Promise((r) => setTimeout(r, 1200)));
+      await (onAction
+        ? onAction()
+        : new Promise<void>((resolve) => {
+            timer.current = setTimeout(resolve, 1200);
+          }));
       if (alive.current) setStatus('done');
     } catch {
       if (alive.current) setStatus('error');
@@ -33,6 +40,7 @@ export default function AsyncStatusButton({
         className="bw-button"
         animate={{ scale: active && status === 'done' ? 1.04 : 1 }}
         disabled={status === 'working'}
+        aria-busy={status === 'working'}
         onClick={run}
       >
         <span aria-live="polite">

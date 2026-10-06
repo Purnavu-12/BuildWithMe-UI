@@ -1,20 +1,67 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script lang="ts">
-  let { label = "Pricing matrix" }: { label?: string } = $props();
+  import { tick } from 'svelte';
+  import { observeMotion } from '../../shared/motion-lifecycle';
+
+  import '../../shared/base.css';
+  import './pricing-matrix.css';
+  let { label = 'Pricing matrix', className = '' }: { label?: string; className?: string } =
+    $props();
+  let root: HTMLDivElement;
   let active = $state(false);
-  let value = $state('');
+  let reduced = $state(true);
+  const uid = $props.id();
+  $effect(() => {
+    if (!root) return;
+    const lifecycle = observeMotion(
+      root,
+      (state) => {
+        active = state.active;
+        reduced = state.reduced;
+      },
+      false,
+    );
+    return () => lifecycle.destroy();
+  });
+  let yearly = $state(false);
+  let selected = $state('');
+  const plans = ['Starter', 'Studio', 'Team'];
+  const prices = [0, 18, 42];
 </script>
 
-<section class="bwm-surface" data-active={active}>
-  <span class="bwm-kicker">BUILDWITHME / SVELTE</span>
-  <strong>{label}</strong>
-  {#if "commerce" === 'forms'}
-    <input bind:value aria-label="Example value" placeholder="Start typing…" />
-  {:else}
-    <p>One design language. Native Svelte interaction.</p>
-  {/if}
-  <button type="button" onclick={() => active = !active}>{active ? 'Selected' : 'Try interaction'}</button>
-</section>
-
-<style>
-  .bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
-</style>
+<div
+  bind:this={root}
+  class={`bw-demo ${className ?? ''}`}
+  data-active={active}
+  data-component="pricing-matrix"
+>
+  <div class="bwm-pricing">
+    <h3>{label}</h3>
+    <div class="bwm-row">
+      <small>Example plans · no checkout</small><button
+        type="button"
+        class="bwm-control"
+        aria-pressed={yearly}
+        onclick={() => (yearly = !yearly)}>Yearly billing {yearly ? '✓' : '○'}</button
+      >
+    </div>
+    <div class="bwm-plans">
+      {#each plans as plan, i (plan)}<article class="bwm-panel">
+          <h4>{plan}</h4>
+          <strong>${yearly ? Math.round(prices[i] * 0.8) : prices[i]}<small> / month</small></strong
+          >
+          <ul>
+            <li>{i === 0 ? 'Personal projects' : 'Unlimited projects'}</li>
+            <li>{i === 2 ? 'Team workspace' : 'One workspace'}</li>
+            <li>Keep your source</li>
+          </ul>
+          <button type="button" aria-pressed={selected === plan} onclick={() => (selected = plan)}
+            >Choose {plan}</button
+          >
+        </article>{/each}
+    </div>
+    <p role="status">
+      {selected ? `${selected} selected locally.` : 'Find room for your next idea.'}
+    </p>
+  </div>
+</div>

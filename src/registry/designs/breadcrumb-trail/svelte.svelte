@@ -1,20 +1,53 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script lang="ts">
-  let { label = "Breadcrumb trail" }: { label?: string } = $props();
+  import { tick } from 'svelte';
+  import { observeMotion } from '../../shared/motion-lifecycle';
+
+  import '../../shared/base.css';
+  import './breadcrumb-trail.css';
+  let { label = 'Breadcrumb trail', className = '' }: { label?: string; className?: string } =
+    $props();
+  let root: HTMLDivElement;
   let active = $state(false);
-  let value = $state('');
+  let reduced = $state(true);
+  const uid = $props.id();
+  $effect(() => {
+    if (!root) return;
+    const lifecycle = observeMotion(
+      root,
+      (state) => {
+        active = state.active;
+        reduced = state.reduced;
+      },
+      false,
+    );
+    return () => lifecycle.destroy();
+  });
+  let current = $state('Navigation');
 </script>
 
-<section class="bwm-surface" data-active={active}>
-  <span class="bwm-kicker">BUILDWITHME / SVELTE</span>
-  <strong>{label}</strong>
-  {#if "navigation" === 'forms'}
-    <input bind:value aria-label="Example value" placeholder="Start typing…" />
-  {:else}
-    <p>One design language. Native Svelte interaction.</p>
-  {/if}
-  <button type="button" onclick={() => active = !active}>{active ? 'Selected' : 'Try interaction'}</button>
-</section>
-
-<style>
-  .bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
-</style>
+<div
+  bind:this={root}
+  class={`bw-demo ${className ?? ''}`}
+  data-active={active}
+  data-component="breadcrumb-trail"
+>
+  <nav class="bwm-breadcrumb" aria-label={label}>
+    <ol>
+      <li><button type="button" onclick={() => (current = 'Workspace')}>Workspace</button></li>
+      <li class="bwm-crumb-overflow">
+        <details>
+          <summary aria-label="Show parent pages">…</summary><button
+            type="button"
+            onclick={() => (current = 'Library')}>Library</button
+          >
+        </details>
+      </li>
+      <li>
+        <button type="button" aria-current="page" onclick={() => (current = 'Navigation')}
+          >{current}</button
+        >
+      </li>
+    </ol>
+  </nav>
+</div>

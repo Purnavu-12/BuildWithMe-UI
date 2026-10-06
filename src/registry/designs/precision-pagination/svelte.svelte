@@ -1,4 +1,44 @@
 <!-- Adapted from https://github.com/vercel/registry-starter/blob/main/src/components/ui/pagination.tsx under MIT. Copyright (c) Vercel, Inc.. -->
-<script lang="ts">let {label='Precision pagination',paused=false}:{label?:string;paused?:boolean}=$props();</script>
-<div class="bw-demo" data-active={!paused}><div class="adapt-simple"><span>PRECISION PAGINATION</span><strong>{label}</strong><p>A compact pagination control with explicit current-page state and large targets.</p><button type="button">Explore pattern</button></div></div>
-<style>.bw-demo{--bw-fg:var(--bwm-component-fg,#f5f5f1);--bw-bg:var(--bwm-component-canvas,#090909);--bw-panel:var(--bwm-component-panel,#111);--bw-muted:var(--bwm-component-muted,#9a9a94);--bw-line:var(--bwm-component-border,#343432);--bw-strong:var(--bwm-component-focus,#fff);min-height:220px;width:100%;display:grid;place-items:center;padding:24px;color:var(--bw-fg);font-family:inherit;isolation:isolate}.bw-demo *{box-sizing:border-box}.bw-demo button,.bw-demo input{font:inherit}.bw-demo button{color:inherit}.bw-demo :focus-visible{outline:2px solid var(--bw-strong);outline-offset:3px}.bw-demo[data-active='false'] *{animation-play-state:paused!important}.adapt-simple{width:min(100%,380px);display:grid;gap:14px;padding:24px;border:1px solid var(--bw-line);background:var(--bw-panel)}.adapt-simple span{font:9px monospace;color:var(--bw-muted);letter-spacing:.12em}.adapt-simple strong{font-size:28px}.adapt-simple p{margin:0;color:var(--bw-muted);line-height:1.6}.adapt-simple button{height:42px;border:1px solid var(--bw-line);background:var(--bw-fg);color:var(--bw-bg)}</style>
+<script lang="ts">
+  import { tick } from 'svelte';
+  import { observeMotion } from '../../shared/motion-lifecycle';
+
+  import '../../shared/base.css';
+  import './precision-pagination.css';
+  let { label = 'Precision pagination', paused = false }: { label?: string; paused?: boolean } =
+    $props();
+  let root: HTMLDivElement;
+  let active = $state(false);
+  let reduced = $state(true);
+  const uid = $props.id();
+  $effect(() => {
+    if (!root) return;
+    const lifecycle = observeMotion(
+      root,
+      (state) => {
+        active = state.active;
+        reduced = state.reduced;
+      },
+      paused,
+    );
+    return () => lifecycle.destroy();
+  });
+  let page = $state(2);
+</script>
+
+<div bind:this={root} class="bw-demo" data-active={active} data-component="precision-pagination">
+  <nav class="adapt-pagination" aria-label={label}>
+    <button type="button" aria-label="Previous page" disabled={page === 1} onclick={() => page--}
+      >←</button
+    >{#each [1, 2, 3, 4] as n (n)}<button
+        type="button"
+        aria-current={page === n ? 'page' : undefined}
+        onclick={() => (page = n)}>{n}</button
+      >{/each}<button
+      type="button"
+      aria-label="Next page"
+      disabled={page === 4}
+      onclick={() => page++}>→</button
+    >
+  </nav>
+</div>

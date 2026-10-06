@@ -17,7 +17,7 @@ export const docs: Record<string, Doc> = {
       {
         title: 'React and Next.js',
         text: 'Choose React in the workbench and install its registry item. Interactive components keep an explicit client boundary, while static components remain server-compatible.',
-        code: "import { MagneticButton } from '@/components/buildwithme/magnetic-button/react';",
+        code: "import MagneticButton from '@/components/buildwithme/magnetic-button/react';",
       },
       {
         title: 'Vue and Nuxt',
@@ -80,7 +80,7 @@ export const docs: Record<string, Doc> = {
   motion: {
     title: 'Motion with a clear owner.',
     intro:
-      'Interface Cosmos uses motion to explain the product while keeping native scrolling, semantic order, and a complete static experience.',
+      'The Kinetic Playground Interface Engine uses motion to explain the product while keeping native scrolling, semantic order, and a complete static experience.',
     sections: [
       {
         title: 'One owner per element',
@@ -121,7 +121,7 @@ export const docs: Record<string, Doc> = {
       },
       {
         title: 'Validate what changed',
-        text: 'Documentation needs link review. Website code needs lint and type checking. Registry changes need validation. New designs and release work use the full browser and installation suites.',
+        text: 'Documentation needs link review. Website code needs lint and type checking. CI runs one lightweight job for code, types, unit tests, and registry validation. Browser and installation suites are optional local checks when the change needs them.',
         code: 'pnpm lint && pnpm typecheck',
       },
       {
@@ -130,7 +130,7 @@ export const docs: Record<string, Doc> = {
       },
       {
         title: 'Open the pull request',
-        text: 'Explain the problem, the resulting behavior, and the checks you ran. Include screenshots only for visible changes and ask for maintainer help when a release-level check is unrelated.',
+        text: 'Explain the problem, the resulting behavior, and the checks you ran. Include screenshots for visible changes when available and report unrelated check failures without expanding the scope.',
       },
     ],
   },

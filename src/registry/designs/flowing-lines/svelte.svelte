@@ -1,20 +1,48 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script lang="ts">
-  let { label = "Flowing lines" }: { label?: string } = $props();
+  import { tick } from 'svelte';
+  import { observeMotion } from '../../shared/motion-lifecycle';
+  import { animate, createScope, stagger } from 'animejs';
+  import '../../shared/base.css';
+  import './flowing-lines.css';
+  let { paused = false }: { paused?: boolean } = $props();
+  let root: HTMLDivElement;
   let active = $state(false);
-  let value = $state('');
+  let reduced = $state(true);
+  const uid = $props.id();
+  $effect(() => {
+    if (!root) return;
+    const lifecycle = observeMotion(
+      root,
+      (state) => {
+        active = state.active;
+        reduced = state.reduced;
+      },
+      paused,
+    );
+    return () => lifecycle.destroy();
+  });
+  $effect(() => {
+    if (!active || !root) return;
+    const scope = createScope({ root }).add(() => {
+      animate('.bw-flow-line', {
+        scaleY: [0.25, 1, 0.25],
+        opacity: [0.2, 0.8, 0.2],
+        duration: 2600,
+        delay: stagger(130),
+        loop: true,
+        ease: 'inOutSine',
+      });
+    });
+    return () => scope.revert();
+  });
 </script>
 
-<section class="bwm-surface" data-active={active}>
-  <span class="bwm-kicker">BUILDWITHME / SVELTE</span>
-  <strong>{label}</strong>
-  {#if "backgrounds" === 'forms'}
-    <input bind:value aria-label="Example value" placeholder="Start typing…" />
-  {:else}
-    <p>One design language. Native Svelte interaction.</p>
-  {/if}
-  <button type="button" onclick={() => active = !active}>{active ? 'Selected' : 'Try interaction'}</button>
-</section>
-
-<style>
-  .bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
-</style>
+<div bind:this={root} class="bw-demo" data-active={active} data-component="flowing-lines">
+  <div class="bw-flow" aria-hidden="true">
+    {#each Array.from({ length: 15 }) as _, i (i)}<span
+        class="bw-flow-line"
+        style:height={`${70 + Math.sin(i * 0.45) * 65}px`}
+      ></span>{/each}
+  </div>
+</div>

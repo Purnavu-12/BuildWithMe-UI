@@ -1,20 +1,53 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script lang="ts">
-  let { label = "Streaming message" }: { label?: string } = $props();
+  import { tick } from 'svelte';
+  import { observeMotion } from '../../shared/motion-lifecycle';
+
+  import '../../shared/base.css';
+  import './streaming-message.css';
+  let {
+    paused = false,
+    text = 'Great things are built together. Start with a small idea, add a little care, and share what you learn.',
+  }: { paused?: boolean; text?: string } = $props();
+  let root: HTMLDivElement;
   let active = $state(false);
-  let value = $state('');
+  let reduced = $state(true);
+  const uid = $props.id();
+  $effect(() => {
+    if (!root) return;
+    const lifecycle = observeMotion(
+      root,
+      (state) => {
+        active = state.active;
+        reduced = state.reduced;
+      },
+      paused,
+    );
+    return () => lifecycle.destroy();
+  });
+  let length = $state(0);
+  $effect(() => {
+    void text;
+    length = 0;
+  });
+  $effect(() => {
+    if (!active) return;
+    const count = text.length;
+    const timer = setInterval(() => {
+      length = Math.min(length + 2, count);
+      if (length === count) clearInterval(timer);
+    }, 45);
+    return () => clearInterval(timer);
+  });
 </script>
 
-<section class="bwm-surface" data-active={active}>
-  <span class="bwm-kicker">BUILDWITHME / SVELTE</span>
-  <strong>{label}</strong>
-  {#if "ai" === 'forms'}
-    <input bind:value aria-label="Example value" placeholder="Start typing…" />
-  {:else}
-    <p>One design language. Native Svelte interaction.</p>
-  {/if}
-  <button type="button" onclick={() => active = !active}>{active ? 'Selected' : 'Try interaction'}</button>
-</section>
-
-<style>
-  .bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
-</style>
+<div bind:this={root} class="bw-demo" data-active={active} data-component="streaming-message">
+  <div class="bw-panel bw-message">
+    <p class="bw-caption">An idea, taking shape</p>
+    <p class="bw-description">
+      <span class="bw-sr-only">{text}</span><span aria-hidden="true"
+        >{reduced ? text : text.slice(0, length)}<span class="bw-caret"></span></span
+      >
+    </p>
+  </div>
+</div>

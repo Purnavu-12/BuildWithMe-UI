@@ -1,20 +1,69 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script lang="ts">
-  let { label = "Multi-step form" }: { label?: string } = $props();
+  import { tick } from 'svelte';
+  import { observeMotion } from '../../shared/motion-lifecycle';
+
+  import '../../shared/base.css';
+  import './multi-step-form.css';
+  let { label = 'Multi-step form', className = '' }: { label?: string; className?: string } =
+    $props();
+  let root: HTMLDivElement;
   let active = $state(false);
-  let value = $state('');
+  let reduced = $state(true);
+  const uid = $props.id();
+  $effect(() => {
+    if (!root) return;
+    const lifecycle = observeMotion(
+      root,
+      (state) => {
+        active = state.active;
+        reduced = state.reduced;
+      },
+      false,
+    );
+    return () => lifecycle.destroy();
+  });
+  let step = $state(0);
+  let name = $state('');
+  let email = $state('');
+  let complete = $state(false);
+  function submit(e: SubmitEvent) {
+    e.preventDefault();
+    if (step < 2) step++;
+    else complete = true;
+  }
 </script>
 
-<section class="bwm-surface" data-active={active}>
-  <span class="bwm-kicker">BUILDWITHME / SVELTE</span>
-  <strong>{label}</strong>
-  {#if "forms" === 'forms'}
-    <input bind:value aria-label="Example value" placeholder="Start typing…" />
-  {:else}
-    <p>One design language. Native Svelte interaction.</p>
-  {/if}
-  <button type="button" onclick={() => active = !active}>{active ? 'Selected' : 'Try interaction'}</button>
-</section>
-
-<style>
-  .bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
-</style>
+<div
+  bind:this={root}
+  class={`bw-demo ${className ?? ''}`}
+  data-active={active}
+  data-component="multi-step-form"
+>
+  <form class="bwm-panel" aria-label={label} onsubmit={submit}>
+    <small>STEP {step + 1} / 3 · Local demonstration</small>
+    <h3>{label}</h3>
+    {#if complete}<p role="status">
+        Thanks, {name}. Your local profile is ready.
+      </p>{:else}{#if step === 0}<label
+          >Your name<input required autocomplete="name" bind:value={name} /></label
+        >{:else if step === 1}<label
+          >Email address<input
+            required
+            type="email"
+            autocomplete="email"
+            bind:value={email}
+          /></label
+        >{:else}<dl>
+          <dt>Name</dt>
+          <dd>{name}</dd>
+          <dt>Email</dt>
+          <dd>{email}</dd>
+        </dl>{/if}
+      <div class="bwm-row">
+        <button type="button" disabled={step === 0} onclick={() => step--}>Back</button><button
+          type="submit">{step === 2 ? 'Complete profile' : 'Continue'}</button
+        >
+      </div>{/if}
+  </form>
+</div>

@@ -23,7 +23,8 @@ export default function RotatingWords({
       <p className="bw-large-text">
         Build it
         <br />
-        <span className="bw-rotating">
+        <span className="bw-sr-only">{words.join(' ') || 'yours.'}</span>
+        <span className="bw-rotating" aria-hidden="true">
           <AnimatePresence mode="wait">
             <motion.span
               key={index}

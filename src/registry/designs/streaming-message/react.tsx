@@ -17,10 +17,10 @@ export default function StreamingMessage({
     setLength(0);
   }, [text]);
   useEffect(() => {
-    if (!active) return;
+    if (!active || length >= text.length) return;
     const t = setInterval(() => setLength((v) => Math.min(v + 2, text.length)), 45);
     return () => clearInterval(t);
-  }, [active, text.length]);
+  }, [active, text.length, length]);
   return (
     <div ref={ref} className="bw-demo" data-active={active}>
       <div className="bw-panel bw-message">

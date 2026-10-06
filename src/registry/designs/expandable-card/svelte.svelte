@@ -1,20 +1,43 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script lang="ts">
-  let { label = "Expandable card" }: { label?: string } = $props();
+  import { tick } from 'svelte';
+  import { observeMotion } from '../../shared/motion-lifecycle';
+
+  import '../../shared/base.css';
+  import './expandable-card.css';
+  let { paused = false }: { paused?: boolean } = $props();
+  let root: HTMLDivElement;
   let active = $state(false);
-  let value = $state('');
+  let reduced = $state(true);
+  const uid = $props.id();
+  $effect(() => {
+    if (!root) return;
+    const lifecycle = observeMotion(
+      root,
+      (state) => {
+        active = state.active;
+        reduced = state.reduced;
+      },
+      paused,
+    );
+    return () => lifecycle.destroy();
+  });
+  let open = $state(false);
 </script>
 
-<section class="bwm-surface" data-active={active}>
-  <span class="bwm-kicker">BUILDWITHME / SVELTE</span>
-  <strong>{label}</strong>
-  {#if "layout" === 'forms'}
-    <input bind:value aria-label="Example value" placeholder="Start typing…" />
-  {:else}
-    <p>One design language. Native Svelte interaction.</p>
-  {/if}
-  <button type="button" onclick={() => active = !active}>{active ? 'Selected' : 'Try interaction'}</button>
-</section>
-
-<style>
-  .bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
-</style>
+<div bind:this={root} class="bw-demo" data-active={active} data-component="expandable-card">
+  <div class="bw-panel">
+    <p class="bw-caption">Field notes · 001</p>
+    <h3 class="bw-title">Less, but better.</h3>
+    <button
+      type="button"
+      class="bw-expand-toggle"
+      aria-expanded={open}
+      aria-controls={uid}
+      onclick={() => (open = !open)}>{open ? 'Close the story −' : 'Read the story +'}</button
+    >{#if open}<p id={uid} class="bw-description">
+        Start with the essentials. Give every element a purpose, every interaction a little care,
+        and every idea room to breathe.
+      </p>{/if}
+  </div>
+</div>

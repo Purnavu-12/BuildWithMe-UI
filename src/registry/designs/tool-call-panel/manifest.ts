@@ -1,72 +1,62 @@
 import { defineManifest } from '../../schema';
 
 export default defineManifest({
-  "schemaVersion": 2,
-  "id": "tool-call-panel",
-  "title": "Tool-call panel",
-  "summary": "A transparent look at what an assistant is doing.",
-  "domains": [
-    "ai"
-  ],
-  "tags": [
-    "ai",
-    "css",
-    "tool",
-    "call",
-    "panel"
-  ],
-  "status": "stable",
-  "engines": [
-    "css"
-  ],
-  "frameworks": {
-    "react": {
-      "source": "designs/tool-call-panel/react.tsx",
-      "exportName": "ToolCallPanel",
-      "usage": "import ToolCallPanel from \"@/components/buildwithme/tool-call-panel/tool-call-panel\";\n\n<ToolCallPanel />",
-      "dependencies": {}
+  schemaVersion: 2,
+  id: 'tool-call-panel',
+  title: 'Tool-call panel',
+  summary: 'A transparent look at what an assistant is doing.',
+  domains: ['ai'],
+  tags: ['ai', 'css', 'tool', 'call', 'panel'],
+  status: 'stable',
+  engines: ['css'],
+  frameworks: {
+    react: {
+      source: 'designs/tool-call-panel/react.tsx',
+      exportName: 'ToolCallPanel',
+      usage:
+        'import ToolCallPanel from "@/components/buildwithme/tool-call-panel/react";\n\n<ToolCallPanel />',
+      dependencies: {},
     },
-    "vue": {
-      "source": "designs/tool-call-panel/vue.vue",
-      "exportName": "ToolCallPanel",
-      "usage": "import ToolCallPanel from '@buildwithme/vue/tool-call-panel';\\n\\n<ToolCallPanel />",
-      "dependencies": {}
+    vue: {
+      source: 'designs/tool-call-panel/vue.vue',
+      exportName: 'ToolCallPanel',
+      usage:
+        '<script setup lang="ts">\nimport ToolCallPanel from "~/components/buildwithme/tool-call-panel/vue.vue";\n</script>\n\n<template>\n  <ToolCallPanel />\n</template>',
+      dependencies: {},
     },
-    "svelte": {
-      "source": "designs/tool-call-panel/svelte.svelte",
-      "exportName": "ToolCallPanel",
-      "usage": "import ToolCallPanel from '@buildwithme/svelte/tool-call-panel';\\n\\n<ToolCallPanel />",
-      "dependencies": {}
-    }
+    svelte: {
+      source: 'designs/tool-call-panel/svelte.svelte',
+      exportName: 'ToolCallPanel',
+      usage:
+        '<script lang="ts">\nimport ToolCallPanel from "$lib/components/buildwithme/tool-call-panel/svelte.svelte";\n</script>\n\n<ToolCallPanel />',
+      dependencies: {},
+    },
   },
-  "installation": {
-    "npm": true,
-    "source": true,
-    "copy": true
+  installation: {
+    npm: true,
+    source: true,
+    copy: true,
   },
-  "accessibility": {
-    "summary": "Respects prefers-reduced-motion; pauses when off screen or the document is hidden. Interactive controls support keyboard focus. Use paused to stop the demonstration.",
-    "features": [
-      "Keyboard reachable controls",
-      "Visible focus treatment",
-      "Reduced-motion friendly"
-    ]
+  accessibility: {
+    summary:
+      'Respects prefers-reduced-motion; pauses when off screen or the document is hidden. Interactive controls support keyboard focus. Use paused to stop the demonstration.',
+    features: ['Keyboard reachable controls', 'Visible focus treatment', 'Reduced-motion friendly'],
   },
-  "props": [
+  props: [
     {
-      "name": "paused",
-      "type": "boolean",
-      "default": "false",
-      "description": "Pause decorative animation while retaining interactive controls."
-    }
-  ],
-  "provenance": {
-    "type": "original",
-    "creator": {
-      "name": "BuildWithMe-UI contributors"
+      name: 'paused',
+      type: 'boolean',
+      default: 'false',
+      description: 'Pause decorative animation while retaining interactive controls.',
     },
-    "license": "MIT"
+  ],
+  provenance: {
+    type: 'original',
+    creator: {
+      name: 'BuildWithMe-UI contributors',
+    },
+    license: 'MIT',
   },
-  "related": [],
-  "style": "designs/tool-call-panel/tool-call-panel.css"
+  related: [],
+  style: 'designs/tool-call-panel/tool-call-panel.css',
 });

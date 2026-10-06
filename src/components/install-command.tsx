@@ -8,8 +8,20 @@ const packages: Record<Framework, string> = {
   vue: '@buildwithme/vue',
   svelte: '@buildwithme/svelte',
 };
-export function ComponentInstall({ id, site }: { id: string; site: string }) {
-  const [framework, setFramework] = useState<Framework>('react');
+export function ComponentInstall({
+  id,
+  site,
+  framework: controlledFramework,
+  onFrameworkChange,
+}: {
+  id: string;
+  site: string;
+  framework?: Framework;
+  onFrameworkChange?: (framework: Framework) => void;
+}) {
+  const [localFramework, setLocalFramework] = useState<Framework>('react');
+  const framework = controlledFramework ?? localFramework;
+  const setFramework = onFrameworkChange ?? setLocalFramework;
   const [method, setMethod] = useState<'npm' | 'source'>('source');
   const origin = site || 'https://build-with-me-ui.vercel.app';
   const command =
@@ -18,28 +30,25 @@ export function ComponentInstall({ id, site }: { id: string; site: string }) {
       : `pnpm dlx shadcn@latest add ${origin}/r/${framework}/${id}.json`;
   return (
     <div className="component-install">
-      <div className="source-tabs" role="tablist" aria-label="Installation framework">
-        {(['react', 'vue', 'svelte'] as const).map((item) => (
-          <button
-            key={item}
-            role="tab"
-            aria-selected={framework === item}
-            onClick={() => setFramework(item)}
-          >
-            {item}
-          </button>
-        ))}
-      </div>
-      <div className="source-tabs" role="tablist" aria-label="Installation method">
-        <button role="tab" aria-selected={method === 'npm'} aria-disabled="true" disabled>
+      {!controlledFramework ? (
+        <div className="source-tabs" aria-label="Installation framework">
+          {(['react', 'vue', 'svelte'] as const).map((item) => (
+            <button key={item} aria-pressed={framework === item} onClick={() => setFramework(item)}>
+              {item}
+            </button>
+          ))}
+        </div>
+      ) : null}
+      <div className="source-tabs" aria-label="Installation method">
+        <button aria-pressed={method === 'npm'} aria-disabled="true" disabled>
           npm · unpublished
         </button>
-        <button role="tab" aria-selected={method === 'source'} onClick={() => setMethod('source')}>
+        <button aria-pressed={method === 'source'} onClick={() => setMethod('source')}>
           own the source
         </button>
       </div>
       <div className="source-toolbar">
-        <code>{command}</code>
+        <code tabIndex={0}>{command}</code>
         <CopyButton text={command} label="Copy command" />
       </div>
     </div>

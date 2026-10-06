@@ -1,20 +1,67 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script lang="ts">
-  let { label = "Adaptive sidebar" }: { label?: string } = $props();
+  import { tick } from 'svelte';
+  import { observeMotion } from '../../shared/motion-lifecycle';
+
+  import '../../shared/base.css';
+  import './adaptive-sidebar.css';
+  let { label = 'Adaptive sidebar', className = '' }: { label?: string; className?: string } =
+    $props();
+  let root: HTMLDivElement;
   let active = $state(false);
-  let value = $state('');
+  let reduced = $state(true);
+  const uid = $props.id();
+  $effect(() => {
+    if (!root) return;
+    const lifecycle = observeMotion(
+      root,
+      (state) => {
+        active = state.active;
+        reduced = state.reduced;
+      },
+      false,
+    );
+    return () => lifecycle.destroy();
+  });
+  let collapsed = $state(false);
+  let selected = $state('Overview');
+  const items = ['Overview', 'Components', 'Contribute'];
 </script>
 
-<section class="bwm-surface" data-active={active}>
-  <span class="bwm-kicker">BUILDWITHME / SVELTE</span>
-  <strong>{label}</strong>
-  {#if "navigation" === 'forms'}
-    <input bind:value aria-label="Example value" placeholder="Start typing…" />
-  {:else}
-    <p>One design language. Native Svelte interaction.</p>
-  {/if}
-  <button type="button" onclick={() => active = !active}>{active ? 'Selected' : 'Try interaction'}</button>
-</section>
-
-<style>
-  .bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
-</style>
+<div
+  bind:this={root}
+  class={`bw-demo ${className ?? ''}`}
+  data-active={active}
+  data-component="adaptive-sidebar"
+>
+  <div class="bwm-sidebar" data-collapsed={collapsed}>
+    <nav aria-label={label}>
+      <button
+        type="button"
+        class="bwm-control"
+        aria-expanded={!collapsed}
+        aria-label={collapsed ? 'Expand navigation' : 'Collapse navigation'}
+        onclick={() => (collapsed = !collapsed)}
+        >{collapsed ? '→' : '←'}{#if !collapsed}<span>Workspace</span>{/if}</button
+      >{#each items as item, i (item)}<button
+          type="button"
+          aria-label={item}
+          aria-current={selected === item ? 'page' : undefined}
+          onclick={() => (selected = item)}
+          ><b aria-hidden="true">{['◈', '▦', '＋'][i]}</b>{#if !collapsed}<span>{item}</span
+            >{/if}</button
+        >{/each}
+    </nav>
+    <article>
+      <small>WORKSPACE</small>
+      <h3>{selected}</h3>
+      <p>
+        {selected === 'Overview'
+          ? 'Your next interface starts here.'
+          : selected === 'Components'
+            ? 'Explore reusable building blocks.'
+            : 'Share an idea. Keep its source open.'}
+      </p>
+    </article>
+  </div>
+</div>

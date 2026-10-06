@@ -9,6 +9,8 @@ build/
 coverage/
 playwright-report/
 test-results/
+/.playwright-cli/
+/output/
 *.tsbuildinfo
 next-env.d.ts
 *.log
@@ -39,6 +41,7 @@ scratch/
 public/r/
 public/registry.json
 public/index.v2.json
+public/index.v1.json
 public/.well-known/buildwithme.json
 src/generated/
 .release/

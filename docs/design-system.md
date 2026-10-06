@@ -1,13 +1,14 @@
-# Interface Cosmos design system
+# Kinetic Playground design system
 
-BuildWithMe UI uses pure black, warm ivory, graphite, and calibrated neutral gray. Dark and light are designed as separate surfaces. Dark is a spatial field with restrained bloom and deep panels. Light is editorial paper with ink typography, graphite structure, and soft physical depth. Framework identity comes from labels and geometry rather than brand colors.
+BuildWithMe UI uses charcoal, warm paper, acid lime, cyan, and coral. The selected Center Stage composition puts the promise and primary action ahead of the Interface Engine. Alternate chapters become paper surfaces; technical reading surfaces use quieter panels. The four-diamond identity and "Build the interface. Keep the source." promise remain authoritative.
 
 ## Semantic tokens
 
 Site surfaces use `--bg`, `--surface`, `--surface-2`, `--ink`, `--muted`, `--faint`, `--line`, `--line-strong`, `--inverse`, and `--paper`. Component previews use a separate public boundary:
 
 ```css
-[data-bwm-theme='dark' | 'light'] {
+[data-bwm-theme='dark'],
+[data-bwm-theme='light'] {
   --bwm-component-canvas: ...;
   --bwm-component-panel: ...;
   --bwm-component-fg: ...;
@@ -25,11 +26,15 @@ Geist Sans carries interface and editorial text. Geist Mono carries coordinates,
 
 ## Geometry and material
 
+The selected reference refinement uses a larger, responsively framed live scene: lime assembly cubes, saturated cyan arcs, coral/paper discs, denser wire planes, and smaller satellite parts. Constellation replaces the hero arcs with layered panels. Paper sections keep their own backgrounds before hydration, so the dark hero and warm chapter can be visible together. Its cyan connection path leads to paired dark demo/source cards; technical controls remain functional rather than illustrative chrome.
+
+The hero artwork occupies a reserved normal-flow stage and animates in place. It does not scale, translate, or dock in response to scrolling. Desktop chapters own independent illustration rows above their demonstrations; mobile renders those illustrations inline. This replaces the earlier shared scroll-docked artboard at the user's request.
+
 The four-diamond brand mark represents one source idea and its three framework expressions. It appears in navigation, metadata artwork, and as the conceptual seed of Interface Cosmos. Do not replace it with framework logos in primary storytelling. Grain, coordinates, and grid lines stay below content contrast and disappear for increased-contrast preferences.
 
 ## Interaction hierarchy
 
-CSS owns hover, focus, selected, and simple reveal states. Motion owns chapter progress and DOM transforms. Anime.js owns the isolated source-line sequence. React Three Fiber owns the optional constellation. A rendered element has one animation owner. Native scroll and semantic reading order remain intact.
+CSS owns hover, focus, selected, and simple reveal states. Motion owns component DOM transitions. Anime.js owns the scoped Interface Engine SVG timeline. React Three Fiber owns the optional canvas. A rendered element has one animation owner. Native scroll and semantic reading order remain intact. Desktop canvas eligibility and layout share the 981px breakpoint.
 
 Components, catalog cards, documentation, empty states, and contribution flows use the same focus ring, neutral surfaces, border cadence, and type scale. Real previews carry visual interest. Hover and pointer depth are enhancements; labels, controls, and information remain complete without them.
 

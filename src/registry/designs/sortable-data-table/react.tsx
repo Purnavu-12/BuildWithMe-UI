@@ -59,11 +59,7 @@ export default function SortableDataTable({
                   <button type="button" onClick={() => updateSort('name')}>
                     Name
                     <span aria-hidden="true">
-                      {sort.key === 'name'
-                        ? sort.direction === 'ascending'
-                          ? '↑'
-                          : '↓'
-                        : '↕'}
+                      {sort.key === 'name' ? (sort.direction === 'ascending' ? '↑' : '↓') : '↕'}
                     </span>
                   </button>
                 </th>
@@ -71,11 +67,7 @@ export default function SortableDataTable({
                   <button type="button" onClick={() => updateSort('status')}>
                     Status
                     <span aria-hidden="true">
-                      {sort.key === 'status'
-                        ? sort.direction === 'ascending'
-                          ? '↑'
-                          : '↓'
-                        : '↕'}
+                      {sort.key === 'status' ? (sort.direction === 'ascending' ? '↑' : '↓') : '↕'}
                     </span>
                   </button>
                 </th>

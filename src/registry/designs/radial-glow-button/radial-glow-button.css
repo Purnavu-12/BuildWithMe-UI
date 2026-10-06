@@ -1,3 +1,46 @@
 /* Adapted under MIT from https://github.com/Ashutoshx7/VengeanceUI/blob/main/src/components/ui/radial-glow-button.tsx. Copyright (c) Ashutoshx7. */
-.adapt-radial{position:relative;min-width:210px;height:58px;overflow:hidden;border:1px solid var(--bw-line);border-radius:999px;background:var(--bw-panel)}.adapt-radial span{position:relative;z-index:2}.adapt-radial i{position:absolute;width:180px;height:180px;left:50%;top:100%;transform:translate(-50%,-10%);border-radius:50%;background:var(--bw-strong);filter:blur(38px);opacity:.12;transition:top .35s,opacity .35s}.adapt-radial:hover i,.adapt-radial:focus-visible i{top:0;opacity:.28}
-@media(prefers-reduced-motion:reduce){.bw-demo *{animation:none!important;transition:none!important}}
+.adapt-radial {
+  position: relative;
+  min-width: 210px;
+  height: 58px;
+  overflow: hidden;
+  border: 1px solid var(--bw-line);
+  border-radius: 999px;
+  background: var(--bw-panel);
+}
+.adapt-radial span {
+  position: relative;
+  z-index: 2;
+}
+.adapt-radial i {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, -10%);
+  border-radius: 50%;
+  background: var(--bw-strong);
+  filter: blur(38px);
+  opacity: 0.12;
+  transition:
+    top 0.35s,
+    opacity 0.35s;
+}
+.adapt-radial:hover i,
+.adapt-radial:focus-visible i {
+  top: 0;
+  opacity: 0.28;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bw-demo * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.adapt-radial i {
+  left: var(--rx, 50%);
+  top: var(--ry, 100%);
+  transform: translate(-50%, -50%);
+}

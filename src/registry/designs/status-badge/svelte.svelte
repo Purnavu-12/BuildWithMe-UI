@@ -1,4 +1,31 @@
 <!-- Adapted from https://github.com/vercel/registry-starter/blob/main/src/components/ui/badge.tsx under MIT. Copyright (c) Vercel, Inc.. -->
-<script lang="ts">let {label='Status badge',paused=false}:{label?:string;paused?:boolean}=$props();</script>
-<div class="bw-demo" data-active={!paused}><div class="adapt-simple"><span>STATUS BADGE</span><strong>{label}</strong><p>A precise operational badge for deployment, build, and service states.</p><button type="button">Explore pattern</button></div></div>
-<style>.bw-demo{--bw-fg:var(--bwm-component-fg,#f5f5f1);--bw-bg:var(--bwm-component-canvas,#090909);--bw-panel:var(--bwm-component-panel,#111);--bw-muted:var(--bwm-component-muted,#9a9a94);--bw-line:var(--bwm-component-border,#343432);--bw-strong:var(--bwm-component-focus,#fff);min-height:220px;width:100%;display:grid;place-items:center;padding:24px;color:var(--bw-fg);font-family:inherit;isolation:isolate}.bw-demo *{box-sizing:border-box}.bw-demo button,.bw-demo input{font:inherit}.bw-demo button{color:inherit}.bw-demo :focus-visible{outline:2px solid var(--bw-strong);outline-offset:3px}.bw-demo[data-active='false'] *{animation-play-state:paused!important}.adapt-simple{width:min(100%,380px);display:grid;gap:14px;padding:24px;border:1px solid var(--bw-line);background:var(--bw-panel)}.adapt-simple span{font:9px monospace;color:var(--bw-muted);letter-spacing:.12em}.adapt-simple strong{font-size:28px}.adapt-simple p{margin:0;color:var(--bw-muted);line-height:1.6}.adapt-simple button{height:42px;border:1px solid var(--bw-line);background:var(--bw-fg);color:var(--bw-bg)}</style>
+<script lang="ts">
+  import { tick } from 'svelte';
+  import { observeMotion } from '../../shared/motion-lifecycle';
+
+  import '../../shared/base.css';
+  import './status-badge.css';
+  let { label = 'Status badge', paused = false }: { label?: string; paused?: boolean } = $props();
+  let root: HTMLDivElement;
+  let active = $state(false);
+  let reduced = $state(true);
+  const uid = $props.id();
+  $effect(() => {
+    if (!root) return;
+    const lifecycle = observeMotion(
+      root,
+      (state) => {
+        active = state.active;
+        reduced = state.reduced;
+      },
+      paused,
+    );
+    return () => lifecycle.destroy();
+  });
+</script>
+
+<div bind:this={root} class="bw-demo" data-active={active} data-component="status-badge">
+  <div class="adapt-status" role="status">
+    <i aria-hidden="true"></i><span>{label}</span><small>Operational · demo</small>
+  </div>
+</div>

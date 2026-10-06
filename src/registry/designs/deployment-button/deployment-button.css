@@ -1,3 +1,45 @@
 /* Adapted under MIT from https://github.com/vercel/examples/blob/main/internal/packages/ui/src/button.tsx. Copyright (c) Vercel, Inc.. */
-.adapt-deploy{min-width:240px;height:56px;padding:0 18px;border:1px solid var(--bw-line);background:var(--bw-fg);color:var(--bw-bg)!important;display:flex;align-items:center;gap:12px}.adapt-deploy i{width:9px;height:9px;border-radius:50%;background:#28a56a;box-shadow:0 0 0 5px #28a56a22}.adapt-deploy b{margin-left:auto}.adapt-deploy:hover i{animation:adapt-pulse 1s infinite}@keyframes adapt-pulse{50%{box-shadow:0 0 0 10px #28a56a00}}
-@media(prefers-reduced-motion:reduce){.bw-demo *{animation:none!important;transition:none!important}}
+.adapt-deploy {
+  min-width: 240px;
+  height: 56px;
+  padding: 0 18px;
+  border: 1px solid var(--bw-line);
+  background: var(--bw-fg);
+  color: var(--bw-bg) !important;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.adapt-deploy i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #28a56a;
+  box-shadow: 0 0 0 5px #28a56a22;
+}
+.adapt-deploy b {
+  margin-left: auto;
+}
+.adapt-deploy:hover i {
+  animation: adapt-pulse 1s infinite;
+}
+@keyframes adapt-pulse {
+  50% {
+    box-shadow: 0 0 0 10px #28a56a00;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bw-demo * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.bw-demo[data-component='deployment-button'] {
+  flex-direction: column;
+  gap: 14px;
+}
+.adapt-deploy {
+  min-width: 0;
+  width: min(100%, 320px);
+}

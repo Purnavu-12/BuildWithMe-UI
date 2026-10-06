@@ -8,9 +8,11 @@ This is one Next.js App Router application. Read `docs/architecture.md` before s
 
 Every design maintains React, Vue, and Svelte capability parity. Use each framework naturally while preserving visual intent, public behavior, keyboard interaction, labels, reduced motion, and failure recovery. Do not execute arbitrary submitted source in the browser.
 
+The selected product direction is Kinetic Playground / Center Stage. Read `docs/component-contracts.md` before changing advertised behavior. Compilation is evidence for source integrity, not browser parity. Keep verification provisional until the contract and visual review pass. `scripts/source-artifacts.ts` owns dependency closure materialization; include helpers, styles, portable artwork modules, and notices in source and package outputs.
+
 ## Interface Cosmos
 
-`src/lib/home-story.ts` is the internal homepage narrative configuration. Featured IDs must exist in the registry and all displayed counts must be derived. Motion owns scroll-linked DOM state, Anime.js owns isolated SVG or code timelines, and React Three Fiber owns canvas state. Never assign the same element to multiple animation engines. Preserve the server-rendered reading order and CSS/SVG fallback.
+`src/lib/home-story.ts` is the internal homepage narrative configuration. Featured IDs must exist in the registry and all displayed counts must be derived. Native scroll updates chapter navigation only; the hero artwork animates in place. Motion owns component DOM state, Anime.js owns isolated SVG or code timelines, and React Three Fiber owns canvas state. Never assign the same element to multiple animation engines. Preserve the server-rendered reading order and CSS/SVG fallback.
 
 ## Provenance
 
@@ -18,7 +20,7 @@ Original work needs a creator identity and license confirmation. Adapted work re
 
 ## Validation
 
-Use pnpm. Run `pnpm check` after substantial changes, `pnpm test:e2e` for experience changes, and `pnpm test:install` for registry or distribution changes. Inspect dark and light themes, mobile layouts, keyboard behavior, and reduced motion.
+Use pnpm. The default CI runs `pnpm check:quick`: lint, types, unit tests, and registry validation in one job. Choose broader local checks by scope: `pnpm check` for substantial build changes, `pnpm test:e2e` for relevant interactions, and `pnpm test:install` for distribution changes. Avoid requiring the entire browser matrix or new screenshot baselines for routine contributions. Inspect dark and light themes, mobile layouts, keyboard behavior, and reduced motion when affected.
 
 ## Git and release
 

@@ -1,6 +1,7 @@
 // Adapted from https://github.com/vercel/registry-starter/blob/main/src/components/login.tsx under MIT. Copyright (c) Vercel, Inc..
 'use client';
 import { useState } from 'react';
+import { useAnimation } from '../../shared/use-animation';
 import '../../shared/base.css';
 import './account-login-card.css';
 
@@ -13,8 +14,9 @@ export default function AccountLoginCard({
 }) {
   const [complete, setComplete] = useState(false);
 
+  const { ref, active } = useAnimation(paused);
   return (
-    <div className="bw-demo" data-active={!paused}>
+    <div ref={ref} className="bw-demo" data-active={active}>
       <form
         className="adapt-login"
         onSubmit={(event) => {
@@ -30,12 +32,7 @@ export default function AccountLoginCard({
         </label>
         <label>
           Password
-          <input
-            type="password"
-            autoComplete="current-password"
-            placeholder="••••••••"
-            required
-          />
+          <input type="password" autoComplete="current-password" placeholder="••••••••" required />
         </label>
         <button type="submit">{complete ? 'Ready' : 'Continue'}</button>
         <p className="adapt-login-status" role="status" aria-live="polite">

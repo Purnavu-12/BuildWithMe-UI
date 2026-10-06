@@ -1,20 +1,50 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script lang="ts">
-  let { label = "Count-up" }: { label?: string } = $props();
+  import { tick } from 'svelte';
+  import { observeMotion } from '../../shared/motion-lifecycle';
+  import { animate } from 'animejs';
+  import '../../shared/base.css';
+  import './count-up.css';
+  let { paused = false, value = 2048.0 }: { paused?: boolean; value?: number } = $props();
+  let root: HTMLDivElement;
   let active = $state(false);
-  let value = $state('');
+  let reduced = $state(true);
+  const uid = $props.id();
+  $effect(() => {
+    if (!root) return;
+    const lifecycle = observeMotion(
+      root,
+      (state) => {
+        active = state.active;
+        reduced = state.reduced;
+      },
+      paused,
+    );
+    return () => lifecycle.destroy();
+  });
+  let output: HTMLSpanElement;
+  $effect(() => {
+    if (!active || !output) return;
+    const state = { value: 0 };
+    const animation = animate(state, {
+      value: value,
+      duration: 1800,
+      ease: 'out(4)',
+      onUpdate: () => {
+        if (output) output.textContent = Math.round(state.value).toLocaleString('en-US');
+      },
+    });
+    return () => {
+      animation.revert();
+      if (output) output.textContent = value.toLocaleString('en-US');
+    };
+  });
 </script>
 
-<section class="bwm-surface" data-active={active}>
-  <span class="bwm-kicker">BUILDWITHME / SVELTE</span>
-  <strong>{label}</strong>
-  {#if "typography" === 'forms'}
-    <input bind:value aria-label="Example value" placeholder="Start typing…" />
-  {:else}
-    <p>One design language. Native Svelte interaction.</p>
-  {/if}
-  <button type="button" onclick={() => active = !active}>{active ? 'Selected' : 'Try interaction'}</button>
-</section>
-
-<style>
-  .bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
-</style>
+<div bind:this={root} class="bw-demo" data-active={active} data-component="count-up">
+  <p class="bw-counter">
+    <span class="bw-sr-only">{value}</span><span bind:this={output} aria-hidden="true"
+      >{value.toLocaleString('en-US')}</span
+    ><span aria-hidden="true">+</span>
+  </p>
+</div>
