@@ -15,7 +15,7 @@ export default function ProductGrid({
   const [selected, setSelected] = useState('');
   const { ref, active } = useAnimation(paused);
   return (
-    <div ref={ref} className="bw-demo" data-active={active}>
+    <div ref={ref} className="bw-demo" data-active={active} data-component="product-grid">
       <div className="adapt-products" aria-label={label}>
         {galleryImages.map((item, index) => (
           <button

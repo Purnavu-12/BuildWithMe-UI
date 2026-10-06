@@ -1,5 +1,7 @@
 import { expect, test, type Locator } from '@playwright/test';
 import { readFileSync } from 'node:fs';
+// Each source uses its own page/context and unique golden paths; run these independently.
+test.describe.configure({ mode: 'parallel' });
 const manifests = JSON.parse(
   readFileSync(new URL('../../src/generated/registry.json', import.meta.url), 'utf8'),
 ) as { id: string }[];
@@ -178,6 +180,9 @@ for (const framework of ['react', 'vue', 'svelte'] as const) {
             'color',
             theme === 'dark' ? 'rgb(244, 241, 232)' : 'rgb(20, 20, 18)',
           );
+          expect(
+            await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+          ).toBe(true);
           // Baselines require review; do not auto-approve generated snapshots.
           await expect(page).toHaveScreenshot(`${manifest.id}-${framework}-${theme}-${width}.png`, {
             animations: 'disabled',

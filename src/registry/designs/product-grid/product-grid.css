@@ -1,11 +1,16 @@
 /* Adapted under MIT from https://github.com/vercel/registry-starter/blob/main/src/components/product-grid.tsx. Copyright (c) Vercel, Inc.. */
+.bw-demo[data-component='product-grid'] {
+  flex-direction: column;
+  gap: 14px;
+}
 .adapt-products {
   width: min(100%, 600px);
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
 .adapt-products button {
+  min-width: 0;
   min-height: 190px;
   padding: 12px;
   border: 1px solid var(--bw-line);
@@ -14,6 +19,11 @@
   flex-direction: column;
   justify-content: space-between;
   text-align: left;
+}
+@media (max-width: 440px) {
+  .adapt-products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 .adapt-products button > i {
   height: 105px;

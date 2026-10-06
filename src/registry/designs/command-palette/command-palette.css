@@ -1,4 +1,9 @@
 /* MIT · BuildWithMe-UI contributors. */
+.bw-demo.bwm-command-palette,
+.bw-demo[data-component='command-palette'] {
+  flex-direction: column;
+  gap: 14px;
+}
 .bw-demo .bwm-panel {
   width: min(100%, 440px);
   padding: 24px;

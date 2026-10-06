@@ -185,6 +185,7 @@ for (const theme of ['dark', 'light'] as const) {
       );
       await page.goto('/');
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      await expect(page.getByRole('combobox', { name: 'Color theme' })).toHaveValue(theme);
       expect(
         await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
       ).toBe(true);

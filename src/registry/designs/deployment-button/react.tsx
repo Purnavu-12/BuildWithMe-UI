@@ -14,7 +14,7 @@ export default function DeploymentButton({
   const [complete, setComplete] = useState(false);
   const { ref, active } = useAnimation(paused);
   return (
-    <div ref={ref} className="bw-demo" data-active={active}>
+    <div ref={ref} className="bw-demo" data-active={active} data-component="deployment-button">
       <button className="adapt-deploy" type="button" onClick={() => setComplete(!complete)}>
         <i aria-hidden="true" />
         <span>{complete ? 'Preview ready · run again' : label}</span>
