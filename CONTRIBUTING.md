@@ -31,15 +31,15 @@ The scaffold creates one typed manifest and three source files. Registry records
 
 ## Validation by scope
 
-| Contribution                                       | Required before review                             |
-| -------------------------------------------------- | -------------------------------------------------- |
-| Markdown or copy only                              | Review rendered content and links                  |
-| Website TypeScript or CSS                          | `pnpm lint && pnpm typecheck`                      |
-| Registry metadata or one existing framework source | `pnpm registry:validate && pnpm typecheck`         |
-| New design or shared component capability          | `pnpm check && pnpm test:e2e && pnpm test:install` |
-| Release or distribution tooling                    | `pnpm check && pnpm test:install`                  |
+| Contribution                                       | Required before review                               |
+| -------------------------------------------------- | ---------------------------------------------------- |
+| Markdown or copy only                              | Review rendered content and links                    |
+| Website TypeScript or CSS                          | `pnpm lint && pnpm typecheck`                        |
+| Registry metadata or one existing framework source | `pnpm registry:validate && pnpm typecheck`           |
+| New design or shared component capability          | `pnpm check:quick` plus relevant interaction review  |
+| Release or distribution tooling                    | `pnpm check:quick` plus relevant installation checks |
 
-CI runs the release-level checks. Report unrelated failures instead of expanding a small contribution until it becomes unmanageable.
+CI runs one lightweight job: lint, types, unit tests, and registry validation. Use `pnpm check`, `pnpm test:e2e`, or `pnpm test:install` locally when your change needs build, browser, or distribution coverage. A complete browser matrix and screenshot baseline update are not prerequisites for every contribution. Report unrelated failures instead of expanding a small contribution until it becomes unmanageable.
 
 ## Accessibility and motion
 

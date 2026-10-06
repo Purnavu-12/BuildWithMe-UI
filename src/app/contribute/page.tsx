@@ -67,8 +67,8 @@ export default function Contribute() {
           <p className="mono-label">HUMAN QUICKSTART / FOUR STEPS</p>
           <h2 id="quickstart-title">Your first contribution should feel possible.</h2>
           <p>
-            Clone, branch, make one change, and run only the check that matches its scope. CI and
-            maintainers handle the release-level gate.
+            Clone, branch, make one change, and run only the check that matches its scope. CI runs
+            the basic code checks; broader testing depends on what you change.
           </p>
         </div>
         <pre tabIndex={0} aria-label="Local contribution setup commands">

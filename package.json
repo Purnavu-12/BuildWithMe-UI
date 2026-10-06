@@ -23,6 +23,7 @@
     "packages:pack": "pnpm packages:build && tsx scripts/pack-smoke.ts",
     "env:validate": "node scripts/validate-production-env.mjs",
     "component:new": "tsx scripts/new-component.ts",
+    "check:quick": "pnpm lint && pnpm typecheck && pnpm test && pnpm registry:validate",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm registry:validate && pnpm build && pnpm packages:pack",
     "format": "prettier --write .",
     "format:check": "prettier --check ."

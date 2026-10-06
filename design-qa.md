@@ -11,6 +11,8 @@ Visual target: the user-selected Center Stage image supplied on 2026-10-06. The 
 
 ## Verification gate
 
+Automation policy: the user requested lightweight CI on 2026-10-06. Screenshot comparison and the three-engine source matrix are now optional local checks, rather than automatic PR gates. Unreviewed images are not accepted or used to claim visual completeness. The blocked result below records the remaining design acceptance evidence, not a requirement to keep every CI suite enabled.
+
 Actual images from GitHub's completed jobs are now available for review. They revealed mobile overlap/overflow and a saved-theme label mismatch, plus inconsistent variable-font weight rendering in Windows WebKit. Those images are not accepted as goldens for affected surfaces. The corrective code needs fresh captures; screenshot assertions remain enabled. Local browser permission remains blocked, while CI is the independent capture source.
 
 GitHub CI has now exercised part of the browser matrix. Its superseded run confirmed old/missing screenshots and exposed real accessibility/layout issues. Overflowed command text is now keyboard-focusable; the product dialog image and spacing are bounded for short iframe viewports. Browser tests scope login status correctly and verify the documented WebGL/SVG fallback. Fresh complete browser execution and reviewed screenshot baselines remain pending; no snapshots were automatically accepted.

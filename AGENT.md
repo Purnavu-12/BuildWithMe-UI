@@ -20,7 +20,7 @@ Original work needs a creator identity and license confirmation. Adapted work re
 
 ## Validation
 
-Use pnpm. Run `pnpm check` after substantial changes, `pnpm test:e2e` for experience changes, and `pnpm test:install` for registry or distribution changes. Inspect dark and light themes, mobile layouts, keyboard behavior, and reduced motion.
+Use pnpm. The default CI runs `pnpm check:quick`: lint, types, unit tests, and registry validation in one job. Choose broader local checks by scope: `pnpm check` for substantial build changes, `pnpm test:e2e` for relevant interactions, and `pnpm test:install` for distribution changes. Avoid requiring the entire browser matrix or new screenshot baselines for routine contributions. Inspect dark and light themes, mobile layouts, keyboard behavior, and reduced motion when affected.
 
 ## Git and release
 
