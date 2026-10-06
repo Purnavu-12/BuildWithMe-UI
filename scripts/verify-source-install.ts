@@ -3,6 +3,7 @@ import path from 'node:path';
 import { build } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
+import { createInstallFixture } from './install-fixture';
 
 /** Compile the actual public artifacts outside the authored registry tree. */
 export async function verifySourceInstall() {
@@ -16,7 +17,7 @@ export async function verifySourceInstall() {
       files: { target: string; content: string }[];
     }[];
   };
-  const fixture = await fs.mkdtemp(path.join(root, 'tmp', 'source-install-'));
+  const fixture = await createInstallFixture(root, 'source-install-');
   for (const framework of ['react', 'vue', 'svelte']) {
     const entries: Record<string, string> = {};
     const directory = path.join(fixture, framework);

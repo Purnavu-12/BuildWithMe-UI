@@ -4,6 +4,7 @@ import { spawn } from 'node:child_process';
 import { compile } from 'svelte/compiler';
 import { verifySourceInstall } from './verify-source-install';
 import { validateRegistry } from './registry';
+import { createInstallFixture } from './install-fixture';
 
 const root = process.cwd();
 const pnpmExecutable = process.env.npm_execpath;
@@ -77,7 +78,7 @@ for (const file of (await fs.readdir(svelteDist)).filter((name) => name.endsWith
 }
 
 await fs.mkdir(path.join(root, 'tmp'), { recursive: true });
-const fixture = await fs.mkdtemp(path.join(root, 'tmp', 'react-package-'));
+const fixture = await createInstallFixture(root, 'react-package-');
 await fs.writeFile(
   path.join(fixture, 'package.json'),
   JSON.stringify({
@@ -135,7 +136,7 @@ await run(['install', '--no-frozen-lockfile'], fixture);
 await run(['build'], fixture);
 
 const vuePackage = packageTarball('vue');
-const nuxtFixture = await fs.mkdtemp(path.join(root, 'tmp', 'nuxt-package-'));
+const nuxtFixture = await createInstallFixture(root, 'nuxt-package-');
 await fs.writeFile(
   path.join(nuxtFixture, 'package.json'),
   JSON.stringify({
@@ -157,7 +158,7 @@ await run(['install', '--no-frozen-lockfile'], nuxtFixture);
 await run(['build'], nuxtFixture);
 
 const sveltePackage = packageTarball('svelte');
-const svelteKitFixture = await fs.mkdtemp(path.join(root, 'tmp', 'sveltekit-package-'));
+const svelteKitFixture = await createInstallFixture(root, 'sveltekit-package-');
 await fs.writeFile(
   path.join(svelteKitFixture, 'package.json'),
   JSON.stringify({
