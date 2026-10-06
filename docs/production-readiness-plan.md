@@ -2,15 +2,38 @@
 
 Audit date: 2026-09-26. Baseline: commit `3995ed1`.
 
-## Implementation status
+## Current implementation — 2026-10-05
 
-The production-readiness branch now has an explicit `data-bwm-theme` boundary, removes duplicated global theme definitions from adapted CSS, follows the site theme by default, preserves explicit preview overrides, and retries React failures through a local remount. Vue and Svelte framework routes mount generated, code-split runtimes inside same-origin iframes with typed theme, pause, replay, ready, and error messages. These sources remain **provisional** until the capability parity audit is complete.
+PR preparation checks — 2026-10-06: after excluding temporary browser logs, old output captures, and generator-owned legacy JSON from Git and removing unused canvas-stage CSS, `pnpm check` and `pnpm test:install` passed. Results: 27 unit tests in six files, 55-design registry validation, production build, three inspected tarballs, compilation of 165 source closures, and clean Next.js/Nuxt/SvelteKit consumers importing all package exports. All changed supported files passed formatting; staged-file hygiene and diff checks passed. Local artifacts were preserved. The 606 browser cases remain unexecuted locally, with fresh screenshot baselines/visual acceptance pending. The PR is a draft for that reason.
 
-The catalog introduction and component detail hierarchy have been compressed so artifacts appear in the first viewport. Cards expose source availability, creator attribution, lifecycle state, and framework-source wording. npm is visibly unpublished; source installation is the active path. Icons, Open Graph artwork, manifest, robots, sitemap gating, repository configuration, production URL validation, CODEOWNERS, issue labels, package dependency aggregation, generated React/Vue/Svelte declarations, notice files, real tarball inspection, and a protected manual release workflow are implemented.
+2026-10-06 reference refinement: the hero now uses tighter spacing and responsive camera framing; cyan/coral parts, assembly cubes, discs, and wire planes are more prominent. Constellation has a local paper background, cyan connector, paired dark Animated Tabs/source cards, and retains collection reveal/domain links. Source ownership and framework flows remain functional. `pnpm check` passed with 32 unit tests across seven files and inspected packages. The browser suite discovers 606 cases across four files, including the new reference-card/theme/layout contracts; execution and same-viewport visual comparison remain blocked by the saved local URL permission. The root `design-qa.md` records `final result: blocked`.
 
-The current verification pass completed `pnpm check`, `pnpm test:install`, and all 78 Playwright cases in Chromium, Firefox, and WebKit. The browser suite includes 24 dark/light responsive image baselines, automated accessibility checks, isolated framework preview checks, reduced-motion and save-data fallbacks, and theme isolation. The visual baselines still need human approval before they become a release gate.
+2026-10-06 placement follow-up: the user's Ownership screenshot confirmed that corrected canvas dimensions still left the scene behind the source card. Desktop chapters now reserve scene rows and the shared artboard docks to measured slots. Off-screen detection follows the artboard. `pnpm check` passed after the final change: 32 unit tests across seven files, lint/types, 55-design registry validation, production build, and three inspected tarballs. Playwright discovers 594 cases; browser execution remains blocked. See [the supplied-image design review](design-review-2026-10-06.md) for confirmed matches, the layout correction, and pending visual fidelity acceptance.
 
-The remaining release gates are full 55-design behavior parity across Vue and Svelte, independent installation of every source artifact into clean fixtures, baseline visual regression approval across all target browsers and viewports, measured field performance, npm ownership, Storybook generation, and the opt-in live editor. The canonical production target is `https://build-with-me-ui.vercel.app`; package publication has not been performed.
+Canvas alignment follow-up: React Three Fiber now measures untransformed layout dimensions and ignores scroll-position measurements, so Motion's artboard scale is applied once. Installed `react-use-measure` source confirmed the transformed bounding-rectangle measurement path. `pnpm check` passed again after this fix (27 unit tests, registry validation, production build, and three package checks). The suite now discovers 594 cases; new canvas regression cases cover forward/reverse scrolling, desktop resizing, the 981px boundary, and pause/play. Browser execution and visual confirmation remain blocked by the saved local URL permission, including the latest retry. Discovery is not execution.
+
+The Kinetic Playground branch implements the selected Center Stage direction and the Interface Engine showcase. The story retains five chapter anchors, native scrolling, server-readable copy, a sticky desktop stage, mobile SVG miniatures, real framework tabs, source ownership, and a local Prompt Composer. The workbench synchronizes framework selection through the query string. Catalog thumbnails identify their React runtime.
+
+All generic Vue/Svelte template cards have been replaced with design-specific native sources. Thirteen React designs now have structural styles and useful behavior. All 165 authoritative usage examples now import the actual default source entry. Source and package artifacts include their dependency closure, portable artwork, styles, and licensing. Generator ownership includes legacy discovery compatibility.
+
+Earlier implementation checks completed on 2026-10-05:
+
+- `pnpm check` passed: lint, types, 27 unit tests across six files, 55-design registry validation, production build, framework declarations, and three inspected packed tarballs.
+- `pnpm test:install` passed: all 165 public source artifacts materialized and compiled independently; clean Next.js, Nuxt, and SvelteKit builds imported every root export and individual component package path. Required styles and notices were present. Tarballs remain available for release upload.
+- `pnpm exec playwright test --list` loaded 591 cases across Chromium, Firefox, and WebKit. Listing is not execution; `pnpm test:e2e` was not run.
+- `git diff --check` passed. Source verification remains provisional.
+
+The browser suite includes the original product journeys and a new 165-source matrix for native interactions and deterministic dark/light 360px/desktop snapshots. New captures and baseline approval are pending; historical screenshots must be refreshed and reviewed. Custom-input/event/composition and recovery acceptance details are tracked in [component contracts](component-contracts.md).
+
+Browser access to `http://127.0.0.1:3000` was blocked by Codex's saved permission setting. The user explicitly requested finishing code and reporting browser checks as blocked. No browser workaround was used. Chromium, Firefox, WebKit behavior checks, fresh screenshots, design QA, responsive/zoom review, and performance measurements have **not** been executed for this change. Historical screenshots are not evidence for the new design; refresh and review them before release.
+
+Framework verification remains provisional. Compilation does not establish the full props/events/composition, keyboard, theme, motion, cleanup, and recovery contract. Publication and deployment remain separate actions and have not occurred.
+
+## Historical audit — 2026-09-26
+
+The historical phases below also contain future workshop/editor proposals; those are not part of the approved Kinetic Playground implementation scope.
+
+The earlier branch recorded a passing check/install run and 78 Playwright cases. That evidence describes the earlier UI and must not be presented as a fresh result. The original findings below remain useful audit context; the current implementation supersedes their code descriptions.
 
 ## Assessment
 
@@ -18,7 +41,7 @@ The repository has useful registry, routing, packaging, and test infrastructure,
 
 ## Baseline findings and current disposition
 
-The table records the defects found at the start of this branch. Theme leakage, preview misrepresentation, CSS pollution, declaration generation, tarball inspection, public wording, visual assertions, community routing, and browser artwork are fixed. Framework behavior parity and independent source-artifact installation remain open and are represented publicly as provisional.
+The table records historical defects. Current code replaces the generic framework templates and adds complete source closure installation. Browser behavior and visual acceptance remain open and are represented publicly as provisional.
 
 | Priority | Finding                                        | Evidence and consequence                                                                                                                                                                                                                                                                     |
 | -------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -33,7 +56,7 @@ The table records the defects found at the start of this branch. Theme leakage, 
 | P1       | Release metadata and notices need verification | Package generator omits dependency aggregation for external animation engines, uses a hand-written version, and does not explicitly copy upstream license/notice files. Current fixture explicitly supplies animation dependencies, potentially masking missing package metadata.            |
 | P1       | Public claim exceeds evidence                  | Component detail says `THREE NATIVE IMPLEMENTATIONS`; use framework-source wording until parity is proven.                                                                                                                                                                                   |
 | P1       | Visual checks are captures, not regressions    | Existing e2e tests call screenshot without baseline comparison. React preview checks establish element visibility, not intended interaction or correct colors.                                                                                                                               |
-| P1       | Release configuration was incomplete           | Resolved for the website: environment defaults, canonical metadata, sitemap, robots, and source-install commands use `https://build-with-me-ui.vercel.app`. npm scope authority still needs confirmation.                                                                                   |
+| P1       | Release configuration was incomplete           | Resolved for the website: environment defaults, canonical metadata, sitemap, robots, and source-install commands use `https://build-with-me-ui.vercel.app`. npm scope authority still needs confirmation.                                                                                    |
 | P2       | Community tooling incomplete                   | Six issue forms and `config.yml` already exist; config only disables blank issues. CODEOWNERS, triage automation, and funding configuration are absent. Funding is optional and needs a real enabled destination.                                                                            |
 | P2       | Browser asset missing                          | Local production browser reports `/favicon.ico` 404.                                                                                                                                                                                                                                         |
 
@@ -44,7 +67,7 @@ The local `prior-art/`, `design-notes/`, and `memory/` directories remain exclud
 1. Add failing cases for all site-theme/preview-theme combinations, saved theme hydration, and system preference changes.
 2. Put semantic component tokens on the nearest explicit theme boundary. Avoid ancestor selectors that match through another theme boundary. Retain standalone package support without depending on website-only tokens.
 3. Scope each design's layout rules to its own root; keep common rules in one shared stylesheet. Eliminate load-order dependence and verify two different designs side by side.
-4. Provide missing structural styles and replace hardcoded surfaces, text, border, disabled, hover, focus, and decorative colors. Preserve a deliberate monochrome palette; remove stale lime tokens.
+4. Provide missing structural styles and replace hardcoded surfaces, text, border, disabled, hover, focus, and decorative colors. Use the selected charcoal/paper palette and semantic lime/cyan/coral accents.
 5. Default preview to following site theme, with explicit dark/light overrides. Expose theme selection on mobile and use hydration-safe controls.
 6. Implement isolated framework-specific preview bundles from reviewed source, loaded only when selected. Never label a React rendering as Vue or Svelte. Until ready, visibly mark unsupported live previews.
 7. Retry failed previews locally without refreshing the entire page. Pause engines on offscreen and hidden-tab events; verify controls actually reach each implementation.

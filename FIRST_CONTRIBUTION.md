@@ -28,6 +28,8 @@ Useful starting points:
 
 You only need three-framework parity when you add a new design or change a capability shared by all frameworks.
 
+The current visual direction is Kinetic Playground: charcoal and warm paper, lime, cyan, and coral. For component work, start with the [acceptance contracts](docs/component-contracts.md). Install the full source closure, including helpers, styles, and notices; copying only the main source file may leave required files behind. npm packages remain unpublished.
+
 ## 3. Run the check that matches your change
 
 | Change                                   | Before opening the pull request                    |

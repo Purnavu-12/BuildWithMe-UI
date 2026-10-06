@@ -1,20 +1,61 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script setup lang="ts">
-import { ref } from 'vue';
-withDefaults(defineProps<{ label?: string }>(), { label: "Breadcrumb trail" });
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue';
+import { observeMotion } from '../../shared/motion-lifecycle';
+
+import '../../shared/base.css';
+import './breadcrumb-trail.css';
+const props = withDefaults(defineProps<{ label?: string; className?: string }>(), {
+  label: 'Breadcrumb trail',
+  className: '',
+});
+const root = ref<HTMLElement | null>(null);
 const active = ref(false);
-const value = ref('');
+const reduced = ref(true);
+const uid = useId();
+let lifecycle: ReturnType<typeof observeMotion> | undefined;
+onMounted(() => {
+  if (root.value)
+    lifecycle = observeMotion(
+      root.value,
+      (state) => {
+        active.value = state.active;
+        reduced.value = state.reduced;
+      },
+      false,
+    );
+});
+watch(
+  () => false,
+  (value) => lifecycle?.setPaused(Boolean(value)),
+);
+onBeforeUnmount(() => lifecycle?.destroy());
+const current = ref('Navigation');
 </script>
 
 <template>
-  <section class="bwm-surface" :data-active="active">
-    <span class="bwm-kicker">BUILDWITHME / VUE</span>
-    <strong>{{ label }}</strong>
-    <input v-if="false" v-model="value" aria-label="Example value" placeholder="Start typing…" />
-    <p v-else>One design language. Native Vue interaction.</p>
-    <button type="button" @click="active = !active">{{ active ? 'Selected' : 'Try interaction' }}</button>
-  </section>
+  <div
+    ref="root"
+    class="bw-demo"
+    :class="props.className"
+    :data-active="active"
+    data-component="breadcrumb-trail"
+  >
+    <nav class="bwm-breadcrumb" :aria-label="props.label">
+      <ol>
+        <li><button type="button" @click="current = 'Workspace'">Workspace</button></li>
+        <li class="bwm-crumb-overflow">
+          <details>
+            <summary aria-label="Show parent pages">…</summary>
+            <button type="button" @click="current = 'Library'">Library</button>
+          </details>
+        </li>
+        <li>
+          <button type="button" aria-current="page" @click="current = 'Navigation'">
+            {{ current }}
+          </button>
+        </li>
+      </ol>
+    </nav>
+  </div>
 </template>
-
-<style scoped>
-.bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
-</style>

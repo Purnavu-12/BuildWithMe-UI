@@ -1,20 +1,94 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script lang="ts">
-  let { label = "Media gallery" }: { label?: string } = $props();
+  import { tick } from 'svelte';
+  import { observeMotion } from '../../shared/motion-lifecycle';
+  import { galleryImages } from '../../shared/gallery-assets';
+  import '../../shared/base.css';
+  import './media-gallery.css';
+  let { label = 'Media gallery', className = '' }: { label?: string; className?: string } =
+    $props();
+  let root: HTMLDivElement;
   let active = $state(false);
-  let value = $state('');
+  let reduced = $state(true);
+  const uid = $props.id();
+  $effect(() => {
+    if (!root) return;
+    const lifecycle = observeMotion(
+      root,
+      (state) => {
+        active = state.active;
+        reduced = state.reduced;
+      },
+      false,
+    );
+    return () => lifecycle.destroy();
+  });
+  let index = $state(0);
+  let dialog: HTMLDialogElement;
+  let trigger: HTMLButtonElement;
+  const item = $derived(galleryImages[index]);
+  function key(e: KeyboardEvent) {
+    let next: number;
+    if (e.key === 'ArrowRight') next = (index + 1) % 3;
+    else if (e.key === 'ArrowLeft') next = (index + 2) % 3;
+    else if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = 2;
+    else return;
+    e.preventDefault();
+    index = next;
+  }
 </script>
 
-<section class="bwm-surface" data-active={active}>
-  <span class="bwm-kicker">BUILDWITHME / SVELTE</span>
-  <strong>{label}</strong>
-  {#if "media" === 'forms'}
-    <input bind:value aria-label="Example value" placeholder="Start typing…" />
-  {:else}
-    <p>One design language. Native Svelte interaction.</p>
-  {/if}
-  <button type="button" onclick={() => active = !active}>{active ? 'Selected' : 'Try interaction'}</button>
-</section>
-
-<style>
-  .bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
-</style>
+<div
+  bind:this={root}
+  class={`bw-demo ${className ?? ''}`}
+  data-active={active}
+  data-component="media-gallery"
+>
+  <div class="bwm-gallery">
+    <figure aria-label={label}>
+      <img src={item.src} alt={item.alt} />
+      <figcaption>{item.title} · {index + 1} / 3</figcaption>
+    </figure>
+    <div class="bwm-row">
+      <button
+        type="button"
+        class="bwm-control"
+        aria-label="Previous image"
+        onclick={() => (index = (index + 2) % 3)}>←</button
+      >{#each galleryImages as image, i (image.title)}<button
+          type="button"
+          class="bwm-thumb"
+          onkeydown={key}
+          aria-label={`Show ${image.title}`}
+          aria-pressed={i === index}
+          onclick={() => (index = i)}><img src={image.src} alt="" /></button
+        >{/each}<button
+        type="button"
+        class="bwm-control"
+        aria-label="Next image"
+        onclick={() => (index = (index + 1) % 3)}>→</button
+      >
+    </div>
+    <button
+      bind:this={trigger}
+      type="button"
+      class="bwm-control"
+      aria-haspopup="dialog"
+      onclick={() => dialog.showModal()}>Open image</button
+    >
+    <dialog
+      bind:this={dialog}
+      class="bwm-modal"
+      aria-labelledby={uid}
+      onclose={() => trigger.focus()}
+    >
+      <h3 id={uid}>{item.title}</h3>
+      <img src={item.src} alt={item.alt} />
+      <div class="bwm-row">
+        <button type="button" class="bwm-control" onclick={() => dialog.close()}>Close image</button
+        >
+      </div>
+    </dialog>
+  </div>
+</div>

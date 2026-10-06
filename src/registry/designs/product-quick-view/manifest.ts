@@ -1,69 +1,67 @@
 import { defineManifest } from '../../schema';
 
 export default defineManifest({
-  "schemaVersion": 2,
-  "id": "product-quick-view",
-  "title": "Product quick view",
-  "summary": "A product detail overlay with media, options, and purchase action.",
-  "domains": [
-    "commerce"
-  ],
-  "tags": [
-    "product",
-    "quick-view",
-    "commerce"
-  ],
-  "status": "new",
-  "engines": [
-    "css"
-  ],
-  "frameworks": {
-    "react": {
-      "source": "designs/product-quick-view/react.tsx",
-      "exportName": "ProductQuickView",
-      "usage": "import ProductQuickView from '@buildwithme/react/product-quick-view';\\n\\n<ProductQuickView />",
-      "dependencies": {}
+  schemaVersion: 2,
+  id: 'product-quick-view',
+  title: 'Product quick view',
+  summary: 'A product detail overlay with media, options, and purchase action.',
+  domains: ['commerce'],
+  tags: ['product', 'quick-view', 'commerce'],
+  status: 'new',
+  engines: ['css'],
+  frameworks: {
+    react: {
+      source: 'designs/product-quick-view/react.tsx',
+      exportName: 'ProductQuickView',
+      usage:
+        'import ProductQuickView from "@/components/buildwithme/product-quick-view/react";\n\n<ProductQuickView />',
+      dependencies: {},
     },
-    "vue": {
-      "source": "designs/product-quick-view/vue.vue",
-      "exportName": "ProductQuickView",
-      "usage": "import ProductQuickView from '@buildwithme/vue/product-quick-view';\\n\\n<ProductQuickView />",
-      "dependencies": {}
+    vue: {
+      source: 'designs/product-quick-view/vue.vue',
+      exportName: 'ProductQuickView',
+      usage:
+        '<script setup lang="ts">\nimport ProductQuickView from "~/components/buildwithme/product-quick-view/vue.vue";\n</script>\n\n<template>\n  <ProductQuickView />\n</template>',
+      dependencies: {},
     },
-    "svelte": {
-      "source": "designs/product-quick-view/svelte.svelte",
-      "exportName": "ProductQuickView",
-      "usage": "import ProductQuickView from '@buildwithme/svelte/product-quick-view';\\n\\n<ProductQuickView />",
-      "dependencies": {}
-    }
+    svelte: {
+      source: 'designs/product-quick-view/svelte.svelte',
+      exportName: 'ProductQuickView',
+      usage:
+        '<script lang="ts">\nimport ProductQuickView from "$lib/components/buildwithme/product-quick-view/svelte.svelte";\n</script>\n\n<ProductQuickView />',
+      dependencies: {},
+    },
   },
-  "installation": {
-    "npm": true,
-    "source": true,
-    "copy": true
+  installation: {
+    npm: true,
+    source: true,
+    copy: true,
   },
-  "accessibility": {
-    "summary": "Uses semantic controls, visible focus, and motion-safe interaction.",
-    "features": [
-      "Keyboard reachable controls",
-      "Visible focus treatment",
-      "Reduced-motion friendly"
-    ]
+  accessibility: {
+    summary: 'Uses semantic controls, visible focus, and motion-safe interaction.',
+    features: ['Keyboard reachable controls', 'Visible focus treatment', 'Reduced-motion friendly'],
   },
-  "props": [
+  props: [
     {
-      "name": "label",
-      "type": "string",
-      "default": "Product quick view",
-      "description": "Accessible display label."
-    }
-  ],
-  "provenance": {
-    "type": "original",
-    "creator": {
-      "name": "BuildWithMe-UI contributors"
+      name: 'label',
+      type: 'string',
+      default: 'Product quick view',
+      description: 'Accessible display label.',
     },
-    "license": "MIT"
+    {
+      name: 'className',
+      type: 'string',
+      default: '',
+      description: 'Additional root CSS class.',
+    },
+  ],
+  provenance: {
+    type: 'original',
+    creator: {
+      name: 'BuildWithMe-UI contributors',
+    },
+    license: 'MIT',
   },
-  "related": []
+  related: [],
+  style: 'designs/product-quick-view/product-quick-view.css',
 });

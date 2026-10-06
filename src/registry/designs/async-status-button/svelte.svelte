@@ -1,20 +1,65 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script lang="ts">
-  let { label = "Async-status button" }: { label?: string } = $props();
+  import { tick } from 'svelte';
+  import { observeMotion } from '../../shared/motion-lifecycle';
+
+  import '../../shared/base.css';
+  let { paused = false, onAction }: { paused?: boolean; onAction?: () => Promise<void> } = $props();
+  let root: HTMLDivElement;
   let active = $state(false);
-  let value = $state('');
+  let reduced = $state(true);
+  const uid = $props.id();
+  $effect(() => {
+    if (!root) return;
+    const lifecycle = observeMotion(
+      root,
+      (state) => {
+        active = state.active;
+        reduced = state.reduced;
+      },
+      paused,
+    );
+    return () => lifecycle.destroy();
+  });
+  let status = $state('idle');
+  let alive = true;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  $effect(() => {
+    alive = true;
+    return () => {
+      alive = false;
+      clearTimeout(timer);
+    };
+  });
+  async function run() {
+    if (status === 'working') return;
+    status = 'working';
+    try {
+      await (onAction
+        ? onAction()
+        : new Promise<void>((resolve) => (timer = setTimeout(resolve, 1200))));
+      if (alive) status = 'done';
+    } catch {
+      if (alive) status = 'error';
+    }
+  }
 </script>
 
-<section class="bwm-surface" data-active={active}>
-  <span class="bwm-kicker">BUILDWITHME / SVELTE</span>
-  <strong>{label}</strong>
-  {#if "actions" === 'forms'}
-    <input bind:value aria-label="Example value" placeholder="Start typing…" />
-  {:else}
-    <p>One design language. Native Svelte interaction.</p>
-  {/if}
-  <button type="button" onclick={() => active = !active}>{active ? 'Selected' : 'Try interaction'}</button>
-</section>
-
-<style>
-  .bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
-</style>
+<div bind:this={root} class="bw-demo" data-active={active} data-component="async-status-button">
+  <button
+    type="button"
+    class="bw-button"
+    disabled={status === 'working'}
+    aria-busy={status === 'working'}
+    onclick={run}
+    ><span role="status"
+      >{status === 'working'
+        ? 'Saving…'
+        : status === 'done'
+          ? '✓ Saved. Run again?'
+          : status === 'error'
+            ? 'Try again'
+            : 'Save your changes'}</span
+    ></button
+  >
+</div>

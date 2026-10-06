@@ -1,3 +1,78 @@
 /* Adapted under MIT from https://github.com/Ashutoshx7/VengeanceUI/blob/main/src/components/ui/folder-preview.tsx. Copyright (c) Ashutoshx7. */
-.adapt-folder{width:min(100%,330px)}.adapt-folder summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;padding:14px 16px;border:1px solid var(--bw-line);background:var(--bw-panel)}.adapt-folder summary span{font:10px monospace;color:var(--bw-muted)}.adapt-folder>div{height:145px;position:relative;border:1px solid var(--bw-line);border-top:0;padding:24px;background:var(--bw-bg);perspective:500px}.adapt-folder i{position:absolute;inset:30px 42px;background:var(--bw-panel);border:1px solid var(--bw-line);transform-origin:bottom;transition:transform .35s}.adapt-folder i:nth-child(2){transform:translateY(7px)}.adapt-folder i:nth-child(3){transform:translateY(14px)}.adapt-folder[open] i:nth-child(1){transform:translateY(-12px) rotateX(-18deg)}.adapt-folder[open] i:nth-child(2){transform:translateY(2px) rotateX(-12deg)}.adapt-folder p{position:absolute;z-index:2;margin:8px;font:11px/1.7 monospace;color:var(--bw-muted)}
-@media(prefers-reduced-motion:reduce){.bw-demo *{animation:none!important;transition:none!important}}
+.adapt-folder {
+  width: min(100%, 330px);
+}
+.adapt-folder summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border: 1px solid var(--bw-line);
+  background: var(--bw-panel);
+}
+.adapt-folder summary span {
+  font: 10px monospace;
+  color: var(--bw-muted);
+}
+.adapt-folder > div {
+  height: 145px;
+  position: relative;
+  border: 1px solid var(--bw-line);
+  border-top: 0;
+  padding: 24px;
+  background: var(--bw-bg);
+  perspective: 500px;
+}
+.adapt-folder i {
+  position: absolute;
+  inset: 30px 42px;
+  background: var(--bw-panel);
+  border: 1px solid var(--bw-line);
+  transform-origin: bottom;
+  transition: transform 0.35s;
+}
+.adapt-folder i:nth-child(2) {
+  transform: translateY(7px);
+}
+.adapt-folder i:nth-child(3) {
+  transform: translateY(14px);
+}
+.adapt-folder[open] i:nth-child(1) {
+  transform: translateY(-12px) rotateX(-18deg);
+}
+.adapt-folder[open] i:nth-child(2) {
+  transform: translateY(2px) rotateX(-12deg);
+}
+.adapt-folder p {
+  position: absolute;
+  z-index: 2;
+  margin: 8px;
+  font: 11px/1.7 monospace;
+  color: var(--bw-muted);
+}
+@media (prefers-reduced-motion: reduce) {
+  .bw-demo * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+.bw-folder-files {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: 12px/1.9 monospace;
+  color: var(--bw-fg);
+}
+.bw-folder-files li {
+  overflow-wrap: anywhere;
+}
+.adapt-folder > div {
+  height: auto;
+  min-height: 145px;
+}
+.bw-demo[data-active='false'] .adapt-folder i {
+  transition: none;
+}

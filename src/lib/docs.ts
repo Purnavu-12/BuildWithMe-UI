@@ -17,7 +17,7 @@ export const docs: Record<string, Doc> = {
       {
         title: 'React and Next.js',
         text: 'Choose React in the workbench and install its registry item. Interactive components keep an explicit client boundary, while static components remain server-compatible.',
-        code: "import { MagneticButton } from '@/components/buildwithme/magnetic-button/react';",
+        code: "import MagneticButton from '@/components/buildwithme/magnetic-button/react';",
       },
       {
         title: 'Vue and Nuxt',
@@ -80,7 +80,7 @@ export const docs: Record<string, Doc> = {
   motion: {
     title: 'Motion with a clear owner.',
     intro:
-      'Interface Cosmos uses motion to explain the product while keeping native scrolling, semantic order, and a complete static experience.',
+      'The Kinetic Playground Interface Engine uses motion to explain the product while keeping native scrolling, semantic order, and a complete static experience.',
     sections: [
       {
         title: 'One owner per element',

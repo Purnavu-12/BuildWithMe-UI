@@ -1,5 +1,5 @@
 .bw-tab-box {
-  width: 290px;
+  width: min(100%, 340px);
 }
 .bw-tabs {
   display: flex;
@@ -22,12 +22,13 @@
   z-index: 1;
 }
 .bw-tabs button[aria-selected='true'] {
-  color: var(--bw-fg);
+  color: var(--bw-highlight-ink);
 }
 .bw-tabs .bw-tab-indicator {
   position: absolute;
   inset: 0;
-  background: color-mix(in srgb, var(--bw-fg) 10%, transparent);
+  background: var(--bw-highlight);
+  transition: background 0.2s;
   border-radius: 7px;
 }
 .bw-tab-copy {

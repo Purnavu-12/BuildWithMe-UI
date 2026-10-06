@@ -35,7 +35,7 @@ export default function PromptComposer({
           rows={2}
         />
         <div>
-          <span aria-live="polite">
+          <span role="status">
             {sent ? 'Prompt submitted locally' : 'A little idea goes a long way'}
           </span>
           <button disabled={!text.trim()} type="submit" aria-label="Submit prompt">

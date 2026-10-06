@@ -1,94 +1,120 @@
 'use client';
 
-import { useId, useRef, useState } from 'react';
+import { useId, useRef, useState, type KeyboardEvent } from 'react';
 import { CopyButton } from './copy-button';
-import type { Framework } from '@/registry/schema';
+import { frameworks, type Framework } from '@/registry/schema';
 
-const frameworks = ['react', 'vue', 'svelte'] as const;
+export type SourceFiles = Record<Framework, { path: string; content: string; target?: string }[]>;
 
 export function SourceViewer({
   sources,
+  framework: controlledFramework,
+  onFrameworkChange,
+  usage,
 }: {
-  sources: Record<Framework, { path: string; content: string }[]>;
+  sources: SourceFiles;
+  framework?: Framework;
+  onFrameworkChange?: (framework: Framework) => void;
+  usage?: string;
 }) {
-  const [framework, setFramework] = useState<Framework>('react');
+  const [localFramework, setLocalFramework] = useState<Framework>('react');
+  const [selectedFile, setSelectedFile] = useState(0);
+  const framework = controlledFramework ?? localFramework;
   const files = sources[framework];
-
+  const file = files[Math.min(selectedFile, files.length - 1)];
   const id = useId();
-  const panelId = `${id}-source-panel`;
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  const tabRefs = useRef<Record<Framework, HTMLButtonElement | null>>({
-    react: null,
-    vue: null,
-    svelte: null,
-  });
-
-  function handleKeyDown(
-    event: React.KeyboardEvent<HTMLButtonElement>,
-    currentFramework: Framework,
-  ) {
-    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
-      return;
-    }
-
-    event.preventDefault();
-
-    const currentIndex = frameworks.indexOf(currentFramework);
-    const direction = event.key === 'ArrowRight' ? 1 : -1;
-
-    const nextIndex =
-      (currentIndex + direction + frameworks.length) % frameworks.length;
-
-    const nextFramework = frameworks[nextIndex];
-
-    setFramework(nextFramework);
-    tabRefs.current[nextFramework]?.focus();
+  function choose(next: Framework) {
+    setSelectedFile(0);
+    if (onFrameworkChange) onFrameworkChange(next);
+    else setLocalFramework(next);
   }
-
+  function navigate(event: KeyboardEvent<HTMLButtonElement>, current: number) {
+    const next =
+      event.key === 'Home'
+        ? 0
+        : event.key === 'End'
+          ? 2
+          : event.key === 'ArrowRight'
+            ? (current + 1) % 3
+            : event.key === 'ArrowLeft'
+              ? (current + 2) % 3
+              : -1;
+    if (next < 0) return;
+    event.preventDefault();
+    choose(frameworks[next]);
+    tabs.current[next]?.focus();
+  }
   return (
     <div className="source-viewer">
-      <div
-        className="source-tabs"
-        role="tablist"
-        aria-label="Source framework"
-      >
-        {frameworks.map((item) => {
-          const tabId = `${id}-source-tab-${item}`;
-          const isActive = item === framework;
-
-          return (
+      {controlledFramework === undefined ? (
+        <div className="source-tabs" role="tablist" aria-label="Source framework">
+          {frameworks.map((item, index) => (
             <button
               key={item}
               ref={(element) => {
-                tabRefs.current[item] = element;
+                tabs.current[index] = element;
               }}
-              id={tabId}
+              id={`${id}-${item}`}
               role="tab"
-              aria-selected={isActive}
-              aria-controls={panelId}
-              tabIndex={isActive ? 0 : -1}
-              onClick={() => setFramework(item)}
-              onKeyDown={(event) => handleKeyDown(event, item)}
+              aria-selected={item === framework}
+              aria-controls={`${id}-panel`}
+              tabIndex={item === framework ? 0 : -1}
+              onClick={() => choose(item)}
+              onKeyDown={(event) => navigate(event, index)}
             >
               {item}
             </button>
-          );
-        })}
-      </div>
-
-      <div
-        id={panelId}
-        role="tabpanel"
-        aria-labelledby={`${id}-source-tab-${framework}`}
-      >
-        <div className="source-toolbar">
-          <span>{files[0].path.split('/').at(-1)}</span>
-          <CopyButton text={files[0].content} label="Copy source" />
+          ))}
         </div>
-
-        <pre className="source-block" tabIndex={0}>
-          <code>{files[0].content}</code>
-        </pre>
+      ) : null}
+      <div
+        id={`${id}-panel`}
+        role={controlledFramework === undefined ? 'tabpanel' : 'region'}
+        aria-labelledby={controlledFramework === undefined ? `${id}-${framework}` : undefined}
+        aria-label={controlledFramework === undefined ? undefined : `${framework} source files`}
+      >
+        {usage ? (
+          <div className="source-usage">
+            <div className="source-toolbar">
+              <span>Usage / source installation</span>
+              <CopyButton text={usage} label="Copy usage" />
+            </div>
+            <pre tabIndex={0}>
+              <code>{usage}</code>
+            </pre>
+          </div>
+        ) : null}
+        <div className="source-file-picker" aria-label="Included source files">
+          {files.map((entry, index) => (
+            <button
+              key={entry.path}
+              type="button"
+              aria-pressed={index === selectedFile}
+              onClick={() => setSelectedFile(index)}
+            >
+              {(entry.target ?? entry.path).split('/').at(-1)}
+            </button>
+          ))}
+        </div>
+        {file ? (
+          <>
+            <div className="source-toolbar">
+              <span title={file.path}>{file.target ?? file.path}</span>
+              <CopyButton text={file.content} label="Copy source" />
+            </div>
+            <pre className="source-block" tabIndex={0}>
+              <code>{file.content}</code>
+            </pre>
+          </>
+        ) : (
+          <p role="status">No source files are available for this framework.</p>
+        )}
+        <p className="source-closure-note">
+          Install the registry item to receive all {files.length} files and their declared
+          dependencies. Copying one file may require the other files shown here.
+        </p>
       </div>
     </div>
   );

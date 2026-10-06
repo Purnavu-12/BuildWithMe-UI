@@ -1,4 +1,41 @@
 <!-- Adapted from https://github.com/Ashutoshx7/VengeanceUI/blob/main/src/components/ui/folder-preview.tsx under MIT. Copyright (c) Ashutoshx7. -->
-<script lang="ts">let {label='Folder preview',paused=false}:{label?:string;paused?:boolean}=$props();</script>
-<div class="bw-demo" data-active={!paused}><div class="adapt-simple"><span>FOLDER PREVIEW</span><strong>{label}</strong><p>A layered folder object that opens to reveal a compact file collection.</p><button type="button">Explore pattern</button></div></div>
-<style>.bw-demo{--bw-fg:var(--bwm-component-fg,#f5f5f1);--bw-bg:var(--bwm-component-canvas,#090909);--bw-panel:var(--bwm-component-panel,#111);--bw-muted:var(--bwm-component-muted,#9a9a94);--bw-line:var(--bwm-component-border,#343432);--bw-strong:var(--bwm-component-focus,#fff);min-height:220px;width:100%;display:grid;place-items:center;padding:24px;color:var(--bw-fg);font-family:inherit;isolation:isolate}.bw-demo *{box-sizing:border-box}.bw-demo button,.bw-demo input{font:inherit}.bw-demo button{color:inherit}.bw-demo :focus-visible{outline:2px solid var(--bw-strong);outline-offset:3px}.bw-demo[data-active='false'] *{animation-play-state:paused!important}.adapt-simple{width:min(100%,380px);display:grid;gap:14px;padding:24px;border:1px solid var(--bw-line);background:var(--bw-panel)}.adapt-simple span{font:9px monospace;color:var(--bw-muted);letter-spacing:.12em}.adapt-simple strong{font-size:28px}.adapt-simple p{margin:0;color:var(--bw-muted);line-height:1.6}.adapt-simple button{height:42px;border:1px solid var(--bw-line);background:var(--bw-fg);color:var(--bw-bg)}</style>
+<script lang="ts">
+  import { tick } from 'svelte';
+  import { observeMotion } from '../../shared/motion-lifecycle';
+
+  import '../../shared/base.css';
+  import './folder-preview.css';
+  let {
+    label = 'Folder preview',
+    paused = false,
+    files = ['manifest.ts', 'react.tsx', 'styles.css'],
+  }: { label?: string; paused?: boolean; files?: string[] } = $props();
+  let root: HTMLDivElement;
+  let active = $state(false);
+  let reduced = $state(true);
+  const uid = $props.id();
+  $effect(() => {
+    if (!root) return;
+    const lifecycle = observeMotion(
+      root,
+      (state) => {
+        active = state.active;
+        reduced = state.reduced;
+      },
+      paused,
+    );
+    return () => lifecycle.destroy();
+  });
+</script>
+
+<div bind:this={root} class="bw-demo" data-active={active} data-component="folder-preview">
+  <details class="adapt-folder">
+    <summary>{label}<span>{files.length} files</span></summary>
+    <div>
+      <i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i>
+      <ul class="bw-folder-files">
+        {#each files as file, index (`${file}-${index}`)}<li>{file}</li>{/each}
+      </ul>
+    </div>
+  </details>
+</div>

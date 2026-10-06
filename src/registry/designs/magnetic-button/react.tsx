@@ -20,6 +20,7 @@ export default function MagneticButton({
         animate={active ? point : { x: 0, y: 0 }}
         transition={{ type: 'spring', stiffness: 220, damping: 14 }}
         onPointerMove={(e) => {
+          if (!active) return;
           const r = e.currentTarget.getBoundingClientRect();
           setPoint({
             x: (e.clientX - r.left - r.width / 2) * 0.22,

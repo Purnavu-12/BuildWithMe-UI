@@ -1,20 +1,77 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script lang="ts">
-  let { label = "Animated tabs" }: { label?: string } = $props();
+  import { tick } from 'svelte';
+  import { observeMotion } from '../../shared/motion-lifecycle';
+
+  import '../../shared/base.css';
+  import './animated-tabs.css';
+  let { paused = false }: { paused?: boolean } = $props();
+  let root: HTMLDivElement;
   let active = $state(false);
-  let value = $state('');
+  let reduced = $state(true);
+  const uid = $props.id();
+  $effect(() => {
+    if (!root) return;
+    const lifecycle = observeMotion(
+      root,
+      (state) => {
+        active = state.active;
+        reduced = state.reduced;
+      },
+      paused,
+    );
+    return () => lifecycle.destroy();
+  });
+  const tabs = ['Design', 'Develop', 'Deliver'];
+  const copy = [
+    'A good idea deserves a thoughtful interface.',
+    'Turn the details into something that works.',
+    'Put it into the world. Keep making it better.',
+  ];
+  let selected = $state(0);
+  async function navigate(event: KeyboardEvent, index: number) {
+    const next =
+      event.key === 'Home'
+        ? 0
+        : event.key === 'End'
+          ? 2
+          : event.key === 'ArrowRight'
+            ? (index + 1) % 3
+            : event.key === 'ArrowLeft'
+              ? (index + 2) % 3
+              : -1;
+    if (next < 0) return;
+    event.preventDefault();
+    selected = next;
+    await tick();
+    root?.querySelectorAll<HTMLButtonElement>('[role=tab]')[next]?.focus();
+  }
 </script>
 
-<section class="bwm-surface" data-active={active}>
-  <span class="bwm-kicker">BUILDWITHME / SVELTE</span>
-  <strong>{label}</strong>
-  {#if "layout" === 'forms'}
-    <input bind:value aria-label="Example value" placeholder="Start typing…" />
-  {:else}
-    <p>One design language. Native Svelte interaction.</p>
-  {/if}
-  <button type="button" onclick={() => active = !active}>{active ? 'Selected' : 'Try interaction'}</button>
-</section>
-
-<style>
-  .bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
-</style>
+<div bind:this={root} class="bw-demo" data-active={active} data-component="animated-tabs">
+  <div class="bw-tab-box">
+    <div class="bw-tabs" role="tablist" aria-label="Workflow">
+      {#each tabs as tab, index (tab)}<button
+          type="button"
+          id={`${uid}-tab-${index}`}
+          role="tab"
+          aria-selected={selected === index}
+          aria-controls={`${uid}-panel-${index}`}
+          tabindex={selected === index ? 0 : -1}
+          onclick={() => (selected = index)}
+          onkeydown={(event) => navigate(event, index)}
+          >{#if selected === index}<span class="bw-tab-indicator"></span>{/if}<span>{tab}</span
+          ></button
+        >{/each}
+    </div>
+    <div
+      class="bw-description bw-tab-copy"
+      role="tabpanel"
+      id={`${uid}-panel-${selected}`}
+      aria-labelledby={`${uid}-tab-${selected}`}
+      tabindex="0"
+    >
+      {copy[selected]}
+    </div>
+  </div>
+</div>

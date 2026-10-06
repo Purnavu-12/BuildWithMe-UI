@@ -1,20 +1,51 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script lang="ts">
-  let { label = "Bento hero" }: { label?: string } = $props();
+  import { tick } from 'svelte';
+  import { observeMotion } from '../../shared/motion-lifecycle';
+  import { galleryImages } from '../../shared/gallery-assets';
+  import '../../shared/base.css';
+  import './bento-hero.css';
+  let { label = 'Bento hero', className = '' }: { label?: string; className?: string } = $props();
+  let root: HTMLDivElement;
   let active = $state(false);
-  let value = $state('');
+  let reduced = $state(true);
+  const uid = $props.id();
+  $effect(() => {
+    if (!root) return;
+    const lifecycle = observeMotion(
+      root,
+      (state) => {
+        active = state.active;
+        reduced = state.reduced;
+      },
+      false,
+    );
+    return () => lifecycle.destroy();
+  });
+  let selected = $state(false);
 </script>
 
-<section class="bwm-surface" data-active={active}>
-  <span class="bwm-kicker">BUILDWITHME / SVELTE</span>
-  <strong>{label}</strong>
-  {#if "marketing" === 'forms'}
-    <input bind:value aria-label="Example value" placeholder="Start typing…" />
-  {:else}
-    <p>One design language. Native Svelte interaction.</p>
-  {/if}
-  <button type="button" onclick={() => active = !active}>{active ? 'Selected' : 'Try interaction'}</button>
-</section>
-
-<style>
-  .bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
-</style>
+<div
+  bind:this={root}
+  class={`bw-demo ${className ?? ''}`}
+  data-active={active}
+  data-component="bento-hero"
+>
+  <div class="bwm-bento">
+    <article class="bwm-panel">
+      <small>BUILDWITHME / UI</small>
+      <h3>{label}</h3>
+      <p>Build the interface.<br />Keep the source.</p>
+      <button type="button" aria-pressed={selected} onclick={() => (selected = !selected)}
+        >{selected ? 'Added to your canvas ✓' : 'Start a canvas ↗'}</button
+      >
+    </article>
+    <figure>
+      <img src={galleryImages[0].src} alt={galleryImages[0].alt} />
+      <figcaption>01 / Signal</figcaption>
+    </figure>
+    <aside class="bwm-panel">
+      <strong>3 runtimes.</strong><span>One idea. Your framework.</span>
+    </aside>
+  </div>
+</div>

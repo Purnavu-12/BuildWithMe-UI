@@ -35,19 +35,37 @@ async function writeRuntime(framework: 'vue' | 'svelte', ids: string[]) {
   const directory = path.join(buildRoot, framework);
   await fs.mkdir(directory, { recursive: true });
   const extension = framework === 'vue' ? 'vue.vue' : 'svelte.svelte';
-  const loaders = ids.map((id) => `  ${JSON.stringify(id)}: () => import(${JSON.stringify(`../../src/registry/designs/${id}/${extension}`)}),`).join('\n');
-  const mountCode = framework === 'vue'
-    ? `import { createApp } from 'vue';\nasync function mountSelected(){ try { if(instance) instance.unmount(); const loaded=await loaders[id]?.(); if(!loaded) throw new Error('Unknown component'); instance=createApp(loaded.default); instance.mount('#app'); send('ready'); } catch(error){ send('error', error instanceof Error ? error.message : String(error)); } }`
-    : `import { mount, unmount } from 'svelte';\nasync function mountSelected(){ try { if(instance) await unmount(instance); document.querySelector('#app').replaceChildren(); const loaded=await loaders[id]?.(); if(!loaded) throw new Error('Unknown component'); instance=mount(loaded.default,{target:document.querySelector('#app')}); send('ready'); } catch(error){ send('error', error instanceof Error ? error.message : String(error)); } }`;
+  const loaders = ids
+    .map(
+      (id) =>
+        `  ${JSON.stringify(id)}: () => import(${JSON.stringify(`../../src/registry/designs/${id}/${extension}`)}),`,
+    )
+    .join('\n');
+  const mountCode =
+    framework === 'vue'
+      ? `import { createApp } from 'vue';\nasync function mountSelected(){ try { if(instance) instance.unmount(); const loaded=await loaders[id]?.(); if(!loaded) throw new Error('Unknown component'); instance=createApp(loaded.default); instance.mount('#app'); send('ready'); } catch(error){ send('error', error instanceof Error ? error.message : String(error)); } }`
+      : `import { mount, unmount } from 'svelte';\nasync function mountSelected(){ try { if(instance) await unmount(instance); document.querySelector('#app').replaceChildren(); const loaded=await loaders[id]?.(); if(!loaded) throw new Error('Unknown component'); instance=mount(loaded.default,{target:document.querySelector('#app')}); send('ready'); } catch(error){ send('error', error instanceof Error ? error.message : String(error)); } }`;
   await fs.writeFile(path.join(directory, 'preview.css'), previewCss);
-  await fs.writeFile(path.join(directory, 'main.ts'), `import './preview.css';\nconst FRAMEWORK=${JSON.stringify(framework)};\nconst loaders={\n${loaders}\n};\n${bridge}\n${mountCode}\nmountSelected();\n`);
-  await fs.writeFile(path.join(directory, 'index.html'), '<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BuildWithMe preview</title></head><body><div id="app"></div><script type="module" src="/main.ts"></script></body></html>');
+  await fs.writeFile(
+    path.join(directory, 'main.ts'),
+    `import './preview.css';\nconst FRAMEWORK=${JSON.stringify(framework)};\nconst loaders={\n${loaders}\n};\n${bridge}\n${mountCode}\nmountSelected();\n`,
+  );
+  await fs.writeFile(
+    path.join(directory, 'index.html'),
+    '<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BuildWithMe preview</title></head><body><div id="app"></div><script type="module" src="/main.ts"></script></body></html>',
+  );
   await build({
+    logLevel: 'warn',
     root: directory,
     base: `/preview-runtime/${framework}/`,
     publicDir: false,
     plugins: framework === 'vue' ? [vue()] : [svelte()],
-    build: { outDir: path.join(outputRoot, framework), emptyOutDir: true, sourcemap: false, rollupOptions: { input: path.join(directory, 'index.html') } },
+    build: {
+      outDir: path.join(outputRoot, framework),
+      emptyOutDir: true,
+      sourcemap: false,
+      rollupOptions: { input: path.join(directory, 'index.html') },
+    },
   });
 }
 

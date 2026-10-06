@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ArrowUpRight, BookOpen, Github, GitPullRequest } from 'lucide-react';
 import { ThemeSelect } from './theme-provider';
 import { CommandSearch } from './command-search';
-import { components, domainLabels, repositoryUrl } from '@/lib/registry';
+import { components, domainLabels, repositoryUrl, registryStats } from '@/lib/registry';
 
 const searchItems = [
   ...components.map((item) => ({
@@ -78,6 +78,9 @@ export function Header() {
           </Link>
         )}
       </div>
+      <span className="header-source-count" aria-hidden="true">
+        SOURCE / {registryStats.designs}:{registryStats.implementations}
+      </span>
     </header>
   );
 }

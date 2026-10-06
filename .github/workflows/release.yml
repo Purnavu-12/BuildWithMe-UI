@@ -32,7 +32,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: package-tarballs
-          path: .release/*.tgz
+          path: .release/tarballs/*.tgz
           if-no-files-found: error
 
   publish:

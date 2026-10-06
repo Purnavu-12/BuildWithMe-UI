@@ -55,6 +55,7 @@
     "@vitejs/plugin-vue": "6.0.9",
     "eslint": "10.11.0",
     "prettier": "3.9.9",
+    "prettier-plugin-svelte": "4.1.1",
     "svelte": "5.57.1",
     "tailwindcss": "4.3.3",
     "tsup": "8.5.1",

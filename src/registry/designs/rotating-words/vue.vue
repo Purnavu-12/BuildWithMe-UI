@@ -1,20 +1,49 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script setup lang="ts">
-import { ref } from 'vue';
-withDefaults(defineProps<{ label?: string }>(), { label: "Rotating words" });
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue';
+import { observeMotion } from '../../shared/motion-lifecycle';
+
+import '../../shared/base.css';
+import './rotating-words.css';
+const props = withDefaults(defineProps<{ paused?: boolean; words?: string[] }>(), {
+  paused: false,
+  words: () => ['beautiful.', 'accessible.', 'yours.'],
+});
+const root = ref<HTMLElement | null>(null);
 const active = ref(false);
-const value = ref('');
+const reduced = ref(true);
+const uid = useId();
+let lifecycle: ReturnType<typeof observeMotion> | undefined;
+onMounted(() => {
+  if (root.value)
+    lifecycle = observeMotion(
+      root.value,
+      (state) => {
+        active.value = state.active;
+        reduced.value = state.reduced;
+      },
+      props.paused,
+    );
+});
+watch(
+  () => props.paused,
+  (value) => lifecycle?.setPaused(Boolean(value)),
+);
+onBeforeUnmount(() => lifecycle?.destroy());
+const index = ref(0);
+const current = computed(() => props.words[index.value % props.words.length] ?? 'yours.');
+watch([active, () => props.words.length], (_, __, cleanup) => {
+  if (!active.value || !props.words.length) return;
+  const timer = setInterval(() => (index.value = (index.value + 1) % props.words.length), 2400);
+  cleanup(() => clearInterval(timer));
+});
 </script>
 
 <template>
-  <section class="bwm-surface" :data-active="active">
-    <span class="bwm-kicker">BUILDWITHME / VUE</span>
-    <strong>{{ label }}</strong>
-    <input v-if="false" v-model="value" aria-label="Example value" placeholder="Start typing…" />
-    <p v-else>One design language. Native Vue interaction.</p>
-    <button type="button" @click="active = !active">{{ active ? 'Selected' : 'Try interaction' }}</button>
-  </section>
+  <div ref="root" class="bw-demo" :data-active="active" data-component="rotating-words">
+    <p class="bw-large-text">
+      Build it<br /><span class="bw-sr-only">{{ props.words.join(' ') || 'yours.' }}</span
+      ><span class="bw-rotating" aria-hidden="true">{{ current }}</span>
+    </p>
+  </div>
 </template>
-
-<style scoped>
-.bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
-</style>

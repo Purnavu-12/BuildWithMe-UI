@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Header, Footer } from '@/components/shell';
 import { registryStats } from '@/lib/registry';
 import './globals.css';
+import './kinetic.css';
 const publicSiteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://build-with-me-ui.vercel.app';
 const socialImages = [`${publicSiteUrl}/opengraph-image`];
 export const metadata: Metadata = {

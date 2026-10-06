@@ -1,78 +1,116 @@
 <!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script lang="ts">
-  let { label = "Command palette" }: { label?: string } = $props();
-  const commands = ['Overview', 'Components', 'Contribute'];
-  let active = $state(commands[0]);
-</script>
+  import { tick } from 'svelte';
+  import { observeMotion } from '../../shared/motion-lifecycle';
 
-<section class="bwm-surface bwm-command-palette">
-  <nav class="bwm-list" aria-label={label}>
-    {#each commands as command (command)}
-      <button
-        type="button"
-        aria-current={active === command ? 'page' : undefined}
-        onclick={() => (active = command)}
-      >
-        <span class="bwm-command-label">{command}</span>
-        <span class="bwm-command-glyph" aria-hidden="true">↗</span>
-      </button>
-    {/each}
-  </nav>
-</section>
-
-<style>
-  .bwm-surface {
-    box-sizing: border-box;
-    display: grid;
-    width: min(100%, 320px);
-    padding: 0.5rem;
-    border: 1px solid var(--bwm-component-border, #343431);
-    background: var(--bwm-component-panel, #10100f);
-    color: var(--bwm-component-fg, #f4f1e8);
-    font-family: inherit;
+  import '../../shared/base.css';
+  import './command-palette.css';
+  let { label = 'Command palette', className = '' }: { label?: string; className?: string } =
+    $props();
+  let root: HTMLDivElement;
+  let active = $state(false);
+  let reduced = $state(true);
+  const uid = $props.id();
+  $effect(() => {
+    if (!root) return;
+    const lifecycle = observeMotion(
+      root,
+      (state) => {
+        active = state.active;
+        reduced = state.reduced;
+      },
+      false,
+    );
+    return () => lifecycle.destroy();
+  });
+  let dialog: HTMLDialogElement;
+  let trigger: HTMLButtonElement;
+  let query = $state('');
+  let index = $state(0);
+  let selected = $state('');
+  const commands = [
+    { name: 'Create component', group: 'Create' },
+    { name: 'Open library', group: 'Navigate' },
+    { name: 'Read handbook', group: 'Navigate' },
+    { name: 'Share an idea', group: 'Create' },
+  ];
+  const matches = $derived(
+    commands.filter((item) => item.name.toLowerCase().includes(query.toLowerCase())),
+  );
+  function choose(name: string) {
+    selected = name;
+    dialog.close();
   }
-  .bwm-list {
-    display: grid;
-    gap: 0.125rem;
-  }
-  .bwm-list button {
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    min-height: 44px;
-    padding: 0 0.875rem;
-    border: 0;
-    border-radius: 8px;
-    background: none;
-    color: var(--bwm-component-muted, #a6a49c);
-    font: inherit;
-    font-size: 14px;
-    text-align: left;
-    cursor: pointer;
-    transition: background-color 150ms ease, color 150ms ease;
-  }
-  .bwm-list button:hover {
-    background: color-mix(in srgb, var(--bwm-component-fg, #f4f1e8) 8%, transparent);
-    color: var(--bwm-component-fg, #f4f1e8);
-  }
-  .bwm-list button[aria-current='page'] {
-    background: color-mix(in srgb, var(--bwm-component-fg, #f4f1e8) 12%, transparent);
-    color: var(--bwm-component-fg, #f4f1e8);
-    font-weight: 550;
-  }
-  .bwm-command-glyph {
-    color: inherit;
-    font-size: 12px;
-  }
-  .bwm-list button:focus-visible {
-    outline: 2px solid var(--bwm-component-focus, #fff);
-    outline-offset: 2px;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .bwm-list button {
-      transition: none;
+  function key(e: KeyboardEvent) {
+    const count = Math.max(matches.length, 1);
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      index = (index + 1) % count;
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      index = (index + count - 1) % count;
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      index = 0;
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      index = count - 1;
+    } else if (e.key === 'Enter' && matches[index]) {
+      e.preventDefault();
+      choose(matches[index].name);
     }
   }
-</style>
+</script>
+
+<div
+  bind:this={root}
+  class={`bw-demo ${className ?? ''}`}
+  data-active={active}
+  data-component="command-palette"
+>
+  <div>
+    <button
+      bind:this={trigger}
+      type="button"
+      class="bwm-control"
+      aria-haspopup="dialog"
+      onclick={() => dialog.showModal()}>Open {label}</button
+    >
+    <p class="bw-caption" role="status">{selected ? `${selected} selected locally.` : ''}</p>
+    <dialog
+      bind:this={dialog}
+      class="bwm-command"
+      aria-labelledby={`${uid}-title`}
+      onclose={() => trigger.focus()}
+    >
+      <h3 id={`${uid}-title`}>{label}</h3>
+      <label class="bw-sr-only" for={`${uid}-query`}>Search commands</label><input
+        id={`${uid}-query`}
+        role="combobox"
+        aria-autocomplete="list"
+        aria-expanded="true"
+        aria-controls={`${uid}-list`}
+        aria-activedescendant={matches[index] ? `${uid}-option-${index}` : undefined}
+        bind:value={query}
+        oninput={() => (index = 0)}
+        onkeydown={key}
+      />
+      <ul id={`${uid}-list`} role="listbox" aria-label="Commands">
+        {#each matches as item, i (item.name)}<li
+            id={`${uid}-option-${i}`}
+            role="option"
+            aria-selected={index === i}
+          >
+            <button type="button" tabindex="-1" onclick={() => choose(item.name)}
+              ><span>{item.name}</span><small>{item.group}</small></button
+            >
+          </li>{/each}
+      </ul>
+      {#if !matches.length}<p role="status">No matching commands.</p>{/if}<button
+        type="button"
+        class="bwm-control"
+        onclick={() => dialog.close()}>Close commands</button
+      >
+    </dialog>
+  </div>
+</div>

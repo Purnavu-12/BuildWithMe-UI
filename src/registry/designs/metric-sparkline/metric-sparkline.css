@@ -1,0 +1,67 @@
+/* MIT · BuildWithMe-UI contributors. */
+.bw-demo .bwm-panel {
+  width: min(100%, 440px);
+  padding: 24px;
+  border: 1px solid var(--bw-border);
+  background: var(--bw-panel);
+  border-radius: 18px;
+  display: grid;
+  gap: 16px;
+}
+.bw-demo .bwm-panel h3,
+.bw-demo .bwm-panel p {
+  margin: 0;
+}
+.bw-demo .bwm-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.bw-demo .bwm-panel button,
+.bw-demo .bwm-control {
+  border: 1px solid var(--bw-border);
+  border-radius: 8px;
+  background: var(--bw-bg);
+  padding: 10px 14px;
+  min-height: 44px;
+  color: var(--bw-fg);
+}
+.bw-demo button[aria-pressed='true'],
+.bw-demo button[aria-current='step'],
+.bw-demo button[aria-current='page'] {
+  background: var(--bw-highlight);
+  color: var(--bw-highlight-ink);
+}
+.bw-demo .bwm-panel small {
+  color: var(--bw-muted);
+}
+.bw-demo img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+.bwm-metric {
+  margin: 0;
+}
+.bwm-metric figcaption {
+  display: grid;
+  gap: 6px;
+}
+.bwm-metric strong {
+  font-size: 44px;
+  letter-spacing: -0.07em;
+}
+.bwm-metric svg {
+  width: 100%;
+  height: 100px;
+  overflow: visible;
+}
+.bwm-metric path {
+  fill: none;
+  stroke: var(--bw-highlight);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}

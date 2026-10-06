@@ -2,6 +2,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { compile } from 'svelte/compiler';
+import { verifySourceInstall } from './verify-source-install';
+import { validateRegistry } from './registry';
 
 const root = process.cwd();
 const pnpmExecutable = process.env.npm_execpath;
@@ -21,7 +23,23 @@ async function run(args: string[], cwd = root) {
   });
 }
 
-await run(['packages:build']);
+await run(['packages:pack']);
+const sourceInstall = await verifySourceInstall();
+const authored = (await validateRegistry()).manifests;
+function individualImports(framework: string) {
+  return authored
+    .map((item, index) => `import C${index} from '@buildwithme/${framework}/${item.id}';`)
+    .join('\n');
+}
+const individualNames = authored.map((_, index) => `C${index}`).join(',');
+const tarballs = await fs.readdir(path.join(root, '.release', 'tarballs'));
+function packageTarball(framework: string) {
+  const name = tarballs.find(
+    (name) => name.startsWith(`buildwithme-${framework}-`) && name.endsWith('.tgz'),
+  );
+  if (!name) throw new Error(`Missing ${framework} tarball`);
+  return `file:${path.join(root, '.release', 'tarballs', name).replaceAll('\\', '/')}`;
+}
 const registry = JSON.parse(
   await fs.readFile(path.join(root, 'public', 'registry.json'), 'utf8'),
 ) as { items: { name: string; files: { content: string }[]; meta: { framework: string } }[] };
@@ -67,7 +85,7 @@ await fs.writeFile(
     private: true,
     scripts: { build: 'next build' },
     dependencies: {
-      '@buildwithme/react': `file:${path.join(root, '.release', 'react').replaceAll('\\', '/')}`,
+      '@buildwithme/react': packageTarball('react'),
       next: '16.3.6',
       react: '19.3.0',
       'react-dom': '19.3.0',
@@ -89,7 +107,7 @@ await fs.writeFile(
 );
 await fs.writeFile(
   path.join(fixture, 'app', 'page.tsx'),
-  `import * as UI from '@buildwithme/react';export default function Page(){return <main><h1>${designCount} components installed</h1>{Object.entries(UI).map(([name,Component])=><section key={name}><h2>{name}</h2><Component /></section>)}</main>}`,
+  `import * as UI from '@buildwithme/react';${individualImports('react')}const individual=[${individualNames}];export default function Page(){return <main><h1>${designCount} components installed</h1>{Object.entries(UI).map(([name,Component])=><section key={name}><h2>{name}</h2><Component /></section>)}{individual.map((Component,index)=><section key={index}><Component/></section>)}</main>}`,
 );
 await fs.writeFile(
   path.join(fixture, 'tsconfig.json'),
@@ -116,7 +134,7 @@ await fs.writeFile(
 await run(['install', '--no-frozen-lockfile'], fixture);
 await run(['build'], fixture);
 
-const vuePackage = `file:${path.join(root, '.release', 'vue').replaceAll('\\', '/')}`;
+const vuePackage = packageTarball('vue');
 const nuxtFixture = await fs.mkdtemp(path.join(root, 'tmp', 'nuxt-package-'));
 await fs.writeFile(
   path.join(nuxtFixture, 'package.json'),
@@ -133,12 +151,12 @@ await fs.writeFile(
 );
 await fs.writeFile(
   path.join(nuxtFixture, 'app.vue'),
-  '<script setup lang="ts">import * as UI from \'@buildwithme/vue\';const count=Object.keys(UI).length;const Component=UI.MagneticButton;</script><template><main><h1>{{count}} components installed</h1><Component>Build</Component></main></template>',
+  `<script setup lang="ts">import * as UI from '@buildwithme/vue';${individualImports('vue')}import '@buildwithme/vue/styles.css';const components=Object.entries(UI);const individual=[${individualNames}];</script><template><main><h1>{{components.length}} components installed</h1><section v-for="[name,Component] in components" :key="name"><h2>{{name}}</h2><component :is="Component"/></section><component v-for="(Component,index) in individual" :key="index" :is="Component"/></main></template>`,
 );
 await run(['install', '--no-frozen-lockfile'], nuxtFixture);
 await run(['build'], nuxtFixture);
 
-const sveltePackage = `file:${path.join(root, '.release', 'svelte').replaceAll('\\', '/')}`;
+const sveltePackage = packageTarball('svelte');
 const svelteKitFixture = await fs.mkdtemp(path.join(root, 'tmp', 'sveltekit-package-'));
 await fs.writeFile(
   path.join(svelteKitFixture, 'package.json'),
@@ -171,7 +189,7 @@ await fs.writeFile(
 );
 await fs.writeFile(
   path.join(svelteKitFixture, 'src', 'routes', '+page.svelte'),
-  '<script lang="ts">import * as UI from \'@buildwithme/svelte\';const count=Object.keys(UI).length;</script><svelte:head><title>BuildWithMe smoke</title></svelte:head><main><h1>{count} components installed</h1></main>',
+  `<script lang="ts">import * as UI from '@buildwithme/svelte';${individualImports('svelte')}const components=Object.entries(UI);const individual=[${individualNames}];</script><svelte:head><title>BuildWithMe smoke</title></svelte:head><main><h1>{components.length} components installed</h1>{#each components as [name,Component] (name)}<section><h2>{name}</h2><Component/></section>{/each}{#each individual as Component,index (index)}<Component/>{/each}</main>`,
 );
 await run(['install', '--no-frozen-lockfile'], svelteKitFixture);
 await run(['build'], svelteKitFixture);
@@ -183,6 +201,7 @@ await fs.writeFile(
       designs: designCount,
       sourceArtifacts: artifactCount,
       packages,
+      sourceInstall,
       fixtures: { next: fixture, nuxt: nuxtFixture, sveltekit: svelteKitFixture },
       passed: true,
     },

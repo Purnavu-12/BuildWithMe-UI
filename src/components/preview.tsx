@@ -33,13 +33,21 @@ class PreviewBoundary extends Component<
     );
   }
 }
-export function Preview({ id, controls = false }: { id: string; controls?: boolean }) {
+export function Preview({
+  id,
+  controls = false,
+  initialTheme = 'site',
+}: {
+  id: string;
+  controls?: boolean;
+  initialTheme?: 'site' | 'dark' | 'light';
+}) {
   const root = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
   const [visible, setVisible] = useState(false);
   const [paused, setPaused] = useState(false);
   const [replay, setReplay] = useState(0);
-  const [theme, setTheme] = useState<'site' | 'dark' | 'light'>('site');
+  const [theme, setTheme] = useState<'site' | 'dark' | 'light'>(initialTheme);
   const [siteTheme, setSiteTheme] = useState<'dark' | 'light'>('dark');
   const [width, setWidth] = useState('100%');
   useEffect(() => {
@@ -65,7 +73,9 @@ export function Preview({ id, controls = false }: { id: string; controls?: boole
     const load = Object.hasOwn(previewLoaders, id)
       ? previewLoaders[id as keyof typeof previewLoaders]
       : undefined;
-    return load ? lazy(load as () => Promise<{ default: ComponentType<{ paused?: boolean }> }>) : undefined;
+    return load
+      ? lazy(load as () => Promise<{ default: ComponentType<{ paused?: boolean }> }>)
+      : undefined;
   }, [id, replay]);
   const effectiveTheme = theme === 'site' ? siteTheme : theme;
   return (
@@ -117,7 +127,17 @@ export function Preview({ id, controls = false }: { id: string; controls?: boole
             </label>
           </div>
         </div>
-      ) : null}
+      ) : (
+        <button
+          type="button"
+          className="preview-pause-compact icon-button"
+          onClick={() => setPaused((value) => !value)}
+          aria-label={`${paused ? 'Play' : 'Pause'} ${id} preview`}
+          aria-pressed={paused}
+        >
+          {paused ? <Play size={14} /> : <Pause size={14} />}
+        </button>
+      )}
       <div
         className="preview-stage"
         data-theme={effectiveTheme}

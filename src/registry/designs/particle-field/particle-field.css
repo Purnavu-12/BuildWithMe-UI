@@ -9,3 +9,11 @@
   border-radius: 50%;
   box-shadow: 0 0 8px #c7ec9b55;
 }
+
+.bw-demo > .bw-particles {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

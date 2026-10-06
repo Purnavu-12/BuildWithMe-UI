@@ -1,20 +1,83 @@
+<!-- MIT · BuildWithMe-UI contributors. Original implementation. -->
 <script setup lang="ts">
-import { ref } from 'vue';
-withDefaults(defineProps<{ label?: string }>(), { label: "Adaptive sidebar" });
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue';
+import { observeMotion } from '../../shared/motion-lifecycle';
+
+import '../../shared/base.css';
+import './adaptive-sidebar.css';
+const props = withDefaults(defineProps<{ label?: string; className?: string }>(), {
+  label: 'Adaptive sidebar',
+  className: '',
+});
+const root = ref<HTMLElement | null>(null);
 const active = ref(false);
-const value = ref('');
+const reduced = ref(true);
+const uid = useId();
+let lifecycle: ReturnType<typeof observeMotion> | undefined;
+onMounted(() => {
+  if (root.value)
+    lifecycle = observeMotion(
+      root.value,
+      (state) => {
+        active.value = state.active;
+        reduced.value = state.reduced;
+      },
+      false,
+    );
+});
+watch(
+  () => false,
+  (value) => lifecycle?.setPaused(Boolean(value)),
+);
+onBeforeUnmount(() => lifecycle?.destroy());
+const collapsed = ref(false);
+const selected = ref('Overview');
+const items = ['Overview', 'Components', 'Contribute'];
 </script>
 
 <template>
-  <section class="bwm-surface" :data-active="active">
-    <span class="bwm-kicker">BUILDWITHME / VUE</span>
-    <strong>{{ label }}</strong>
-    <input v-if="false" v-model="value" aria-label="Example value" placeholder="Start typing…" />
-    <p v-else>One design language. Native Vue interaction.</p>
-    <button type="button" @click="active = !active">{{ active ? 'Selected' : 'Try interaction' }}</button>
-  </section>
+  <div
+    ref="root"
+    class="bw-demo"
+    :class="props.className"
+    :data-active="active"
+    data-component="adaptive-sidebar"
+  >
+    <div class="bwm-sidebar" :data-collapsed="collapsed">
+      <nav :aria-label="props.label">
+        <button
+          type="button"
+          class="bwm-control"
+          :aria-expanded="!collapsed"
+          :aria-label="collapsed ? 'Expand navigation' : 'Collapse navigation'"
+          @click="collapsed = !collapsed"
+        >
+          {{ collapsed ? '→' : '←' }}<span v-if="!collapsed">Workspace</span></button
+        ><button
+          v-for="(item, i) in items"
+          :key="item"
+          type="button"
+          :aria-label="item"
+          :aria-current="selected === item ? 'page' : undefined"
+          @click="selected = item"
+        >
+          <b aria-hidden="true">{{ ['◈', '▦', '＋'][i] }}</b
+          ><span v-if="!collapsed">{{ item }}</span>
+        </button>
+      </nav>
+      <article>
+        <small>WORKSPACE</small>
+        <h3>{{ selected }}</h3>
+        <p>
+          {{
+            selected === 'Overview'
+              ? 'Your next interface starts here.'
+              : selected === 'Components'
+                ? 'Explore reusable building blocks.'
+                : 'Share an idea. Keep its source open.'
+          }}
+        </p>
+      </article>
+    </div>
+  </div>
 </template>
-
-<style scoped>
-.bwm-surface{display:grid;gap:1rem;min-height:12rem;place-content:center;padding:2rem;border:1px solid var(--bwm-component-border,#333);background:var(--bwm-component-canvas,#090909);color:var(--bwm-component-fg,#f5f5f2);font-family:ui-sans-serif,sans-serif}.bwm-kicker{font:10px ui-monospace,monospace;letter-spacing:.14em;color:var(--bwm-component-muted,#8b8b87)}.bwm-surface strong{font-size:clamp(1.5rem,4vw,2.5rem)}button,input{border:1px solid var(--bwm-component-border,#555);background:var(--bwm-component-fg,#fff);color:var(--bwm-component-canvas,#050505);padding:.75rem 1rem;font:inherit}input{background:var(--bwm-component-panel,#111);color:var(--bwm-component-fg,#fff)}
-</style>
