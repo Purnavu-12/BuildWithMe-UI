@@ -11,6 +11,8 @@ Visual target: the user-selected Center Stage image supplied on 2026-10-06. The 
 
 ## Verification gate
 
+GitHub CI has now exercised part of the browser matrix. Its superseded run confirmed old/missing screenshots and exposed real accessibility/layout issues. Overflowed command text is now keyboard-focusable; the product dialog image and spacing are bounded for short iframe viewports. Browser tests scope login status correctly and verify the documented WebGL/SVG fallback. Fresh complete browser execution and reviewed screenshot baselines remain pending; no snapshots were automatically accepted.
+
 Fresh same-viewport screenshots, rendered reference comparison, interaction execution, contrast, and performance review remain blocked by the saved browser permission for the local URL. No visual acceptance or pixel-fidelity claim is made. Browser tests cover paired-card interactions, themes, mobile overflow, desktop placement, and hero position stability but have not been executed for this refinement.
 
 final result: blocked

@@ -1,11 +1,18 @@
 import { expect, test, type Page } from '@playwright/test';
 
 async function expectCanvasAligned(page: Page) {
-  await expect(page.locator('.engine-sticky')).toHaveAttribute('data-renderer', 'webgl');
+  const stage = page.locator('.engine-sticky');
+  await expect(stage).toHaveAttribute('data-canvas-state', /^(ready|failed)$/);
+  const ready = (await stage.getAttribute('data-canvas-state')) === 'ready';
+  await expect(stage).toHaveAttribute('data-renderer', ready ? 'webgl' : 'svg');
+  if (!ready) {
+    await expect(page.locator('.engine-vector')).toBeVisible();
+    await expect(page.locator('.engine-canvas canvas')).toHaveCount(0);
+  }
   await expect
     .poll(async () =>
       page.locator('.engine-artboard').evaluate((artboard) => {
-        const canvas = artboard.querySelector('canvas');
+        const canvas = artboard.querySelector('canvas') ?? artboard.querySelector('svg');
         if (!canvas) return Infinity;
         const expected = artboard.getBoundingClientRect();
         const actual = canvas.getBoundingClientRect();

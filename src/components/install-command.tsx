@@ -48,7 +48,7 @@ export function ComponentInstall({
         </button>
       </div>
       <div className="source-toolbar">
-        <code>{command}</code>
+        <code tabIndex={0}>{command}</code>
         <CopyButton text={command} label="Copy command" />
       </div>
     </div>

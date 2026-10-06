@@ -59,12 +59,24 @@
 }
 .bwm-modal img {
   width: 100%;
-  max-height: 55dvh;
+  height: min(160px, 24dvh);
+  max-height: 24dvh;
   object-fit: contain;
 }
 .bwm-modal h3 {
   font-size: 28px;
   letter-spacing: -0.04em;
+  margin: 14px 0 8px;
+}
+.bwm-modal p {
+  margin: 8px 0;
+}
+.bwm-modal fieldset {
+  min-width: 0;
+  padding: 8px;
+}
+.bwm-modal .bwm-row button {
+  flex: 1;
 }
 .bwm-modal .bwm-row {
   margin-top: 14px;

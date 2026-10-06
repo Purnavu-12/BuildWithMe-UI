@@ -189,6 +189,9 @@ export function InterfaceCosmos({
         className="engine-sticky"
         data-running={active}
         data-renderer={capable && !failed && webglReady ? 'webgl' : 'svg'}
+        data-canvas-state={
+          !capable ? 'ineligible' : failed ? 'failed' : webglReady ? 'ready' : 'loading'
+        }
       >
         <div ref={artboard} className="engine-artboard" data-paper={paper}>
           <div className="engine-vector" data-covered={capable && !failed && webglReady}>

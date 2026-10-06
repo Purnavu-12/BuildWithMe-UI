@@ -225,7 +225,7 @@ test('adapted artifacts expose working semantic interactions', async ({ page }) 
   await page.getByRole('textbox', { name: 'Email' }).fill('builder@example.com');
   await page.getByLabel('Password').fill('source-owned');
   await page.getByRole('button', { name: 'Continue' }).click();
-  await expect(page.getByRole('status')).toHaveText('Demo sign-in complete.');
+  await expect(page.locator('.adapt-login-status')).toHaveText('Demo sign-in complete.');
 
   await page.goto('/components/precision-pagination');
   await expect(page.getByRole('button', { name: '2', exact: true })).toHaveAttribute(

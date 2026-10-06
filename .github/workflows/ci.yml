@@ -44,7 +44,7 @@ jobs:
       - run: pnpm exec playwright install chromium firefox webkit
       - run: pnpm test:e2e
       - uses: actions/upload-artifact@v4
-        if: failure()
+        if: always()
         with:
           name: browser-results-windows
           path: |
