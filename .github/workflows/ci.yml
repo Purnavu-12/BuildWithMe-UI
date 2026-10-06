@@ -28,8 +28,13 @@ jobs:
       - run: pnpm test:install
 
   browser:
+    name: browser (${{ matrix.engine }})
     runs-on: windows-latest
     timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, firefox, webkit]
     env:
       NEXT_TELEMETRY_DISABLED: '1'
     steps:
@@ -41,12 +46,12 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
-      - run: pnpm exec playwright install chromium firefox webkit
-      - run: pnpm test:e2e
+      - run: pnpm exec playwright install ${{ matrix.engine }}
+      - run: pnpm test:e2e --project=${{ matrix.engine }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: browser-results-windows
+          name: browser-results-windows-${{ matrix.engine }}
           path: |
             playwright-report/
             test-results/
