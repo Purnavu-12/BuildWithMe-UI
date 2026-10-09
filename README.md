@@ -65,3 +65,4 @@ Run `pnpm env:validate` in the production environment before deploying. It rejec
 ## License
 
 Original project code is MIT licensed. Adapted and remixed designs retain their recorded upstream licenses and provenance. See [LICENSE](LICENSE) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+  also
