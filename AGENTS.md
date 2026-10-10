@@ -1,27 +1,21 @@
 # BuildWithMe-UI agent entry point
 
-BuildWithMe-UI is a Next.js application supporting React, Vue, and Svelte components.
+BuildWithMe-UI is a single Next.js application serving a multi-framework component ecosystem.
 
-## Reading order
-- `AGENT.md` — engineering rules and repository conventions.
-- `IDENTITY.md` — engineering principles and priorities.
-- `docs/architecture.md` — read before structural changes.
-- `docs/component-contracts.md` — read before changing component behavior.
-- `CONTRIBUTING.md` — contribution workflow and guidelines.
+Read in order: `AGENT.md`, `IDENTITY.md`, `memory/PROJECT_STATE.md`, `memory/DECISIONS.md`, relevant `design-notes/`, and package documentation.
 
-## Development rules
-- **Source of truth:** `src/registry/designs/` contains authoritative manifests and framework implementations. Never edit generated registry outputs or import maps directly.
-- **Validation:** Use pnpm. Run `pnpm check:quick` by default; use `pnpm check` for substantial changes, `pnpm test:e2e` for UI changes, and `pnpm test:install` for distribution changes.
-- **Accessibility and licensing:** Preserve keyboard usability, reduced-motion support, creator attribution, and license notices.
-- **Contribution workflow:** Follow `CONTRIBUTING.md`, work on feature branches, and inspect staged files before committing.
-- **Git hygiene:** Never commit secrets, personal files, build outputs, bootstrap prompts, or temporary plans.
+- Typed manifests and React, Vue, and Svelte sources under `src/registry/designs/` are authoritative. Never edit generated public JSON or the generated import map.
+- Use pnpm. Run `pnpm check` after substantial changes; add `pnpm test:e2e` for UI changes and `pnpm test:install` for distribution changes.
+- Preserve licensing, creator attribution, reduced motion, and keyboard usability.
+- Follow `CONTRIBUTING.md`. Work on feature branches. Inspect staged files before committing.
+- Never track secrets, personal files, build outputs, bootstrap prompts, or temporary plans.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know
 
-Next.js APIs and conventions may differ from your training data. Before writing code, consult the relevant guide under `node_modules/next/dist/docs/` and follow any deprecation notices.
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 
-This block is maintained by `next dev`. See `node_modules/next/dist/server/lib/generate-agent-files.js`. Avoid editing or removing it manually, as the development server may recreate it.
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
