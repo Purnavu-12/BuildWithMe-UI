@@ -52,7 +52,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md), [architecture](docs/architecture.md), [d
 
 The full build, browser screenshots, and package installation suites are optional local checks for changes that need them. CI does not run browser matrices, pack packages, upload artifacts, publish to npm, or deploy. Package publication is manual; npm remains unpublished.
 
-Framework selection in a component workbench is reflected in `?framework=react|vue|svelte` and controls preview, usage, files, and installation. Catalog thumbnails are explicitly React previews; choosing a framework carries into the workbench. Vue source installation should use your configured components directory; Svelte consumers should place the generated `components/buildwithme` tree under `src/lib` to match the shown `$lib` imports. Preserve every delivered helper, stylesheet, LICENSE, and notice file.
+The selected framework in the component workbench is controlled by the `framework` query parameter (`react`, `vue`, or `svelte`). It determines the preview, usage examples, source files, and installation instructions. Catalog thumbnails always use React previews; selecting a framework carries that selection into the workbench.
+
+For Vue, install the source files in your configured components directory. For Svelte, place the generated `components/buildwithme` directory under `src/lib` so the `$lib` imports resolve correctly. Preserve all delivered helper files, stylesheets, `LICENSE`, and notice files when copying a component.
 
 Compilation and registry validation do not certify browser behavior. See [readiness](docs/production-readiness-plan.md) for fresh results and outstanding browser review.
 
