@@ -1172,6 +1172,13 @@ body {
   font-weight: 630;
   letter-spacing: -0.035em;
 }
+.docs-content ol {
+  list-style: decimal;
+  padding-inline-start: 1.5rem;
+}
+.docs-content ol > li + li {
+  margin-block-start: 0.75rem;
+}
 .docs-content pre {
   font-size: 13px;
   line-height: 1.7;

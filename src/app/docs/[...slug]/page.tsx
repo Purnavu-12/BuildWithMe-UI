@@ -26,6 +26,13 @@ export default async function Doc({ params }: { params: Promise<{ slug: string[]
           <section key={section.id ?? index} id={section.id}>
             <h2>{section.title}</h2>
             <p>{section.text}</p>
+            {section.steps ? (
+              <ol>
+                {section.steps.map((step, index) => (
+                  <li key={index}>{step}</li>
+                ))}
+              </ol>
+            ) : null}
             {section.code ? (
               <pre tabIndex={0}>
                 <code>{section.code}</code>

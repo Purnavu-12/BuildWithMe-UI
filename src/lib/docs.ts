@@ -10,6 +10,7 @@ type Doc = {
     title: string;
     text: string;
     code?: string;
+    steps?: string[];
     links?: { label: string; href: string }[];
   }[];
 };
@@ -191,6 +192,26 @@ export const docs: Record<string, Doc> = {
       {
         title: 'Performance boundaries',
         text: 'Three.js is dynamically loaded, its space is reserved, rendering pauses off-screen or in hidden tabs, and only active component previews are imported. Vue and Svelte runtimes are excluded from the homepage.',
+      },
+      {
+        title: 'Testing reduced-motion preference',
+        id: 'testing-reduced-motion',
+        text: 'Use this short Chrome checklist to test the user preference. Reduced motion is independent of the preview’s manual pause control; choosing Play must still respect the operating-system or emulated preference.',
+        steps: [
+          'Open Chrome DevTools with F12 or Ctrl+Shift+I on Windows/Linux, or Command+Option+I on macOS.',
+          'Open the Command Menu with Ctrl+Shift+P on Windows/Linux or Command+Shift+P on macOS. Search for Show Rendering and open the Rendering panel. Under Emulate CSS media feature prefers-reduced-motion, select prefers-reduced-motion: reduce.',
+          'Visit the homepage and /components/magnetic-button in the tab where emulation is enabled.',
+          'Confirm that hero animations, canvas effects, and the button’s magnetic movement stop or simplify. Content, headings, keyboard focus, and controls must remain usable. Scrolling and chapter navigation should still work.',
+          'Restore No emulation under the same prefers-reduced-motion setting, then refresh. This restores your operating-system preference; motion may still be reduced if your system requests it.',
+        ],
+        links: [
+          {
+            label: 'Chrome DevTools reduced-motion guidance',
+            href: 'https://developer.chrome.com/docs/devtools/rendering/emulate-css/#emulate-css-media-feature-prefers-reduced-motion',
+          },
+          { label: 'Homepage', href: '/' },
+          { label: 'Magnetic Button preview', href: '/components/magnetic-button' },
+        ],
       },
     ],
   },
