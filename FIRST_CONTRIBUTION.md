@@ -2,6 +2,26 @@
 
 You can improve BuildWithMe UI without learning three frameworks or the registry system. Start with documentation, copy, accessibility notes, a small website fix, or a focused issue labeled [`good first issue`](https://github.com/Purnavu-12/BuildWithMe-UI/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22).
 
+## Prerequisites
+
+Before starting, make sure you have Git, Node.js 22+, and pnpm 10.28.1 installed.
+
+Check your installed versions:
+
+```bash
+git --version
+node --version
+pnpm --version
+```
+
+If you need to install them, follow the official guides:
+
+- [Git installation](https://git-scm.com/install)
+- [Node.js installation](https://nodejs.org/en/download)
+- [pnpm installation](https://pnpm.io/installation)
+
+This repository uses pnpm for package management. Use pnpm to install dependencies and maintain the lockfile. Do not create or commit `package-lock.json` or `yarn.lock`.
+
 ## 1. Get the project running
 
 ```sh
