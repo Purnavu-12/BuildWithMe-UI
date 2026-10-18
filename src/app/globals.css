@@ -1478,6 +1478,14 @@ pre,
   padding: 70px clamp(24px, 7vw, 110px);
   max-width: 1000px;
 }
+.integration-examples-content {
+  min-width: 0;
+  max-width: none;
+}
+.integration-examples-content > .standalone-preview {
+  width: 100%;
+  min-width: 0;
+}
 .docs-content h1 {
   font-size: clamp(44px, 6vw, 78px);
 }

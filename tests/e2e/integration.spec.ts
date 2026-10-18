@@ -8,6 +8,18 @@ for (const framework of ['react', 'vue', 'svelte'] as const) {
     page.on('pageerror', (error) => errors.push(error.message));
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(`/examples/${framework}`);
+    const handbook = page.getByRole('navigation', { name: 'Documentation' });
+    const integrationLink = handbook.getByRole('link', { name: 'Integration examples' });
+
+    await expect(handbook).toBeVisible();
+    await expect(integrationLink).toHaveAttribute('href', `/examples/${framework}`);
+    await expect(integrationLink).toHaveAttribute('aria-current', 'page');
+
+    // The handbook becomes a compact navigation block on mobile, not a missing sidebar.
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(handbook).toBeVisible();
+    await page.setViewportSize({ width: 1280, height: 800 });
+
     const app =
       framework === 'react'
         ? page.locator('.bwm-examples')
