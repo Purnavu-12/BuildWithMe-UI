@@ -18,6 +18,13 @@ test('homepage presents the ecosystem before discovery', async ({ page }) => {
 
 test('chapter navigation and command search work by keyboard', async ({ page }) => {
   await page.goto('/');
+  const searchButton = page.getByRole('button', { name: 'Search components and documentation' });
+  const shortcutHint = searchButton.locator('kbd');
+  await expect(shortcutHint).toHaveText('Ctrl / ⌘ K');
+  await expect(shortcutHint).toHaveAttribute('aria-hidden', 'true');
+  await expect(searchButton).toHaveAccessibleDescription(
+    'Keyboard shortcut: Control+K on Windows and Linux, or Command+K on macOS.',
+  );
   await page.getByRole('link', { name: /03 Translation/ }).focus();
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/#translation$/);

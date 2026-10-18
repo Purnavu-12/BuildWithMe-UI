@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -13,6 +14,7 @@ import { Command, Search, X } from 'lucide-react';
 type SearchItem = { title: string; description: string; href: string; meta: string };
 
 const RESULTS_ID = 'command-search-results';
+const SHORTCUT_ID = 'command-search-shortcut';
 
 export function CommandSearch({ items }: { items: SearchItem[] }) {
   const dialog = useRef<HTMLDialogElement>(null);
@@ -20,62 +22,81 @@ export function CommandSearch({ items }: { items: SearchItem[] }) {
   const options = useRef<Array<HTMLAnchorElement | null>>([]);
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(-1);
+
   const results = useMemo(() => {
     const value = query.trim().toLowerCase();
+
     return (
       value
         ? items.filter((item) =>
-            `${item.title} ${item.description} ${item.meta}`.toLowerCase().includes(value),
+            `${item.title} ${item.description} ${item.meta}`
+              .toLowerCase()
+              .includes(value),
           )
         : items
     ).slice(0, 9);
   }, [items, query]);
+
   function resetSearch() {
     setQuery('');
     setActiveIndex(-1);
   }
+
   function moveActive(delta: 1 | -1) {
     if (!results.length) {
       setActiveIndex(-1);
       return;
     }
+
     setActiveIndex((current) => {
-      if (current < 0 || current >= results.length) return delta > 0 ? 0 : results.length - 1;
+      if (current < 0 || current >= results.length) {
+        return delta > 0 ? 0 : results.length - 1;
+      }
+
       return (current + delta + results.length) % results.length;
     });
   }
+
   function onSearchKeyDown(event: ReactKeyboardEvent<HTMLInputElement>) {
     if (event.key === 'ArrowDown') {
       event.preventDefault();
       moveActive(1);
       return;
     }
+
     if (event.key === 'ArrowUp') {
       event.preventDefault();
       moveActive(-1);
       return;
     }
+
     if (event.key === 'Enter' && activeIndex >= 0 && activeIndex < results.length) {
       event.preventDefault();
       options.current[activeIndex]?.click();
     }
   }
+
   function open() {
     setActiveIndex(-1);
     dialog.current?.showModal();
     requestAnimationFrame(() => input.current?.focus());
   }
+
   function close() {
     dialog.current?.close();
     resetSearch();
   }
+
   useEffect(() => {
     options.current[activeIndex]?.scrollIntoView({ block: 'nearest' });
   }, [activeIndex]);
+
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       const target = event.target as HTMLElement;
-      const typing = /INPUT|TEXTAREA|SELECT/.test(target.tagName) || target.isContentEditable;
+      const typing =
+        /INPUT|TEXTAREA|SELECT/.test(target.tagName) || target.isContentEditable;
+
       if (
         (event.key.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey)) ||
         (event.key === '/' && !typing)
@@ -84,20 +105,30 @@ export function CommandSearch({ items }: { items: SearchItem[] }) {
         open();
       }
     }
+
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, []);
+
   return (
     <>
       <button
         className="command-trigger"
         onClick={open}
         aria-label="Search components and documentation"
+        aria-describedby={SHORTCUT_ID}
       >
         <Search size={13} />
         <span>Search</span>
-        <kbd>⌘K</kbd>
+
+        {/* Visual hint only; the accessible description is provided below. */}
+        <kbd aria-hidden="true">Ctrl / ⌘ K</kbd>
+
+        <span className="sr-only" id={SHORTCUT_ID}>
+          Keyboard shortcut: Control+K on Windows and Linux, or Command+K on macOS.
+        </span>
       </button>
+
       <dialog
         className="command-dialog"
         ref={dialog}
@@ -134,6 +165,7 @@ export function CommandSearch({ items }: { items: SearchItem[] }) {
               <X size={15} />
             </button>
           </label>
+
           <div
             id={RESULTS_ID}
             className="command-results"
@@ -160,8 +192,10 @@ export function CommandSearch({ items }: { items: SearchItem[] }) {
                 <em>{item.meta}</em>
               </Link>
             ))}
+
             {!results.length ? <p>No matching component or guide.</p> : null}
           </div>
+
           <footer>
             <span>
               <Command size={12} /> BuildWithMe discovery
