@@ -141,14 +141,24 @@ export function Footer() {
   );
 }
 
-export function DocsNav() {
+export function DocsNav({
+  integrationExamplesHref = '/examples/react',
+  integrationExamplesActive = false,
+}: {
+  integrationExamplesHref?: string;
+  integrationExamplesActive?: boolean;
+}) {
   return (
     <nav className="docs-nav" aria-label="Documentation">
       <p className="mono-label">HANDBOOK / 02</p>
       <Link prefetch={false} href="/docs/installation">
         <BookOpen size={15} /> Installation
       </Link>
-      <Link prefetch={false} href="/examples/react">
+      <Link
+        prefetch={false}
+        href={integrationExamplesHref}
+        aria-current={integrationExamplesActive ? 'page' : undefined}
+      >
         Integration examples
       </Link>
       <Link prefetch={false} href="/docs/integrations">
